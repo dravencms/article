@@ -1,0 +1,7 @@
+{block #content}
+    <div class="page-header"><h1>{_$h1}</h1></div>
+    <p n:isAllowed="article, edit">
+        <a n:href="Article:edit, groupId => $group->getId()" class="btn btn-primary"><i class="fa fa-plus"></i> {_"New article"}</a>
+    </p>
+    {control gridArticle}
+{/block}

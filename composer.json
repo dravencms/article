@@ -1,0 +1,27 @@
+{
+  "name": "dravencms/article",
+  "type": "library",
+  "description": "Article module for dravencms",
+  "keywords": [
+    "dravencms",
+    "article"
+  ],
+  "license": [
+    "LGPL-3.0"
+  ],
+  "authors": [
+    {
+      "name": "Adam Schubert"
+    }
+  ],
+  "require": {
+  },
+  "require-dev": {
+    "nette/tester": "@dev"
+  },
+  "autoload": {
+    "psr-0": {
+      "Dravencms\\": "src/"
+    }
+  }
+}
