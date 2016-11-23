@@ -33,16 +33,16 @@ class InstallCommand extends Command
 
         try {
 
-            $aclResource = new AclResource('timeline', 'Timeline');
+            $aclResource = new AclResource('article', 'Article');
 
             $entityManager->persist($aclResource);
 
-            $aclOperation = new AclOperation($aclResource, 'edit', 'Allows editation of timeline');
+            $aclOperation = new AclOperation($aclResource, 'edit', 'Allows editation of article');
             $entityManager->persist($aclOperation);
-            $aclOperation = new AclOperation($aclResource, 'delete', 'Allows deletion of timeline');
+            $aclOperation = new AclOperation($aclResource, 'delete', 'Allows deletion of article');
             $entityManager->persist($aclOperation);
 
-            $adminMenu = new Menu('Timeline', ':Admin:Timeline:Group', 'fa-bars', $aclOperation);
+            $adminMenu = new Menu('Article', ':Admin:Article:Group', 'fa-bullhorn', $aclOperation);
 
             $foundRoot = $adminMenuRepository->getOneByName('Site items');
 

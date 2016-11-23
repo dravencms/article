@@ -30,7 +30,7 @@ class UninstallCommand extends Command
 
         try {
 
-            $aclResource = $aclResourceRepository->getOneByName('timeline');
+            $aclResource = $aclResourceRepository->getOneByName('article');
 
             foreach($aclResource->getAclOperations() AS $aclOperation)
             {
