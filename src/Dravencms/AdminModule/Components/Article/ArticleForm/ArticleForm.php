@@ -18,12 +18,12 @@
  * MA 02110-1301  USA
  */
 
-namespace Dravencms\AdminModule\Components\Article;
+namespace Dravencms\AdminModule\Components\Article\ArticleForm;
 
 use Dravencms\Components\BaseFormFactory;
-use App\Model\Article\Entities\Article;
-use App\Model\Article\Entities\Group;
-use App\Model\Article\Repository\ArticleRepository;
+use Dravencms\Model\Article\Entities\Article;
+use Dravencms\Model\Article\Entities\Group;
+use Dravencms\Model\Article\Repository\ArticleRepository;
 use App\Model\File\Repository\StructureFileRepository;
 use App\Model\Locale\Repository\LocaleRepository;
 use App\Model\Tag\Repository\TagRepository;

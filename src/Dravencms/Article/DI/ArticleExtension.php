@@ -21,7 +21,7 @@ class ArticleExtension extends Nette\DI\CompilerExtension
 
 
         $builder->addDefinition($this->prefix('article'))
-            ->setClass('App\Article\Article', []);
+            ->setClass('Dravencms\Article\Article', []);
 
         $this->loadCmsComponents();
         $this->loadComponents();

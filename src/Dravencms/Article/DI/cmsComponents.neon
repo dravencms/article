@@ -1,1 +1,4 @@
-- App\FrontModule\Components\Timeline\Timeline\DetailFactory
+- Dravencms\FrontModule\Components\Article\Article\Detail\DetailFactory
+- Dravencms\FrontModule\Components\Article\Article\GroupDetail\GroupDetailFactory
+- Dravencms\FrontModule\Components\Article\Group\SimpleDetail\SimpleDetailFactory
+- Dravencms\FrontModule\Components\Article\Group\Detail\DetailFactory

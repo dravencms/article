@@ -7,13 +7,13 @@
 
 namespace Dravencms\AdminModule\ArticleModule;
 
-use Dravencms\AdminModule\Components\Article\ArticleFormFactory;
-use Dravencms\AdminModule\Components\Article\ArticleGridFactory;
+use Dravencms\AdminModule\Components\Article\ArticleForm\ArticleFormFactory;
+use Dravencms\AdminModule\Components\Article\ArticleGrid\ArticleGridFactory;
 use Dravencms\AdminModule\SecuredPresenter;
-use App\Model\Article\Entities\Article;
-use App\Model\Article\Entities\Group;
-use App\Model\Article\Repository\ArticleRepository;
-use App\Model\Article\Repository\GroupRepository;
+use Dravencms\Model\Article\Entities\Article;
+use Dravencms\Model\Article\Entities\Group;
+use Dravencms\Model\Article\Repository\ArticleRepository;
+use Dravencms\Model\Article\Repository\GroupRepository;
 use App\Model\Tag\Repository\TagRepository;
 
 /**

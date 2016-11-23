@@ -18,11 +18,11 @@
  * MA 02110-1301  USA
  */
 
-namespace Dravencms\AdminModule\Components\Article;
+namespace Dravencms\AdminModule\Components\Article\GroupForm;
 
 use Dravencms\Components\BaseFormFactory;
-use App\Model\Article\Entities\Group;
-use App\Model\Article\Repository\GroupRepository;
+use Dravencms\Model\Article\Entities\Group;
+use Dravencms\Model\Article\Repository\GroupRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Form;

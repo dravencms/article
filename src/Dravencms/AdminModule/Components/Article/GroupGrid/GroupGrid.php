@@ -19,11 +19,11 @@
  * MA 02110-1301  USA
  */
 
-namespace Dravencms\AdminModule\Components\Article;
+namespace Dravencms\AdminModule\Components\Article\GroupGrid;
 
 use Dravencms\Components\BaseGridFactory;
-use App\Model\Article\Entities\Group;
-use App\Model\Article\Repository\GroupRepository;
+use Dravencms\Model\Article\Entities\Group;
+use Dravencms\Model\Article\Repository\GroupRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;
 

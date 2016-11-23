@@ -1,11 +1,11 @@
 <?php
 
-namespace Dravencms\FrontModule\Components\Article\Group;
+namespace Dravencms\FrontModule\Components\Article\Group\SimpleDetail;
 
 use Dravencms\Components\BaseControl;
 use Dravencms\Components\BasePaginatorFactory;
-use App\Model\Article\Repository\ArticleRepository;
-use App\Model\Article\Repository\GroupRepository;
+use Dravencms\Model\Article\Repository\ArticleRepository;
+use Dravencms\Model\Article\Repository\GroupRepository;
 use IPub\VisualPaginator\Components\Control;
 use Salamek\Cms\ICmsActionOption;
 

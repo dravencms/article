@@ -1,13 +1,13 @@
 <?php
 
-namespace Dravencms\Timeline;
+namespace Dravencms\Article;
 
 
 /**
- * Class TemplatedEmail
- * @package Salamek\TemplatedEmail
+ * Class Article
+ * @package Dravencms\Article
  */
-class Timeline extends \Nette\Object
+class Article extends \Nette\Object
 {
 
     public function __construct()

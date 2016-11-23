@@ -1,2 +1,2 @@
-- App\Model\Timeline\Repository\TimelineRepository
-- App\Model\Timeline\Repository\GroupRepository
+- Dravencms\Model\Article\Repository\ArticleRepository
+- Dravencms\Model\Article\Repository\GroupRepository

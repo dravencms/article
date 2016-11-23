@@ -7,11 +7,11 @@
 
 namespace Dravencms\AdminModule\ArticleModule;
 
-use Dravencms\AdminModule\Components\Article\GroupFormFactory;
-use Dravencms\AdminModule\Components\Article\GroupGridFactory;
+use Dravencms\AdminModule\Components\Article\GroupForm\GroupFormFactory;
+use Dravencms\AdminModule\Components\Article\GroupGrid\GroupGridFactory;
 use Dravencms\AdminModule\SecuredPresenter;
-use App\Model\Article\Entities\Article;
-use App\Model\Article\Repository\GroupRepository;
+use Dravencms\Model\Article\Entities\Article;
+use Dravencms\Model\Article\Repository\GroupRepository;
 
 /**
  * Description of GroupPresenter

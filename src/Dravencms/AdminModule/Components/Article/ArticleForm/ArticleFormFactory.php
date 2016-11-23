@@ -17,11 +17,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301  USA
  */
-namespace Dravencms\AdminModule\Components\Article;
+namespace Dravencms\AdminModule\Components\Article\ArticleForm;
 
 
-use App\Model\Article\Entities\Article;
-use App\Model\Article\Entities\Group;
+use Dravencms\Model\Article\Entities\Article;
+use Dravencms\Model\Article\Entities\Group;
 
 interface ArticleFormFactory
 {

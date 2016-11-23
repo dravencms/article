@@ -1,9 +1,9 @@
 <?php
 
-namespace Dravencms\FrontModule\Components\Article\Article;
+namespace Dravencms\FrontModule\Components\Article\Article\Detail;
 
 use Dravencms\Components\BaseControl;
-use App\Model\Article\Repository\ArticleRepository;
+use Dravencms\Model\Article\Repository\ArticleRepository;
 use Salamek\Cms\ICmsActionOption;
 
 class Detail extends BaseControl

@@ -1,5 +1,5 @@
 <?php
-namespace App\Model\Article\Entities;
+namespace Dravencms\Model\Article\Entities;
 
 use App\Model\File\Entities\StructureFile;
 use App\Model\Tag\Entities\Tag;

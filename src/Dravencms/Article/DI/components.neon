@@ -1,4 +1,4 @@
-- App\AdminModule\Components\Timeline\GroupForm\GroupFormFactory
-- App\AdminModule\Components\Timeline\GroupGrid\GroupGridFactory
-- App\AdminModule\Components\Timeline\TimelineForm\TimelineFormFactory
-- App\AdminModule\Components\Timeline\TimelineGrid\TimelineGridFactory
+- Dravencms\AdminModule\Components\Article\ArticleGrid\ArticleGridFactory
+- Dravencms\AdminModule\Components\Article\ArticleForm\ArticleFormFactory
+- Dravencms\AdminModule\Components\Article\GroupForm\GroupFormFactory
+- Dravencms\AdminModule\Components\Article\GroupGrid\GroupGridFactory
