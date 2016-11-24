@@ -5,9 +5,9 @@
 
 namespace Dravencms\Model\Article\Repository;
 
+use Dravencms\Locale\TLocalizedRepository;
 use Dravencms\Model\Article\Entities\Article;
 use Dravencms\Model\Article\Entities\Group;
-use App\Model\BaseRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
 use Salamek\Cms\CmsActionOption;
@@ -16,8 +16,10 @@ use Salamek\Cms\ICmsComponentRepository;
 use Gedmo\Translatable\TranslatableListener;
 use Salamek\Cms\Models\ILocale;
 
-class ArticleRepository extends BaseRepository implements ICmsComponentRepository
+class ArticleRepository implements ICmsComponentRepository
 {
+    use TLocalizedRepository;
+    
     /** @var \Kdyby\Doctrine\EntityRepository */
     private $articleRepository;
 

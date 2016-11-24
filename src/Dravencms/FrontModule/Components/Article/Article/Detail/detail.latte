@@ -9,7 +9,7 @@
             {$detail->getSubtitle()}
         </div>
         <p n:if="$detail->getStructureFile()" class="featured-image"><img class="img-responsive" n:img="$detail->getStructureFile(), '750x300', 'fit_exact'" alt="{$detail->getName()}"></p>
-        <p>{$detail->getText()|protectEmails|noescape}</p>
+        <p>{$detail->getText()|noescape}</p>
         </article>
     </div>
 {/block}

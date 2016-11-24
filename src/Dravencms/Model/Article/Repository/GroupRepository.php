@@ -5,8 +5,8 @@
 
 namespace Dravencms\Model\Article\Repository;
 
+use Dravencms\Locale\TLocalizedRepository;
 use Dravencms\Model\Article\Entities\Group;
-use App\Model\BaseRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
 use Salamek\Cms\CmsActionOption;
@@ -14,8 +14,10 @@ use Salamek\Cms\ICmsActionOption;
 use Salamek\Cms\ICmsComponentRepository;
 use Salamek\Cms\Models\ILocale;
 
-class GroupRepository extends BaseRepository implements ICmsComponentRepository
+class GroupRepository implements ICmsComponentRepository
 {
+    use TLocalizedRepository;
+    
     /** @var \Kdyby\Doctrine\EntityRepository */
     private $groupRepository;
 
