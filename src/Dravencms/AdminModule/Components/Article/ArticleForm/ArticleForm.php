@@ -20,7 +20,8 @@
 
 namespace Dravencms\AdminModule\Components\Article\ArticleForm;
 
-use Dravencms\Components\BaseFormFactory;
+use Dravencms\Components\BaseControl\BaseControl;
+use Dravencms\Components\BaseForm\BaseFormFactory;
 use Dravencms\File\File;
 use Dravencms\Model\Article\Entities\Article;
 use Dravencms\Model\Article\Entities\Group;
@@ -30,7 +31,6 @@ use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Dravencms\Model\Tag\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Kdyby\Doctrine\EntityManager;
-use Nette\Application\UI\Control;
 use Nette\Application\UI\Form;
 use Nette\Utils\Strings;
 
@@ -39,7 +39,7 @@ use Nette\Utils\Strings;
  *
  * @author Adam Schubert <adam.schubert@sg1-game.net>
  */
-class ArticleForm extends Control
+class ArticleForm extends BaseControl
 {
     /** @var BaseFormFactory */
     private $baseFormFactory;

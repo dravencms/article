@@ -2,8 +2,8 @@
 
 namespace Dravencms\FrontModule\Components\Article\Group\Detail;
 
-use Dravencms\Components\BaseControl;
-use Dravencms\Components\BasePaginatorFactory;
+use Dravencms\Components\BaseControl\BaseControl;
+use Dravencms\Components\BasePaginator\BasePaginatorFactory;
 use Dravencms\Model\Article\Repository\ArticleRepository;
 use Dravencms\Model\Article\Repository\GroupRepository;
 use IPub\VisualPaginator\Components\Control;

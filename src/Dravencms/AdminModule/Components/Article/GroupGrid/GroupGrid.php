@@ -21,18 +21,18 @@
 
 namespace Dravencms\AdminModule\Components\Article\GroupGrid;
 
-use Dravencms\Components\BaseGridFactory;
+use Dravencms\Components\BaseControl\BaseControl;
+use Dravencms\Components\BaseGrid\BaseGridFactory;
 use Dravencms\Model\Article\Entities\Group;
 use Dravencms\Model\Article\Repository\GroupRepository;
 use Kdyby\Doctrine\EntityManager;
-use Nette\Application\UI\Control;
 
 /**
  * Description of GroupGrid
  *
  * @author Adam Schubert <adam.schubert@sg1-game.net>
  */
-class GroupGrid extends Control
+class GroupGrid extends BaseControl
 {
 
     /** @var BaseGridFactory */

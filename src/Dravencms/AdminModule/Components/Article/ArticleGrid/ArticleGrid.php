@@ -21,19 +21,19 @@
 
 namespace Dravencms\AdminModule\Components\Article\ArticleGrid;
 
-use Dravencms\Components\BaseGridFactory;
+use Dravencms\Components\BaseControl\BaseControl;
+use Dravencms\Components\BaseGrid\BaseGridFactory;
 use Dravencms\Model\Article\Entities\Group;
 use Dravencms\Model\Article\Repository\ArticleRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Kdyby\Doctrine\EntityManager;
-use Nette\Application\UI\Control;
 
 /**
  * Description of ArticleGrid
  *
  * @author Adam Schubert <adam.schubert@sg1-game.net>
  */
-class ArticleGrid extends Control
+class ArticleGrid extends BaseControl
 {
 
     /** @var BaseGridFactory */

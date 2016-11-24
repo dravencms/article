@@ -2,7 +2,7 @@
 
 namespace Dravencms\FrontModule\Components\Article\Article\GroupDetail;
 
-use Dravencms\Components\BaseControl;
+use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Model\Article\Repository\ArticleRepository;
 use Salamek\Cms\ICmsActionOption;
 
