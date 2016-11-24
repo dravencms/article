@@ -1,2 +1,2 @@
-- Dravencms\Timeline\Console\InstallCommand
-- Dravencms\Timeline\Console\UninstallCommand
+- Dravencms\Article\Console\InstallCommand
+- Dravencms\Article\Console\UninstallCommand
