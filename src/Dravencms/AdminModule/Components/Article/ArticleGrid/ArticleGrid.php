@@ -24,7 +24,7 @@ namespace Dravencms\AdminModule\Components\Article\ArticleGrid;
 use Dravencms\Components\BaseGridFactory;
 use Dravencms\Model\Article\Entities\Group;
 use Dravencms\Model\Article\Repository\ArticleRepository;
-use App\Model\Locale\Repository\LocaleRepository;
+use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;
 

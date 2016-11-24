@@ -21,12 +21,13 @@
 namespace Dravencms\AdminModule\Components\Article\ArticleForm;
 
 use Dravencms\Components\BaseFormFactory;
+use Dravencms\File\File;
 use Dravencms\Model\Article\Entities\Article;
 use Dravencms\Model\Article\Entities\Group;
 use Dravencms\Model\Article\Repository\ArticleRepository;
-use App\Model\File\Repository\StructureFileRepository;
-use App\Model\Locale\Repository\LocaleRepository;
-use App\Model\Tag\Repository\TagRepository;
+use Dravencms\Model\File\Repository\StructureFileRepository;
+use Dravencms\Model\Locale\Repository\LocaleRepository;
+use Dravencms\Model\Tag\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;
@@ -61,6 +62,9 @@ class ArticleForm extends Control
     /** @var Group */
     private $group;
 
+    /** @var File */
+    private $file;
+
     /** @var Article|null */
     private $article = null;
 
@@ -76,6 +80,7 @@ class ArticleForm extends Control
      * @param TagRepository $tagRepository
      * @param StructureFileRepository $structureFileRepository
      * @param LocaleRepository $localeRepository
+     * @param File $file,
      * @param Article|null $article
      */
     public function __construct(
@@ -86,6 +91,7 @@ class ArticleForm extends Control
         TagRepository $tagRepository,
         StructureFileRepository $structureFileRepository,
         LocaleRepository $localeRepository,
+        File $file,
         Article $article = null
     ) {
         parent::__construct();
@@ -99,6 +105,7 @@ class ArticleForm extends Control
         $this->tagRepository = $tagRepository;
         $this->structureFileRepository = $structureFileRepository;
         $this->localeRepository = $localeRepository;
+        $this->file = $file;
 
 
         if ($this->article) {
@@ -314,6 +321,7 @@ class ArticleForm extends Control
     public function render()
     {
         $template = $this->template;
+        $template->fileSelectorPath = $this->file->getFileSelectorPath();
         $template->activeLocales = $this->localeRepository->getActive();
         $template->setFile(__DIR__ . '/ArticleForm.latte');
         $template->render();

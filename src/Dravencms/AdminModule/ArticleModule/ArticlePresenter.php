@@ -14,7 +14,7 @@ use Dravencms\Model\Article\Entities\Article;
 use Dravencms\Model\Article\Entities\Group;
 use Dravencms\Model\Article\Repository\ArticleRepository;
 use Dravencms\Model\Article\Repository\GroupRepository;
-use App\Model\Tag\Repository\TagRepository;
+use Dravencms\Model\Tag\Repository\TagRepository;
 
 /**
  * Description of ArticlePresenter

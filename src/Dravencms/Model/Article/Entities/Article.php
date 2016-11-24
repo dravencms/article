@@ -1,8 +1,8 @@
 <?php
 namespace Dravencms\Model\Article\Entities;
 
-use App\Model\File\Entities\StructureFile;
-use App\Model\Tag\Entities\Tag;
+use Dravencms\Model\File\Entities\StructureFile;
+use Dravencms\Model\Tag\Entities\Tag;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -15,7 +15,7 @@ use Nette;
 
 /**
  * Class Article
- * @package App\Model\Article\Entities
+ * @package Dravencms\Model\Article\Entities
  * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
  * @ORM\Table(name="articleArticle", uniqueConstraints={@UniqueConstraint(name="name_unique", columns={"name", "group_id"})})
  */
@@ -94,7 +94,7 @@ class Article extends Nette\Object
 
     /**
      * @var StructureFile
-     * @ORM\ManyToOne(targetEntity="\App\Model\File\Entities\StructureFile", inversedBy="articles")
+     * @ORM\ManyToOne(targetEntity="\Dravencms\Model\File\Entities\StructureFile", inversedBy="articles")
      * @ORM\JoinColumn(name="structure_file_id", referencedColumnName="id")
      */
     private $structureFile;
@@ -102,7 +102,7 @@ class Article extends Nette\Object
     /**
      * @var \Doctrine\Common\Collections\Collection|Tag[]
      *
-     * @ORM\ManyToMany(targetEntity="\App\Model\Tag\Entities\Tag", inversedBy="articles")
+     * @ORM\ManyToMany(targetEntity="\Dravencms\Model\Tag\Entities\Tag", inversedBy="articles")
      * @ORM\JoinTable(
      *  name="article_tag",
      *  joinColumns={
