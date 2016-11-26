@@ -1,6 +1,6 @@
 {
   "name": "dravencms/article",
-  "type": "library",
+  "type": "dravencms-package",
   "description": "Article module for dravencms",
   "keywords": [
     "dravencms",
@@ -24,6 +24,19 @@
   "autoload": {
     "psr-0": {
       "Dravencms\\": "src/"
+    }
+  },
+  "extra": {
+    "dravencms": {
+      "configuration": {
+        "extensions": {
+          "timeline": "Dravencms\\Article\\DI\\ArticleExtension"
+        }
+      },
+      "scripts": {
+        "post-install": "Dravencms\\Article\\Script\\PostInstall",
+        "pre-uninstall": "Dravencms\\Article\\Script\\PreUninstall"
+      }
     }
   }
 }
