@@ -29,6 +29,13 @@ class PostInstall implements IScript
     /** @var AclOperationRepository */
     private $aclOperationRepository;
 
+    /**
+     * PostInstall constructor.
+     * @param MenuRepository $menuRepository
+     * @param EntityManager $entityManager
+     * @param AclResourceRepository $aclResourceRepository
+     * @param AclOperationRepository $aclOperationRepository
+     */
     public function __construct(MenuRepository $menuRepository, EntityManager $entityManager, AclResourceRepository $aclResourceRepository, AclOperationRepository $aclOperationRepository)
     {
         $this->menuRepository = $menuRepository;
@@ -37,6 +44,10 @@ class PostInstall implements IScript
         $this->aclOperationRepository = $aclOperationRepository;
     }
 
+    /**
+     * @param IPackage $package
+     * @throws \Exception
+     */
     public function run(IPackage $package)
     {
         if (!$aclResource = $this->aclResourceRepository->getOneByName('article'))
@@ -72,7 +83,7 @@ class PostInstall implements IScript
                 $this->entityManager->persist($adminMenu);
             }
         }
-        
+
         $this->entityManager->flush();
 
     }
