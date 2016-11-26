@@ -11,8 +11,10 @@ use Kdyby\Doctrine\EntityManager;
  */
 class PreUninstall implements IScript
 {
+    /** @var AclResourceRepository */
     private $aclResourceRepository;
 
+    /** @var EntityManager */
     private $entityManager;
 
     public function __construct(EntityManager $entityManager, AclResourceRepository $aclResourceRepository)
