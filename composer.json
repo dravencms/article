@@ -16,7 +16,8 @@
   ],
   "require": {
     "dravencms/tag": "@dev",
-    "dravencms/file": "@dev"
+    "dravencms/file": "@dev",
+    "dravencms/user": "@dev"
   },
   "require-dev": {
     "nette/tester": "@dev"
