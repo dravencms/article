@@ -30,7 +30,7 @@
     "dravencms": {
       "configuration": {
         "extensions": {
-          "timeline": "Dravencms\\Article\\DI\\ArticleExtension"
+          "article": "Dravencms\\Article\\DI\\ArticleExtension"
         }
       },
       "scripts": {
