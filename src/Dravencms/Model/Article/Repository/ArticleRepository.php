@@ -10,13 +10,10 @@ use Dravencms\Model\Article\Entities\Article;
 use Dravencms\Model\Article\Entities\Group;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
-use Salamek\Cms\CmsActionOption;
-use Salamek\Cms\ICmsActionOption;
-use Salamek\Cms\ICmsComponentRepository;
 use Gedmo\Translatable\TranslatableListener;
-use Salamek\Cms\Models\ILocale;
+use Dravencms\Model\Locale\Entities\ILocale;
 
-class ArticleRepository implements ICmsComponentRepository
+class ArticleRepository
 {
     use TLocalizedRepository;
     
@@ -52,6 +49,14 @@ class ArticleRepository implements ICmsComponentRepository
     public function getById($id)
     {
         return $this->articleRepository->findBy(['id' => $id]);
+    }
+
+    /**
+     * @return Article[]
+     */
+    public function getActive()
+    {
+        return $this->articleRepository->findBy(['isActive' => true]);
     }
 
     /**
@@ -200,56 +205,5 @@ class ArticleRepository implements ICmsComponentRepository
         }
 
         return $qb->getQuery()->getResult();
-    }
-
-    /**
-     * @param string $componentAction
-     * @return ICmsActionOption[]
-     */
-    public function getActionOptions($componentAction)
-    {
-        switch ($componentAction)
-        {
-            case 'Detail':
-            case 'OverviewDetail':
-                $return = [];
-                /** @var Article $article */
-                foreach ($this->articleRepository->findBy(['isActive' => true]) AS $article) {
-                    $return[] = new CmsActionOption($article->getName(), ['id' => $article->getId()]);
-                }
-                break;
-
-            case 'Overview':
-            case 'SimpleOverview':
-            case 'Navigation':
-                return null;
-                break;
-
-            default:
-                return false;
-                break;
-        }
-        
-
-        return $return;
-    }
-
-    /**
-     * @param string $componentAction
-     * @param array $parameters
-     * @param ILocale $locale
-     * @return null|CmsActionOption
-     */
-    public function getActionOption($componentAction, array $parameters, ILocale $locale)
-    {
-        /** @var Article $found */
-        $found = $this->findTranslatedOneBy($this->articleRepository, $locale, $parameters + ['isActive' => true]);
-        
-        if ($found)
-        {
-            return new CmsActionOption(($found->getLead() ? $found->getLead() . ' ' : '') . $found->getName(), $parameters);
-        }
-
-        return null;
     }
 }

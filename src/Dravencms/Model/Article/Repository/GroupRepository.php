@@ -51,7 +51,15 @@ class GroupRepository implements ICmsComponentRepository
     {
         return $this->groupRepository->findBy(['id' => $id]);
     }
-    
+
+    /**
+     * @return Group[]
+     */
+    public function getAll()
+    {
+        return $this->groupRepository->findAll();
+    }
+
     /**
      * @param $name
      * @param Group|null $groupIgnore
