@@ -18,7 +18,8 @@
     "dravencms/tag": "@dev",
     "dravencms/file": "@dev",
     "dravencms/user": "@dev",
-    "dravencms/structure": "@dev"
+    "dravencms/structure": "@dev",
+    "dravencms/paginator": "@dev"
   },
   "require-dev": {
     "nette/tester": "@dev"
