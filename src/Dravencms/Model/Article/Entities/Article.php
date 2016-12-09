@@ -251,7 +251,6 @@ class Article extends Nette\Object
             return;
         }
         $this->tags->add($tag);
-        $tag->addArticle($this);
     }
 
     /**
@@ -264,7 +263,6 @@ class Article extends Nette\Object
             return;
         }
         $this->tags->removeElement($tag);
-        $tag->removeGroup($this);
     }
 
     /**
