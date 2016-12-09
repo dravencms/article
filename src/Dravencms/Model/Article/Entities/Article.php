@@ -94,7 +94,7 @@ class Article extends Nette\Object
 
     /**
      * @var StructureFile
-     * @ORM\ManyToOne(targetEntity="\Dravencms\Model\File\Entities\StructureFile", inversedBy="articles")
+     * @ORM\ManyToOne(targetEntity="\Dravencms\Model\File\Entities\StructureFile")
      * @ORM\JoinColumn(name="structure_file_id", referencedColumnName="id")
      */
     private $structureFile;
@@ -102,7 +102,7 @@ class Article extends Nette\Object
     /**
      * @var \Doctrine\Common\Collections\Collection|Tag[]
      *
-     * @ORM\ManyToMany(targetEntity="\Dravencms\Model\Tag\Entities\Tag", inversedBy="articles")
+     * @ORM\ManyToMany(targetEntity="\Dravencms\Model\Tag\Entities\Tag")
      * @ORM\JoinTable(
      *  name="article_tag",
      *  joinColumns={
