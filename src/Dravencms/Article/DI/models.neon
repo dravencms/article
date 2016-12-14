@@ -2,3 +2,7 @@
 - Dravencms\Model\Article\Repository\GroupRepository
 - Dravencms\Model\Article\Repository\ArticleCmsRepository
 - Dravencms\Model\Article\Repository\GroupCmsRepository
+
+- Dravencms\Model\Article\Fixtures\AclOperationFixtures
+- Dravencms\Model\Article\Fixtures\AclResourceFixtures
+- Dravencms\Model\Article\Fixtures\AdminMenuFixtures
