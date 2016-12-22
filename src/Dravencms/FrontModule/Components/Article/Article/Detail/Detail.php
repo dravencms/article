@@ -27,7 +27,7 @@ class Detail extends BaseControl
         $detail = $this->articleRepository->getOneByIdAndActive($this->cmsActionOption->getParameter('id'));
 
         if (!$detail) {
-            throw new \Nette\Application\BadRequestException();
+            throw new \Nette\Application\BadRequestException(sprintf('Article %s not found', $this->cmsActionOption->getParameter('id')));
         }
 
         $template->detail = $detail;
