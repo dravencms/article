@@ -6,6 +6,7 @@
 namespace Dravencms\Model\Article\Repository;
 
 use Dravencms\Locale\TLocalizedRepository;
+use Dravencms\Model\Article\Entities\Article;
 use Dravencms\Model\Article\Entities\Group;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
@@ -136,5 +137,14 @@ class GroupRepository implements ICmsComponentRepository
         }
 
         return null;
+    }
+
+    /**
+     * @param $name
+     * @return Article|null
+     */
+    public function getOneByName($name)
+    {
+        return $this->groupRepository->findOneBy(['name' => $name]);
     }
 }

@@ -55,7 +55,7 @@ class Article extends Nette\Object
     /**
      * @var string
      * @Gedmo\Translatable
-     * @ORM\Column(type="text",nullable=false)
+     * @ORM\Column(type="text",nullable=true)
      */
     private $perex;
 
@@ -126,7 +126,7 @@ class Article extends Nette\Object
     /**
      * Article constructor.
      * @param Group $group
-     * @param $title
+     * @param $name
      * @param $text
      * @param null $subtitle
      * @param null $lead
@@ -136,10 +136,10 @@ class Article extends Nette\Object
      * @param bool $isAutoDetectTags
      * @param StructureFile|null $file
      */
-    public function __construct(Group $group, $title, $text, $subtitle = null, $lead = null, $perex = null, $isActive = true, $isShowTitle = true, $isAutoDetectTags = true, StructureFile $file = null)
+    public function __construct(Group $group, $name, $text, $subtitle = null, $lead = null, $perex = null, $isActive = true, $isShowTitle = true, $isAutoDetectTags = true, StructureFile $file = null)
     {
         $this->group = $group;
-        $this->name = $title;
+        $this->name = $name;
         $this->subtitle = $subtitle;
         $this->text = $text;
         $this->perex = $perex;
@@ -384,6 +384,14 @@ class Article extends Nette\Object
     public function getGroup()
     {
         return $this->group;
+    }
+
+    /**
+     * @param Group $group
+     */
+    public function setGroup($group)
+    {
+        $this->group = $group;
     }
 }
 
