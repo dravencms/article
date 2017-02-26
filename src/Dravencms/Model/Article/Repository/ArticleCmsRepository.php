@@ -56,13 +56,12 @@ class ArticleCmsRepository implements ICmsComponentRepository
     /**
      * @param string $componentAction
      * @param array $parameters
-     * @param ILocale $locale
      * @return null|CmsActionOption
      */
-    public function getActionOption($componentAction, array $parameters, ILocale $locale)
+    public function getActionOption($componentAction, array $parameters)
     {
         /** @var Article $found */
-        $found = $this->articleRepository->findTranslatedOneBy($this->articleRepository, $locale, $parameters + ['isActive' => true]);
+        $found = $this->articleRepository->getOneByParameters($parameters + ['isActive' => true]);
         
         if ($found)
         {

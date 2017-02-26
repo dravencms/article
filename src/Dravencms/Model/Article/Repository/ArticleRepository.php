@@ -15,8 +15,6 @@ use Dravencms\Model\Locale\Entities\ILocale;
 
 class ArticleRepository
 {
-    use TLocalizedRepository;
-    
     /** @var \Kdyby\Doctrine\EntityRepository */
     private $articleRepository;
 
@@ -205,5 +203,14 @@ class ArticleRepository
         }
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param array $parameters
+     * @return Article
+     */
+    public function getOneByParameters(array $parameters)
+    {
+        return $this->articleRepository->findOneBy($parameters);
     }
 }

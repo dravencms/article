@@ -49,13 +49,13 @@ class GroupCmsRepository implements ICmsComponentRepository
     /**
      * @param string $componentAction
      * @param array $parameters
-     * @param ILocale $locale
      * @return null|CmsActionOption
      */
-    public function getActionOption($componentAction, array $parameters, ILocale $locale)
+    public function getActionOption($componentAction, array $parameters)
     {
-        $found = $this->groupRepository->findTranslatedOneBy($this->groupRepository, $locale, $parameters);
 
+        $found = $this->groupRepository->getOneByParameters($parameters);
+        
         if ($found) {
             return new CmsActionOption($found->getName(), $parameters);
         }

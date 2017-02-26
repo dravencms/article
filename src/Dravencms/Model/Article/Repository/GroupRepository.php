@@ -15,10 +15,8 @@ use Salamek\Cms\ICmsActionOption;
 use Salamek\Cms\ICmsComponentRepository;
 use Salamek\Cms\Models\ILocale;
 
-class GroupRepository implements ICmsComponentRepository
+class GroupRepository/* implements ICmsComponentRepository*/
 {
-    use TLocalizedRepository;
-    
     /** @var \Kdyby\Doctrine\EntityRepository */
     private $groupRepository;
 
@@ -99,14 +97,14 @@ class GroupRepository implements ICmsComponentRepository
      * @param string $componentAction
      * @return ICmsActionOption[]
      */
-    public function getActionOptions($componentAction)
+    /*public function getActionOptions($componentAction)
     {
         switch ($componentAction)
         {
             case 'Detail':
             case 'SimpleDetail':
                 $return = [];
-                /** @var Group $group */
+                /** @var Group $group *
                 foreach ($this->groupRepository->findAll() AS $group) {
                     $return[] = new CmsActionOption($group->getName(), ['id' => $group->getId()]);
                 }
@@ -119,7 +117,7 @@ class GroupRepository implements ICmsComponentRepository
         
 
         return $return;
-    }
+    }*/
 
     /**
      * @param string $componentAction
@@ -127,7 +125,7 @@ class GroupRepository implements ICmsComponentRepository
      * @param ILocale $locale
      * @return null|CmsActionOption
      */
-    public function getActionOption($componentAction, array $parameters, ILocale $locale)
+    /*public function getActionOption($componentAction, array $parameters, ILocale $locale)
     {
         $found = $this->findTranslatedOneBy($this->groupRepository, $locale, $parameters);
 
@@ -137,7 +135,7 @@ class GroupRepository implements ICmsComponentRepository
         }
 
         return null;
-    }
+    }*/
 
     /**
      * @param $name
@@ -146,5 +144,14 @@ class GroupRepository implements ICmsComponentRepository
     public function getOneByName($name)
     {
         return $this->groupRepository->findOneBy(['name' => $name]);
+    }
+
+    /**
+     * @param array $parameters
+     * @return null|Article
+     */
+    public function getOneByParameters(array $parameters)
+    {
+        return $this->groupRepository->findOneBy($parameters);
     }
 }
