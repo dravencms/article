@@ -6,18 +6,16 @@ use Dravencms\Model\Tag\Entities\Tag;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Translatable\Translatable;
-use Doctrine\ORM\Mapping\UniqueConstraint;
-use Gedmo\Sortable\Sortable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use Nette;
 
 /**
  * Class Article
  * @package Dravencms\Model\Article\Entities
  * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
- * @ORM\Table(name="articleArticle", uniqueConstraints={@UniqueConstraint(name="name_unique", columns={"name", "group_id"})})
+ * @ORM\Table(name="articleArticle", uniqueConstraints={@UniqueConstraint(name="identifier_unique", columns={"identifier", "group_id"})})
  */
 class Article extends Nette\Object
 {
@@ -26,38 +24,9 @@ class Article extends Nette\Object
 
     /**
      * @var string
-     * @Gedmo\Translatable
      * @ORM\Column(type="string",length=255,nullable=false)
      */
-    private $name;
-
-    /**
-     * @var string
-     * @Gedmo\Translatable
-     * @ORM\Column(type="string",length=255,nullable=true)
-     */
-    private $subtitle;
-
-    /**
-     * @var string
-     * @Gedmo\Translatable
-     * @ORM\Column(type="string",length=255,nullable=true)
-     */
-    private $lead;
-
-    /**
-     * @var string
-     * @Gedmo\Translatable
-     * @ORM\Column(type="text",nullable=false)
-     */
-    private $text;
-
-    /**
-     * @var string
-     * @Gedmo\Translatable
-     * @ORM\Column(type="text",nullable=true)
-     */
-    private $perex;
+    private $identifier;
 
     /**
      * @var boolean
@@ -83,14 +52,6 @@ class Article extends Nette\Object
      * @ORM\Column(type="integer")
      */
     private $position;
-
-    /**
-     * @Gedmo\Locale
-     * Used locale to override Translation listener`s locale
-     * this is not a mapped field of entity metadata, just a simple property
-     * and it is not necessary because globally locale can be set in listener
-     */
-    private $locale;
 
     /**
      * @var StructureFile
@@ -124,73 +85,31 @@ class Article extends Nette\Object
     private $group;
 
     /**
+     * @var ArrayCollection|ArticleTranslation[]
+     * @ORM\OneToMany(targetEntity="ArticleTranslation", mappedBy="article",cascade={"persist", "remove"})
+     */
+    private $translations;
+
+    /**
      * Article constructor.
      * @param Group $group
-     * @param $name
-     * @param $text
-     * @param null $subtitle
-     * @param null $lead
-     * @param null $perex
+     * @param $identifier
      * @param bool $isActive
      * @param bool $isShowTitle
      * @param bool $isAutoDetectTags
      * @param StructureFile|null $file
      */
-    public function __construct(Group $group, $name, $text, $subtitle = null, $lead = null, $perex = null, $isActive = true, $isShowTitle = true, $isAutoDetectTags = true, StructureFile $file = null)
+    public function __construct(Group $group, $identifier, $isActive = true, $isShowTitle = true, $isAutoDetectTags = true, StructureFile $file = null)
     {
         $this->group = $group;
-        $this->name = $name;
-        $this->subtitle = $subtitle;
-        $this->text = $text;
-        $this->perex = $perex;
+        $this->identifier = $identifier;
         $this->isActive = $isActive;
         $this->isShowName = $isShowTitle;
         $this->isAutoDetectTags = $isAutoDetectTags;
-        $this->lead = $lead;
         $this->structureFile = $file;
 
         $this->tags = new ArrayCollection();
-    }
-
-
-    /**
-     * @param $locale
-     */
-    public function setTranslatableLocale($locale)
-    {
-        $this->locale = $locale;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @param string $subtitle
-     */
-    public function setSubtitle($subtitle)
-    {
-        $this->subtitle = $subtitle;
-    }
-
-    /**
-     * @param string $text
-     */
-    public function setText($text)
-    {
-        $this->text = $text;
-    }
-
-    /**
-     * @param string $perex
-     */
-    public function setPerex($perex)
-    {
-        $this->perex = $perex;
+        $this->translations = new ArrayCollection();
     }
 
     /**
@@ -218,14 +137,6 @@ class Article extends Nette\Object
     }
 
     /**
-     * @param string $lead
-     */
-    public function setLead($lead)
-    {
-        $this->lead = $lead;
-    }
-
-    /**
      * @param mixed $position
      */
     public function setPosition($position)
@@ -239,6 +150,14 @@ class Article extends Nette\Object
     public function setStructureFile(StructureFile $structureFile = null)
     {
         $this->structureFile = $structureFile;
+    }
+
+    /**
+     * @param string $identifier
+     */
+    public function setIdentifier($identifier)
+    {
+        $this->identifier = $identifier;
     }
 
     /**
@@ -291,38 +210,6 @@ class Article extends Nette\Object
     }
 
     /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSubtitle()
-    {
-        return $this->subtitle;
-    }
-
-    /**
-     * @return string
-     */
-    public function getText()
-    {
-        return $this->text;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPerex()
-    {
-        return $this->perex;
-    }
-
-    /**
      * @return boolean
      */
     public function isActive()
@@ -371,7 +258,7 @@ class Article extends Nette\Object
     }
 
     /**
-     * @return \App\Model\Tag\Entities\Tag[]|\Doctrine\Common\Collections\Collection
+     * @return ArrayCollection|\Doctrine\Common\Collections\Collection|\Dravencms\Model\Tag\Entities\Tag[]
      */
     public function getTags()
     {
@@ -392,6 +279,22 @@ class Article extends Nette\Object
     public function setGroup($group)
     {
         $this->group = $group;
+    }
+
+    /**
+     * @return ArrayCollection|ArticleTranslation[]
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
     }
 }
 

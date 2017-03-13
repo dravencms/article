@@ -24,8 +24,10 @@ use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseForm\BaseFormFactory;
 use Dravencms\File\File;
 use Dravencms\Model\Article\Entities\Article;
+use Dravencms\Model\Article\Entities\ArticleTranslation;
 use Dravencms\Model\Article\Entities\Group;
 use Dravencms\Model\Article\Repository\ArticleRepository;
+use Dravencms\Model\Article\Repository\ArticleTranslationRepository;
 use Dravencms\Model\File\Repository\StructureFileRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Dravencms\Model\Tag\Repository\TagRepository;
@@ -59,6 +61,9 @@ class ArticleForm extends BaseControl
     /** @var TagRepository */
     private $tagRepository;
 
+    /** @var ArticleTranslationRepository */
+    private $articleTranslationRepository;
+
     /** @var Group */
     private $group;
 
@@ -71,23 +76,12 @@ class ArticleForm extends BaseControl
     /** @var array */
     public $onSuccess = [];
 
-    /**
-     * ArticleForm constructor.
-     * @param Group $group
-     * @param BaseFormFactory $baseFormFactory
-     * @param EntityManager $entityManager
-     * @param ArticleRepository $articleRepository
-     * @param TagRepository $tagRepository
-     * @param StructureFileRepository $structureFileRepository
-     * @param LocaleRepository $localeRepository
-     * @param File $file,
-     * @param Article|null $article
-     */
     public function __construct(
         Group $group,
         BaseFormFactory $baseFormFactory,
         EntityManager $entityManager,
         ArticleRepository $articleRepository,
+        ArticleTranslationRepository $articleTranslationRepository,
         TagRepository $tagRepository,
         StructureFileRepository $structureFileRepository,
         LocaleRepository $localeRepository,
@@ -102,6 +96,7 @@ class ArticleForm extends BaseControl
         $this->baseFormFactory = $baseFormFactory;
         $this->entityManager = $entityManager;
         $this->articleRepository = $articleRepository;
+        $this->articleTranslationRepository = $articleTranslationRepository;
         $this->tagRepository = $tagRepository;
         $this->structureFileRepository = $structureFileRepository;
         $this->localeRepository = $localeRepository;
@@ -117,22 +112,20 @@ class ArticleForm extends BaseControl
             $defaults = [
                 'structureFile' => ($this->article->getStructureFile() ? $this->article->getStructureFile()->getId() : null),
                 'position' => $this->article->getPosition(),
+                'identifier' => $this->article->getIdentifier(),
                 'isActive' => $this->article->isActive(),
                 'isShowName' => $this->article->isShowName(),
                 'isAutoDetectTags' => $this->article->isAutoDetectTags(),
                 'tags' => $tags
             ];
 
-            $repository = $this->entityManager->getRepository('Gedmo\Translatable\Entity\Translation');
-            $defaults += $repository->findTranslations($this->article);
-
-            $defaultLocale = $this->localeRepository->getDefault();
-            if ($defaultLocale) {
-                $defaults[$defaultLocale->getLanguageCode()]['name'] = $this->article->getName();
-                $defaults[$defaultLocale->getLanguageCode()]['lead'] = $this->article->getLead();
-                $defaults[$defaultLocale->getLanguageCode()]['subtitle'] = $this->article->getSubtitle();
-                $defaults[$defaultLocale->getLanguageCode()]['perex'] = $this->article->getPerex();
-                $defaults[$defaultLocale->getLanguageCode()]['text'] = $this->article->getText();
+            foreach ($this->article->getTranslations() AS $translation)
+            {
+                $defaults[$translation->getLocale()->getLanguageCode()]['name'] = $translation->getName();
+                $defaults[$translation->getLocale()->getLanguageCode()]['lead'] = $translation->getLead();
+                $defaults[$translation->getLocale()->getLanguageCode()]['subtitle'] = $translation->getSubtitle();
+                $defaults[$translation->getLocale()->getLanguageCode()]['perex'] = $translation->getPerex();
+                $defaults[$translation->getLocale()->getLanguageCode()]['text'] = $translation->getText();
             }
         } else {
             $defaults = [
@@ -169,6 +162,10 @@ class ArticleForm extends BaseControl
             $container->addTextArea('text');
         }
 
+        $form->addText('identifier')
+            ->setRequired('Please fill in an identifier');
+
+
         $form->addText('structureFile');
 
         $form->addText('position')
@@ -194,7 +191,7 @@ class ArticleForm extends BaseControl
         $values = $form->getValues();
 
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
-            if (!$this->articleRepository->isNameFree($values->{$activeLocale->getLanguageCode()}->name, $activeLocale, $this->group, $this->article)) {
+            if (!$this->articleTranslationRepository->isNameFree($values->{$activeLocale->getLanguageCode()}->name, $activeLocale, $this->group, $this->article)) {
                 $form->addError('Tento název je již zabrán.');
             }
         }
@@ -228,45 +225,43 @@ class ArticleForm extends BaseControl
 
         if ($this->article) {
             $article = $this->article;
-            //$article->setName($this->cleanName($values->name));
-            //$article->setLead($values->lead);
-            //$article->setSubtitle($values->subtitle);
+            $article->setIdentifier($values->identifier);
             $article->setStructureFile($structureFile);
-            //$article->setPerex($values->perex);
-            //$article->setText($text);
             $article->setIsActive($values->isActive);
             $article->setIsShowName($values->isShowName);
             $article->setIsAutoDetectTags($values->isAutoDetectTags);
             $article->setPosition($values->position);
         } else {
-
-            $defaultLocale = $this->localeRepository->getDefault();
-
-            $article = new Article($this->group, $this->cleanName($values->{$defaultLocale->getLanguageCode()}->name), $this->cleanText($values->{$defaultLocale->getLanguageCode()}->text), $values->{$defaultLocale->getLanguageCode()}->subtitle, $values->{$defaultLocale->getLanguageCode()}->lead, $values->{$defaultLocale->getLanguageCode()}->perex, $values->isActive, $values->isShowName, $values->isAutoDetectTags,
-                $structureFile);
+            $article = new Article($this->group, $values->isActive, $values->isShowName, $values->isAutoDetectTags, $structureFile);
         }
         $article->setTags($tags);
-
-        $repository = $this->entityManager->getRepository('Gedmo\\Translatable\\Entity\\Translation');
-
-        foreach ($this->localeRepository->getActive() AS $activeLocale) {
-            $repository->translate($article, 'name', $activeLocale->getLanguageCode(), $this->cleanName($values->{$activeLocale->getLanguageCode()}->name))
-                ->translate($article, 'lead', $activeLocale->getLanguageCode(), $values->{$activeLocale->getLanguageCode()}->lead)
-                ->translate($article, 'subtitle', $activeLocale->getLanguageCode(), $values->{$activeLocale->getLanguageCode()}->subtitle)
-                ->translate($article, 'perex', $activeLocale->getLanguageCode(), $values->{$activeLocale->getLanguageCode()}->perex)
-                ->translate($article, 'text', $activeLocale->getLanguageCode(), $this->cleanText($values->{$activeLocale->getLanguageCode()}->text));
-        }
 
         $this->entityManager->persist($article);
 
         $this->entityManager->flush();
 
-        $this->onSuccess();
-    }
+        foreach ($this->localeRepository->getActive() AS $activeLocale) {
+            if ($articleTranslation = $this->articleTranslationRepository->getTranslation($article, $activeLocale))
+            {
+                $articleTranslation->setName($values->{$activeLocale->getLanguageCode()}->name);
+            }
+            else
+            {
+                $articleTranslation = new ArticleTranslation(
+                    $article,
+                    $activeLocale,
+                    $values->{$activeLocale->getLanguageCode()}->name,
+                    $values->{$activeLocale->getLanguageCode()}->subtitle,
+                    $values->{$activeLocale->getLanguageCode()}->lead,
+                    $this->cleanText($values->{$activeLocale->getLanguageCode()}->text),
+                    $values->{$activeLocale->getLanguageCode()}->perex
+                );
+            }
+            $this->entityManager->persist($articleTranslation);
+        }
+        $this->entityManager->flush();
 
-    private function cleanName($name)
-    {
-        return Strings::firstUpper(Strings::lower($name));
+        $this->onSuccess();
     }
 
     /**

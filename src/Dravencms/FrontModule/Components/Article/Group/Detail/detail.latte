@@ -1,16 +1,6 @@
 <div class="row page-row">
     <div class="news-wrapper" n:snippet="overview">
-        {*<div class="row page-row ">
-            <form class="form-horizontal col-md-10 col-sm-9 col-xs-8" action="/clanky-a-tipy" method="post" id="frm-searchForm" novalidate="">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Hledat v článcích..." name="query" id="frm-searchForm-query" required="" value="fir">
-                  <span class="input-group-btn">
-                    <a href="https://www.cvc.cz/clanky-a-tipy" class="btn btn-danger" title="Resetovat vyhledávání"><span class="fa fa-times"></span></a>
-                    <input class="btn btn-default" value="Hledat" title="Hledat v článcích" type="submit" name="send">
-                  </span>
-                </div>
-            </form>
-        </div>*}
+
         <article n:foreach="$overview AS $article" class="news-item page-row has-divider clearfix row">
             <figure class="thumb col-md-2 col-sm-3 col-xs-4">
                 <img class="img-responsive" n:img="$article->getStructureFile(), '100x100'" alt="{$article->getName()}">

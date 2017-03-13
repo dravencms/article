@@ -23,6 +23,7 @@ namespace Dravencms\AdminModule\Components\Article\ArticleGrid;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseGrid\BaseGridFactory;
+use Dravencms\Locale\CurrentLocale;
 use Dravencms\Model\Article\Entities\Group;
 use Dravencms\Model\Article\Repository\ArticleRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
@@ -45,8 +46,7 @@ class ArticleGrid extends BaseControl
     /** @var EntityManager */
     private $entityManager;
 
-    /** @var LocaleRepository */
-    private $localeRepository;
+    private $currentLocale;
 
     /** @var Group */
     private $group;
@@ -62,23 +62,29 @@ class ArticleGrid extends BaseControl
      * @param ArticleRepository $articleRepository
      * @param BaseGridFactory $baseGridFactory
      * @param EntityManager $entityManager
-     * @param LocaleRepository $localeRepository
+     * @param CurrentLocale $currentLocale
      */
-    public function __construct(Group $group, ArticleRepository $articleRepository, BaseGridFactory $baseGridFactory, EntityManager $entityManager, LocaleRepository $localeRepository)
+    public function __construct(
+        Group $group,
+        ArticleRepository $articleRepository,
+        BaseGridFactory $baseGridFactory,
+        EntityManager $entityManager,
+        CurrentLocale $currentLocale
+    )
     {
         parent::__construct();
 
         $this->group = $group;
         $this->baseGridFactory = $baseGridFactory;
         $this->articleRepository = $articleRepository;
-        $this->localeRepository = $localeRepository;
+        $this->currentLocale = $currentLocale;
         $this->entityManager = $entityManager;
     }
 
 
     /**
      * @param $name
-     * @return \Dravencms\Components\BaseGrid
+     * @return \Dravencms\Components\BaseGrid\BaseGrid
      */
     public function createComponentGrid($name)
     {
@@ -94,11 +100,10 @@ class ArticleGrid extends BaseControl
             $grid->setDefaultSort(['createdAt' => 'DESC']);
         }
 
-        $grid->addColumnText('name', 'Name')
+        $grid->addColumnText('identifier', 'Identifier')
             ->setSortable()
             ->setFilterText()
             ->setSuggestion();
-
 
         $grid->addColumnBoolean('isActive', 'Active');
         $grid->addColumnBoolean('isShowName', 'Show name');
@@ -113,7 +118,7 @@ class ArticleGrid extends BaseControl
         }
         elseif ($this->group->getSortBy() == Group::SORT_BY_CREATED_AT)
         {
-            $grid->addColumnDate('createdAt', 'Created', $this->localeRepository->getLocalizedDateTimeFormat())
+            $grid->addColumnDate('createdAt', 'Created', $this->currentLocale->getDateTimeFormat())
                 ->setSortable()
                 ->setFilterDate();
             $grid->getColumn('createdAt')->cellPrototype->class[] = 'center';
@@ -134,7 +139,7 @@ class ArticleGrid extends BaseControl
                 })
                 ->setIcon('trash-o')
                 ->setConfirm(function ($row) {
-                    return ['Opravdu chcete smazat article %s ?', $row->getName()];
+                    return ['Opravdu chcete smazat article %s ?', $row->getIdentifier()];
                 });
 
 

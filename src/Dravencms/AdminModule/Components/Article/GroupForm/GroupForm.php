@@ -23,7 +23,10 @@ namespace Dravencms\AdminModule\Components\Article\GroupForm;
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseForm\BaseFormFactory;
 use Dravencms\Model\Article\Entities\Group;
+use Dravencms\Model\Article\Entities\GroupTranslation;
 use Dravencms\Model\Article\Repository\GroupRepository;
+use Dravencms\Model\Article\Repository\GroupTranslationRepository;
+use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Form;
 
@@ -43,6 +46,12 @@ class GroupForm extends BaseControl
     /** @var GroupRepository */
     private $groupRepository;
 
+    /** @var LocaleRepository */
+    private $localeRepository;
+
+    /** @var GroupTranslationRepository */
+    private $groupTranslationRepository;
+
     /** @var Group|null */
     private $group = null;
 
@@ -50,16 +59,20 @@ class GroupForm extends BaseControl
     public $onSuccess = [];
 
     /**
-     * ArticleForm constructor.
+     * GroupForm constructor.
      * @param BaseFormFactory $baseFormFactory
      * @param EntityManager $entityManager
      * @param GroupRepository $groupRepository
+     * @param GroupTranslationRepository $groupTranslationRepository
+     * @param LocaleRepository $localeRepository
      * @param Group|null $group
      */
     public function __construct(
         BaseFormFactory $baseFormFactory,
         EntityManager $entityManager,
         GroupRepository $groupRepository,
+        GroupTranslationRepository $groupTranslationRepository,
+        LocaleRepository $localeRepository,
         Group $group = null
     ) {
         parent::__construct();
@@ -69,16 +82,22 @@ class GroupForm extends BaseControl
         $this->baseFormFactory = $baseFormFactory;
         $this->entityManager = $entityManager;
         $this->groupRepository = $groupRepository;
+        $this->groupTranslationRepository = $groupTranslationRepository;
+        $this->localeRepository = $localeRepository;
 
 
         if ($this->group) {
 
             $defaults = [
-                'name' => $this->group->getName(),
+                'identifier' => $this->group->getIdentifier(),
                 'isShowName' => $this->group->isShowName(),
                 'sortBy' => $this->group->getSortBy()
             ];
 
+            foreach ($this->group->getTranslations() AS $translation)
+            {
+                $defaults[$translation->getLocale()->getLanguageCode()]['name'] = $translation->getName();
+            }
         }
         else{
             $defaults = [
@@ -94,9 +113,15 @@ class GroupForm extends BaseControl
     {
         $form = $this->baseFormFactory->create();
 
-        $form->addText('name')
-            ->setRequired('Please enter article name.')
-            ->addRule(Form::MAX_LENGTH, 'Article name is too long.', 255);
+        foreach ($this->localeRepository->getActive() AS $activeLocale) {
+            $container = $form->addContainer($activeLocale->getLanguageCode());
+            $container->addText('name')
+                ->setRequired('Please enter group name.')
+                ->addRule(Form::MAX_LENGTH, 'Group name is too long.', 255);
+        }
+
+        $form->addText('identifier')
+            ->setRequired('Please fill in an identifier');
 
         $form->addSelect('sortBy', null, Group::$sortByList)
             ->setRequired('Please select sorting mode');
@@ -118,8 +143,14 @@ class GroupForm extends BaseControl
     public function editFormValidate(Form $form)
     {
         $values = $form->getValues();
-        if (!$this->groupRepository->isNameFree($values->name, $this->group)) {
-            $form->addError('Tento název je již zabrán.');
+        if (!$this->groupRepository->isIdentifierFree($values->identifier, $this->group)) {
+            $form->addError('Tento identifier je již zabrán.');
+        }
+
+        foreach ($this->localeRepository->getActive() AS $activeLocale) {
+            if (!$this->groupTranslationRepository->isNameFree($values->{$activeLocale->getLanguageCode()}->name, $activeLocale, $this->group)) {
+                $form->addError('Tento název je již zabrán.');
+            }
         }
 
         if (!$this->presenter->isAllowed('article', 'edit')) {
@@ -137,15 +168,32 @@ class GroupForm extends BaseControl
 
         if ($this->group) {
             $group = $this->group;
-            $group->setName($values->name);
+            $group->setIdentifier($values->identifier);
             $group->setIsShowName($values->isShowName);
             $group->setSortBy($values->sortBy);
         } else {
-            $group = new Group($values->name, $values->isShowName, $values->sortBy);
+            $group = new Group($values->identifier, $values->isShowName, $values->sortBy);
         }
 
         $this->entityManager->persist($group);
 
+        $this->entityManager->flush();
+
+        foreach ($this->localeRepository->getActive() AS $activeLocale) {
+            if ($groupTranslation = $this->groupTranslationRepository->getTranslation($group, $activeLocale))
+            {
+                $groupTranslation->setName($values->{$activeLocale->getLanguageCode()}->name);
+            }
+            else
+            {
+                $groupTranslation = new GroupTranslation(
+                    $group,
+                    $activeLocale,
+                    $values->{$activeLocale->getLanguageCode()}->name
+                );
+            }
+            $this->entityManager->persist($groupTranslation);
+        }
         $this->entityManager->flush();
 
         $this->onSuccess();
@@ -154,6 +202,7 @@ class GroupForm extends BaseControl
     public function render()
     {
         $template = $this->template;
+        $template->activeLocales = $this->localeRepository->getActive();
         $template->setFile(__DIR__ . '/GroupForm.latte');
         $template->render();
     }

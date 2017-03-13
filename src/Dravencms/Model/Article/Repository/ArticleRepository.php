@@ -5,13 +5,10 @@
 
 namespace Dravencms\Model\Article\Repository;
 
-use Dravencms\Locale\TLocalizedRepository;
 use Dravencms\Model\Article\Entities\Article;
 use Dravencms\Model\Article\Entities\Group;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
-use Gedmo\Translatable\TranslatableListener;
-use Dravencms\Model\Locale\Entities\ILocale;
 
 class ArticleRepository
 {
@@ -58,21 +55,20 @@ class ArticleRepository
     }
 
     /**
-     * @param $name
-     * @param ILocale $locale
+     * @param $identifier
      * @param Group $group
      * @param Article|null $articleIgnore
      * @return bool
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree($name, ILocale $locale, Group $group, Article $articleIgnore = null)
+    public function isIdentifierFree($identifier, Group $group, Article $articleIgnore = null)
     {
         $qb = $this->articleRepository->createQueryBuilder('a')
             ->select('a')
-            ->where('a.name = :name')
+            ->where('a.identifier = :identifier')
             ->andWhere('a.group = :group')
             ->setParameters([
-                'name' => $name,
+                'identifier' => $identifier,
                 'group' => $group
             ]);
 
@@ -83,8 +79,6 @@ class ArticleRepository
         }
 
         $query = $qb->getQuery();
-
-        $query->setHint(TranslatableListener::HINT_TRANSLATABLE_LOCALE, $locale->getLanguageCode());
 
         return (is_null($query->getOneOrNullResult()));
     }
@@ -132,77 +126,6 @@ class ArticleRepository
     {
         $parameters['isActive'] = $isActive;
         return $this->articleRepository->findOneBy($parameters);
-    }
-
-    /**
-     * @param Group $group
-     * @param null $query
-     * @param array $tags
-     * @param bool $isActive
-     * @param null $limit
-     * @param null $offset
-     * @param Article|null $ignoreArticle
-     * @return array
-     */
-    public function search(Group $group = null, $query = null, array $tags = [], $isActive = true, $limit = null, $offset = null, Article $ignoreArticle = null)
-    {
-        $qb = $this->articleRepository->createQueryBuilder('a')
-            ->select('a')
-            ->where('a.isActive = :isActive')
-            ->setParameters(
-                [
-                    'isActive' => $isActive,
-                ]
-            );
-
-        if ($group)
-        {
-            $qb->andWhere('a.group = :group')
-                ->setParameter('group', $group);
-
-            if ($group->getSortBy() == Group::SORT_BY_POSITION)
-            {
-                $qb->orderBy('a.position', 'ASC');
-            }
-            elseif ($group->getSortBy() == Group::SORT_BY_CREATED_AT)
-            {
-                $qb->orderBy('a.createdAt', 'DESC');
-            }
-        }
-
-        if ($query)
-        {
-            $qb->andWhere('at.name LIKE :query')
-                ->orWhere('a.text LIKE :query')
-                ->orWhere('a.name LIKE :query')
-                ->orWhere('a.perex LIKE :query')
-                ->setParameter('query', '%'.$query.'%');
-        }
-
-        if (!empty($tags))
-        {
-            $qb->join('a.tags', 'at')
-                ->andWhere('at IN (:tags)')
-                ->setParameter('tags', $tags);
-        }
-
-        if ($limit)
-        {
-            $qb->setMaxResults($limit);
-        }
-
-        if ($offset)
-        {
-            $qb->setFirstResult($offset);
-        }
-
-        if ($ignoreArticle)
-        {
-            $qb->andWhere('a != :ignoreArticle')
-                ->setParameter('ignoreArticle', $ignoreArticle);
-        }
-
-        return $qb->getQuery()->getResult();
     }
 
     /**

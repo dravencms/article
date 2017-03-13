@@ -64,12 +64,18 @@
         {include $fileSelectorPath, filetype => Salamek\Files\Models\IFile::TYPE_IMAGE, form => $form}
 
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-6">
+                <div class="form-group no-margin-hr">
+                    <label class="control-label" n:name="identifier">{_"Identifier"}</label>
+                    <input n:name="identifier" class="form-control">
+                </div>
+            </div><!-- col-sm-6 -->
+            <div class="col-sm-6">
                 <div class="form-group no-margin-hr">
                     <label class="control-label" n:name="position">{_"Position"}</label>
                     <input n:name="position" class="form-control">
                 </div>
-            </div><!-- col-sm-12 -->
+            </div><!-- col-sm-6 -->
         </div><!-- row -->
 
         <div class="row">

@@ -67,7 +67,7 @@ class GroupGrid extends BaseControl
 
     /**
      * @param $name
-     * @return \Dravencms\Components\BaseGrid
+     * @return \Dravencms\Components\BaseGrid\BaseGrid
      */
     public function createComponentGrid($name)
     {
@@ -75,7 +75,7 @@ class GroupGrid extends BaseControl
 
         $grid->setModel($this->groupRepository->getGroupQueryBuilder());
 
-        $grid->addColumnText('name', 'Name')
+        $grid->addColumnText('identifier', 'Identifier')
             ->setSortable()
             ->setFilterText()
             ->setSuggestion();
@@ -108,7 +108,7 @@ class GroupGrid extends BaseControl
                 })
                 ->setIcon('trash-o')
                 ->setConfirm(function ($row) {
-                    return ['Opravdu chcete smazat article group %s ?', $row->name];
+                    return ['Opravdu chcete smazat article group %s ?', $row->getIdentifier()];
                 });
 
 

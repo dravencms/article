@@ -10,6 +10,7 @@ namespace Dravencms\AdminModule\ArticleModule;
 use Dravencms\AdminModule\Components\Article\GroupForm\GroupFormFactory;
 use Dravencms\AdminModule\Components\Article\GroupGrid\GroupGridFactory;
 use Dravencms\AdminModule\SecuredPresenter;
+use Dravencms\Flash;
 use Dravencms\Model\Article\Entities\Article;
 use Dravencms\Model\Article\Repository\GroupRepository;
 
@@ -56,34 +57,34 @@ class GroupPresenter extends SecuredPresenter
 
             $this->group = $group;
 
-            $this->template->h1 = sprintf('Edit article group „%s“', $group->getName());
+            $this->template->h1 = sprintf('Edit article group „%s“', $group->getIdentifier());
         } else {
             $this->template->h1 = 'New article group';
         }
     }
 
     /**
-     * @return \AdminModule\Components\Article\GroupForm
+     * @return \Dravencms\AdminModule\Components\Article\GroupForm\GroupForm
      */
     protected function createComponentFormGroup()
     {
         $control = $this->groupFormFactory->create($this->group);
         $control->onSuccess[] = function(){
-            $this->flashMessage('Article group has been successfully saved', 'alert-success');
+            $this->flashMessage('Article group has been successfully saved', Flash::SUCCESS);
             $this->redirect('Group:');
         };
         return $control;
     }
 
     /**
-     * @return \AdminModule\Components\Article\GroupGrid
+     * @return \Dravencms\AdminModule\Components\Article\GroupGrid\GroupGrid
      */
     public function createComponentGridGroup()
     {
         $control = $this->groupGridFactory->create();
         $control->onDelete[] = function()
         {
-            $this->flashMessage('Article group has been successfully deleted', 'alert-success');
+            $this->flashMessage('Article group has been successfully deleted', Flash::SUCCESS);
             $this->redirect('Group:');
         };
         return $control;

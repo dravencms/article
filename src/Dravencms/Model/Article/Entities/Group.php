@@ -31,10 +31,9 @@ class Group extends Nette\Object
 
     /**
      * @var string
-     * @Gedmo\Translatable
      * @ORM\Column(type="string",length=255,nullable=false,unique=true)
      */
-    private $name;
+    private $identifier;
 
     /**
      * @var boolean
@@ -49,39 +48,38 @@ class Group extends Nette\Object
     private $sortBy;
 
     /**
-     * @Gedmo\Locale
-     * Used locale to override Translation listener`s locale
-     * this is not a mapped field of entity metadata, just a simple property
-     * and it is not necessary because globally locale can be set in listener
-     */
-    private $locale;
-
-    /**
      * @var ArrayCollection|Article[]
      * @ORM\OneToMany(targetEntity="Article", mappedBy="group",cascade={"persist"})
      */
     private $articles;
 
     /**
+     * @var ArrayCollection|GroupTranslation[]
+     * @ORM\OneToMany(targetEntity="GroupTranslation", mappedBy="group",cascade={"persist", "remove"})
+     */
+    private $translations;
+
+    /**
      * Group constructor.
-     * @param $name
+     * @param $identifier
      * @param $isShowName
      * @param string $sortBy
      */
-    public function __construct($name, $isShowName, $sortBy = self::SORT_BY_POSITION)
+    public function __construct($identifier, $isShowName, $sortBy = self::SORT_BY_POSITION)
     {
-        $this->name = $name;
+        $this->identifier = $identifier;
         $this->isShowName = $isShowName;
         $this->sortBy = $sortBy;
         $this->articles = new ArrayCollection();
+        $this->translations = new ArrayCollection();
     }
 
     /**
-     * @param string $name
+     * @param string $identifier
      */
-    public function setName($name)
+    public function setIdentifier($identifier)
     {
-        $this->name = $name;
+        $this->identifier = $identifier;
     }
 
     /**
@@ -107,9 +105,9 @@ class Group extends Nette\Object
     /**
      * @return string
      */
-    public function getName()
+    public function getIdentifier()
     {
-        return $this->name;
+        return $this->identifier;
     }
 
     /**
@@ -134,6 +132,14 @@ class Group extends Nette\Object
     public function getSortBy()
     {
         return $this->sortBy;
+    }
+
+    /**
+     * @return ArrayCollection|GroupTranslation[]
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
     }
 }
 

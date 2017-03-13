@@ -5,17 +5,12 @@
 
 namespace Dravencms\Model\Article\Repository;
 
-use Dravencms\Locale\TLocalizedRepository;
 use Dravencms\Model\Article\Entities\Article;
 use Dravencms\Model\Article\Entities\Group;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
-use Salamek\Cms\CmsActionOption;
-use Salamek\Cms\ICmsActionOption;
-use Salamek\Cms\ICmsComponentRepository;
-use Salamek\Cms\Models\ILocale;
 
-class GroupRepository/* implements ICmsComponentRepository*/
+class GroupRepository
 {
     /** @var \Kdyby\Doctrine\EntityRepository */
     private $groupRepository;
@@ -60,18 +55,18 @@ class GroupRepository/* implements ICmsComponentRepository*/
     }
 
     /**
-     * @param $name
+     * @param $identifier
      * @param Group|null $groupIgnore
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree($name, Group $groupIgnore = null)
+    public function isIdentifierFree($identifier, Group $groupIgnore = null)
     {
         $qb = $this->groupRepository->createQueryBuilder('g')
             ->select('g')
-            ->where('g.name = :name')
+            ->where('g.identifier = :identifier')
             ->setParameters([
-                'name' => $name
+                'identifier' => $identifier
             ]);
 
         if ($groupIgnore)
@@ -92,50 +87,6 @@ class GroupRepository/* implements ICmsComponentRepository*/
             ->select('g');
         return $qb;
     }
-
-    /**
-     * @param string $componentAction
-     * @return ICmsActionOption[]
-     */
-    /*public function getActionOptions($componentAction)
-    {
-        switch ($componentAction)
-        {
-            case 'Detail':
-            case 'SimpleDetail':
-                $return = [];
-                /** @var Group $group *
-                foreach ($this->groupRepository->findAll() AS $group) {
-                    $return[] = new CmsActionOption($group->getName(), ['id' => $group->getId()]);
-                }
-                break;
-
-            default:
-                return false;
-                break;
-        }
-        
-
-        return $return;
-    }*/
-
-    /**
-     * @param string $componentAction
-     * @param array $parameters
-     * @param ILocale $locale
-     * @return null|CmsActionOption
-     */
-    /*public function getActionOption($componentAction, array $parameters, ILocale $locale)
-    {
-        $found = $this->findTranslatedOneBy($this->groupRepository, $locale, $parameters);
-
-        if ($found)
-        {
-            return new CmsActionOption($found->getName(), $parameters);
-        }
-
-        return null;
-    }*/
 
     /**
      * @param $name
