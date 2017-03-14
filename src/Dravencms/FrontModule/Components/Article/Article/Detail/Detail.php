@@ -3,7 +3,9 @@
 namespace Dravencms\FrontModule\Components\Article\Article\Detail;
 
 use Dravencms\Components\BaseControl\BaseControl;
+use Dravencms\Locale\CurrentLocale;
 use Dravencms\Model\Article\Repository\ArticleRepository;
+use Dravencms\Model\Article\Repository\ArticleTranslationRepository;
 use Salamek\Cms\ICmsActionOption;
 
 class Detail extends BaseControl
@@ -14,24 +16,38 @@ class Detail extends BaseControl
     /** @var ICmsActionOption */
     private $cmsActionOption;
 
-    public function __construct(ICmsActionOption $cmsActionOption, ArticleRepository $articleRepository)
+    /** @var CurrentLocale */
+    private $currentLocale;
+
+    /** @var ArticleTranslationRepository */
+    private $articleTranslationRepository;
+
+    public function __construct(
+        ICmsActionOption $cmsActionOption,
+        ArticleRepository $articleRepository,
+        ArticleTranslationRepository $articleTranslationRepository,
+        CurrentLocale $currentLocale
+    )
     {
         parent::__construct();
         $this->cmsActionOption = $cmsActionOption;
         $this->articleRepository = $articleRepository;
+        $this->articleTranslationRepository = $articleTranslationRepository;
+        $this->currentLocale = $currentLocale;
     }
     
     public function render()
     {
         $template = $this->template;
-        $detail = $this->articleRepository->getOneByIdAndActive($this->cmsActionOption->getParameter('id'));
+        $article = $this->articleRepository->getOneByIdAndActive($this->cmsActionOption->getParameter('id'));
 
-        if (!$detail) {
+        if (!$article) {
             throw new \Nette\Application\BadRequestException(sprintf('Article %s not found', $this->cmsActionOption->getParameter('id')));
         }
 
-        $template->detail = $detail;
-        $template->setFile(__DIR__ . '/detail.latte');
+        $template->article = $article;
+        $template->articleTranslation = $this->articleTranslationRepository->getTranslation($article, $this->currentLocale);
+        $template->setFile($this->cmsActionOption->getTemplatePath(__DIR__ . '/detail.latte'));
         $template->render();
     }
 }

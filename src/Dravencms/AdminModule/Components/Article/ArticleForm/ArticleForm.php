@@ -244,6 +244,10 @@ class ArticleForm extends BaseControl
             if ($articleTranslation = $this->articleTranslationRepository->getTranslation($article, $activeLocale))
             {
                 $articleTranslation->setName($values->{$activeLocale->getLanguageCode()}->name);
+                $articleTranslation->setSubtitle($values->{$activeLocale->getLanguageCode()}->subtitle);
+                $articleTranslation->setLead($values->{$activeLocale->getLanguageCode()}->lead);
+                $articleTranslation->setText($values->{$activeLocale->getLanguageCode()}->text);
+                $articleTranslation->setPerex($values->{$activeLocale->getLanguageCode()}->perex);
             }
             else
             {

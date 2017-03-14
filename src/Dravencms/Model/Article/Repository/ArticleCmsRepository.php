@@ -34,7 +34,7 @@ class ArticleCmsRepository implements ICmsComponentRepository
                 $return = [];
                 /** @var Article $article */
                 foreach ($this->articleRepository->getActive() AS $article) {
-                    $return[] = new CmsActionOption($article->getName(), ['id' => $article->getId()]);
+                    $return[] = new CmsActionOption($article->getIdentifier(), ['id' => $article->getId()]);
                 }
                 break;
 
@@ -65,7 +65,7 @@ class ArticleCmsRepository implements ICmsComponentRepository
         
         if ($found)
         {
-            return new CmsActionOption(($found->getLead() ? $found->getLead() . ' ' : '') . $found->getName(), $parameters);
+            return new CmsActionOption(($found->getLead() ? $found->getLead() . ' ' : '') . $found->getIdentifier(), $parameters);
         }
 
         return null;

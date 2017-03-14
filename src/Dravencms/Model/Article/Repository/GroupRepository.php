@@ -89,12 +89,12 @@ class GroupRepository
     }
 
     /**
-     * @param $name
+     * @param $identifier
      * @return Article|null
      */
-    public function getOneByName($name)
+    public function getOneByIdentifier($identifier)
     {
-        return $this->groupRepository->findOneBy(['name' => $name]);
+        return $this->groupRepository->findOneBy(['identifier' => $identifier]);
     }
 
     /**

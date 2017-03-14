@@ -1,15 +1,13 @@
-{block content}
-    <div class="article news-wrapper {$detail->getName()|webalize}">
-        <article class="news-item">
-        <h2 n:if="$detail->isShowName()">
-            <span n:if="$detail->getLead()" class="lead">{_$detail->getLead()}</span>
-            {$detail->getName()}
-        </h2>
-        <div n:if="$detail->getSubtitle()" class="subtitle">
-            {$detail->getSubtitle()}
-        </div>
-        <p n:if="$detail->getStructureFile()" class="featured-image"><img class="img-responsive" n:img="$detail->getStructureFile(), '750x300', 'fit_exact'" alt="{$detail->getName()}"></p>
-        <p>{$detail->getText()|noescape}</p>
-        </article>
+<div class="article news-wrapper {$article->getIdentifier()|webalize}">
+    <article class="news-item">
+    <h2 n:if="$article->isShowName()">
+        <span n:if="$articleTranslation->getLead()" class="lead">{$articleTranslation->getLead()}</span>
+        {$articleTranslation->getName()}
+    </h2>
+    <div n:if="$articleTranslation->getSubtitle()" class="subtitle">
+        {$articleTranslation->getSubtitle()}
     </div>
-{/block}
+    <p n:if="$article->getStructureFile()" class="featured-image"><img class="img-responsive" n:img="$article->getStructureFile(), '750x300', 'fit_exact'" alt="{$articleTranslation->getName()}"></p>
+    <p>{$articleTranslation->getText()|noescape}</p>
+    </article>
+</div>
