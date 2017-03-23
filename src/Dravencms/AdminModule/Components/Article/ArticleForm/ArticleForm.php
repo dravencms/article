@@ -32,6 +32,7 @@ use Dravencms\Model\File\Repository\StructureFileRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Dravencms\Model\Tag\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Dravencms\Model\Tag\Repository\TagTranslationRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Form;
 use Nette\Utils\Strings;
@@ -64,6 +65,9 @@ class ArticleForm extends BaseControl
     /** @var ArticleTranslationRepository */
     private $articleTranslationRepository;
 
+    /** @var TagTranslationRepository */
+    private $tagTranslationRepository;
+
     /** @var Group */
     private $group;
 
@@ -83,6 +87,7 @@ class ArticleForm extends BaseControl
         ArticleRepository $articleRepository,
         ArticleTranslationRepository $articleTranslationRepository,
         TagRepository $tagRepository,
+        TagTranslationRepository $tagTranslationRepository,
         StructureFileRepository $structureFileRepository,
         LocaleRepository $localeRepository,
         File $file,
@@ -99,6 +104,7 @@ class ArticleForm extends BaseControl
         $this->articleTranslationRepository = $articleTranslationRepository;
         $this->tagRepository = $tagRepository;
         $this->structureFileRepository = $structureFileRepository;
+        $this->tagTranslationRepository = $tagTranslationRepository;
         $this->localeRepository = $localeRepository;
         $this->file = $file;
 
@@ -207,9 +213,9 @@ class ArticleForm extends BaseControl
 
         if ($values->isAutoDetectTags) {
             foreach ($this->localeRepository->getActive() AS $activeLocale) {
-                foreach ($this->tagRepository->getAll($activeLocale) AS $tag) {
-                    if (strpos($values->{$activeLocale->getLanguageCode()}->text, $tag->getName()) !== false && !in_array($tag->getId(), $values->tags)) {
-                        $values->tags[$tag->getId()] = $tag->getId();
+                foreach ($this->tagTranslationRepository->getAll($activeLocale) AS $tag) {
+                    if (strpos($values->{$activeLocale->getLanguageCode()}->text, $tag->getName()) !== false && !in_array($tag->getTag()->getId(), $values->tags)) {
+                        $values->tags[$tag->getTag()->getId()] = $tag->getTag()->getId();
                     }
                 }
             }
