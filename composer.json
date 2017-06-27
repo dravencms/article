@@ -15,11 +15,11 @@
     }
   ],
   "require": {
-    "dravencms/tag": "@dev",
-    "dravencms/file": "@dev",
-    "dravencms/user": "@dev",
-    "dravencms/structure": "@dev",
-    "dravencms/paginator": "@dev"
+    "dravencms/tag": "^v1.0",
+    "dravencms/file": "^v1.0",
+    "dravencms/user": "^v1.0",
+    "dravencms/structure": "^v1.0",
+    "dravencms/paginator": "^v1.0"
   },
   "require-dev": {
     "nette/tester": "@dev"
