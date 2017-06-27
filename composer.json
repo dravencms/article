@@ -19,7 +19,9 @@
     "dravencms/file": "^v1.0",
     "dravencms/user": "^v1.0",
     "dravencms/structure": "^v1.0",
-    "dravencms/paginator": "^v1.0"
+    "dravencms/paginator": "^v1.0",
+    
+    "o5/grido": "dev-master"
   },
   "require-dev": {
     "nette/tester": "@dev"
