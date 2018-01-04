@@ -1,6 +1,8 @@
 <?php
 namespace Dravencms\Article;
 
+use Nette\SmartObject;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -12,8 +14,10 @@ namespace Dravencms\Article;
  *
  * @author Adam Schubert <adam.schubert@sg1-game.net>
  */
-class LinkProtector extends \Nette\Object
+class LinkProtector
 {
+    use SmartObject;
+
     /** @var string */
     private $html;
 

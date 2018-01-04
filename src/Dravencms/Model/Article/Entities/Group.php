@@ -15,19 +15,20 @@ use Nette;
  * @ORM\Entity
  * @ORM\Table(name="articleGroup")
  */
-class Group extends Nette\Object
+class Group
 {
     const SORT_BY_POSITION = 'position';
     const SORT_BY_CREATED_AT = 'createdAt';
+
+    use Nette\SmartObject;
+    use Identifier;
+    use TimestampableEntity;
 
     /** @var array */
     public static $sortByList = [
         self::SORT_BY_POSITION => 'Sort by position',
         self::SORT_BY_CREATED_AT => 'Sort by created at',
     ];
-
-    use Identifier;
-    use TimestampableEntity;
 
     /**
      * @var string

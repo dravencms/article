@@ -14,8 +14,9 @@ use Nette;
  * @ORM\Entity
  * @ORM\Table(name="articleArticleTranslation")
  */
-class ArticleTranslation extends Nette\Object
+class ArticleTranslation
 {
+    use Nette\SmartObject;
     use Identifier;
     use TimestampableEntity;
 

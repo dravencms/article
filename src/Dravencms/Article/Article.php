@@ -2,14 +2,15 @@
 
 namespace Dravencms\Article;
 
+use Nette\SmartObject;
 
 /**
  * Class Article
  * @package Dravencms\Article
  */
-class Article extends \Nette\Object
+class Article
 {
-
+    use SmartObject;
     public function __construct()
     {
     }
