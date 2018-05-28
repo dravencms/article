@@ -34,6 +34,11 @@
       "configuration": {
         "extensions": {
           "article": "Dravencms\\Article\\DI\\ArticleExtension"
+        },
+        "doctrine":{
+          "metadata": {
+            "Dravencms\\Model\\Article": "%appDir%/../vendor/dravencms/article/src/Dravencms/Model/Article"
+          }
         }
       },
       "scripts": {
