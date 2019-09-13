@@ -210,7 +210,6 @@ class ArticleForm extends BaseControl
     public function editFormSucceeded(Form $form)
     {
         $values = $form->getValues();
-
         if ($values->isAutoDetectTags) {
             foreach ($this->localeRepository->getActive() AS $activeLocale) {
                 foreach ($this->tagTranslationRepository->getAll($activeLocale) AS $tag) {
@@ -238,7 +237,7 @@ class ArticleForm extends BaseControl
             $article->setIsAutoDetectTags($values->isAutoDetectTags);
             $article->setPosition($values->position);
         } else {
-            $article = new Article($this->group, $values->isActive, $values->isShowName, $values->isAutoDetectTags, $structureFile);
+            $article = new Article($this->group, $values->identifier, $values->isActive, $values->isShowName, $values->isAutoDetectTags, $structureFile);
         }
         $article->setTags($tags);
 
