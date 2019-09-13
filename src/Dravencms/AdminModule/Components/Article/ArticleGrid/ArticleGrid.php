@@ -176,7 +176,10 @@ class ArticleGrid extends BaseControl
     public function handleUp($id)
     {
         $articleItem = $this->articleRepository->getOneById($id);
-        $this->articleRepository->moveUp($articleItem, 1);
+        $articleItem->setPosition($articleItem->getPosition() + 1);
+        $this->entityManager->persist($articleItem);
+        $this->entityManager->flush();
+
     }
 
     /**
@@ -185,7 +188,9 @@ class ArticleGrid extends BaseControl
     public function handleDown($id)
     {
         $articleItem = $this->articleRepository->getOneById($id);
-        $this->articleRepository->moveDown($articleItem, 1);
+        $articleItem->setPosition($articleItem->getPosition() - 1);
+        $this->entityManager->persist($articleItem);
+        $this->entityManager->flush();
     }
     
     public function render()
