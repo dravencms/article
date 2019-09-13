@@ -91,7 +91,7 @@ class ArticleGrid extends BaseControl
     {
         $grid = $this->baseGridFactory->create($this, $name);
 
-        $grid->setModel($this->articleRepository->getArticleQueryBuilder($this->group));
+        $grid->setDataSource($this->articleRepository->getArticleQueryBuilder($this->group));
 
         if ($this->group->getSortBy() == Group::SORT_BY_POSITION) {
             $grid->setDefaultSort(['position' => 'ASC']);
@@ -103,68 +103,54 @@ class ArticleGrid extends BaseControl
 
         $grid->addColumnText('identifier', 'Identifier')
             ->setSortable()
-            ->setFilterText()
-            ->setSuggestion();
+            ->setFilterText();
 
         $grid->addColumnBoolean('isActive', 'Active');
         $grid->addColumnBoolean('isShowName', 'Show name');
 
         if ($this->group->getSortBy() == Group::SORT_BY_POSITION)
         {
-            $grid->addColumnNumber('position', 'Position')
-                ->setSortable()
-                ->setFilterNumber()
-                ->setSuggestion();
-            $grid->getColumn('position')->cellPrototype->class[] = 'center';
+            $grid->addColumnPosition('position', 'Position', 'up!', 'down!');
         }
         elseif ($this->group->getSortBy() == Group::SORT_BY_CREATED_AT)
         {
-            $grid->addColumnDate('createdAt', 'Created', $this->currentLocale->getDateTimeFormat())
+            $grid->addColumnDateTime('updatedAt', 'Last edit')
+                ->setFormat($this->currentLocale->getDateTimeFormat())
+                ->setAlign('center')
                 ->setSortable()
                 ->setFilterDate();
-            $grid->getColumn('createdAt')->cellPrototype->class[] = 'center';
         }
 
         if ($this->presenter->isAllowed('article', 'edit')) {
+
+            $grid->addAction('edit', 'Upravit', 'edit', ['groupId' => 'group.id', 'id'])
+                ->setIcon('pencil')
+                ->setTitle('Upravit')
+                ->setClass('btn btn-xs btn-primary');
+
+            /*
             $grid->addActionHref('edit', 'Upravit')
                 ->setCustomHref(function($row){
                     return $this->presenter->link('edit', ['id' => $row->getId(), 'groupId' => $this->group->getId()]);
                 })
                 ->setIcon('pencil');
+            */
         }
 
         if ($this->presenter->isAllowed('article', 'delete')) {
-            $grid->addActionHref('delete', 'Smazat', 'delete!')
-                ->setCustomHref(function($row){
-                    return $this->link('delete!', $row->getId());
-                })
-                ->setIcon('trash-o')
-                ->setConfirm(function ($row) {
-                    return ['Opravdu chcete smazat article %s ?', $row->getIdentifier()];
-                });
-
-
-            $operations = ['delete' => 'Smazat'];
-            $grid->setOperation($operations, [$this, 'gridOperationsHandler'])
-                ->setConfirm('delete', 'Opravu chcete smazat %i articles ?');
+            $grid->addAction('delete', '', 'delete!')
+                ->setIcon('trash')
+                ->setTitle('Smazat')
+                ->setClass('btn btn-xs btn-danger ajax')
+                ->setConfirm('Do you really want to delete row %s?', 'identifier');
+            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDelete'];
         }
-        $grid->setExport();
+        $grid->addExportCsvFiltered('Csv export (filtered)', 'articles_filtered.csv')
+            ->setTitle('Csv export (filtered)');
+        $grid->addExportCsv('Csv export', 'articlesall.csv')
+            ->setTitle('Csv export');
 
         return $grid;
-    }
-
-    /**
-     * @param $action
-     * @param $ids
-     */
-    public function gridOperationsHandler($action, $ids)
-    {
-        switch ($action)
-        {
-            case 'delete':
-                $this->handleDelete($ids);
-                break;
-        }
     }
 
     /**
@@ -184,6 +170,24 @@ class ArticleGrid extends BaseControl
         $this->onDelete();
     }
 
+    /**
+     * @param $id
+     */
+    public function handleUp($id)
+    {
+        $articleItem = $this->articleRepository->getOneById($id);
+        $this->articleRepository->moveUp($articleItem, 1);
+    }
+
+    /**
+     * @param $id
+     */
+    public function handleDown($id)
+    {
+        $articleItem = $this->articleRepository->getOneById($id);
+        $this->articleRepository->moveDown($articleItem, 1);
+    }
+    
     public function render()
     {
         $template = $this->template;

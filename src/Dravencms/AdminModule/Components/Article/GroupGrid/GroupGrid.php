@@ -73,16 +73,15 @@ class GroupGrid extends BaseControl
     {
         $grid = $this->baseGridFactory->create($this, $name);
 
-        $grid->setModel($this->groupRepository->getGroupQueryBuilder());
+        $grid->setDataSource($this->groupRepository->getGroupQueryBuilder());
 
         $grid->addColumnText('identifier', 'Identifier')
             ->setSortable()
-            ->setFilterText()
-            ->setSuggestion();
+            ->setFilterText();
 
         $grid->addColumnText('sortBy', 'Sorted by')
-            ->setCustomRender(function($row){
-                return Group::$sortByList[$row->sortBy];
+            ->setRenderer(function($row){
+                return Group::$sortByList[$row->getSortBy()];
             })
             ->setSortable()
             ->setFilterSelect(Group::$sortByList);
@@ -91,48 +90,40 @@ class GroupGrid extends BaseControl
 
         if ($this->presenter->isAllowed('article', 'edit')) {
 
+/*
             $grid->addActionHref('articles', 'Articles')
                 ->setCustomHref(function($row){
                     return $this->presenter->link('Article:', ['groupId' => $row->getId()]);
                 })
-                ->setIcon('bars');
+                ->setIcon('bars');*/
 
-            $grid->addActionHref('edit', 'Upravit')
-                ->setIcon('pencil');
+            $grid->addAction('articles', 'Articles', 'Article:default', ['groupId' => 'id'])
+                ->setIcon('bars')
+                ->setTitle('Pictures')
+                ->setClass('btn btn-xs btn-default');
+
+            $grid->addAction('edit', '')
+                ->setIcon('pencil')
+                ->setTitle('Upravit')
+                ->setClass('btn btn-xs btn-primary');
+
         }
 
         if ($this->presenter->isAllowed('article', 'delete')) {
-            $grid->addActionHref('delete', 'Smazat', 'delete!')
-                ->setCustomHref(function($row){
-                    return $this->link('delete!', $row->getId());
-                })
-                ->setIcon('trash-o')
-                ->setConfirm(function ($row) {
-                    return ['Opravdu chcete smazat article group %s ?', $row->getIdentifier()];
-                });
-
-
-            $operations = ['delete' => 'Smazat'];
-            $grid->setOperation($operations, [$this, 'gridOperationsHandler'])
-                ->setConfirm('delete', 'Opravu chcete smazat %i groups ?');
+            $grid->addAction('delete', '', 'delete!')
+                ->setIcon('trash')
+                ->setTitle('Smazat')
+                ->setClass('btn btn-xs btn-danger ajax')
+                ->setConfirm('Do you really want to delete row %s?', 'identifier');
+            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDelete'];
         }
-        $grid->setExport();
+        $grid->addExportCsvFiltered('Csv export (filtered)', 'article_group_filtered.csv')
+            ->setTitle('Csv export (filtered)');
+        $grid->addExportCsv('Csv export', 'article_group_all.csv')
+            ->setTitle('Csv export');
+
 
         return $grid;
-    }
-
-    /**
-     * @param $action
-     * @param $ids
-     */
-    public function gridOperationsHandler($action, $ids)
-    {
-        switch ($action)
-        {
-            case 'delete':
-                $this->handleDelete($ids);
-                break;
-        }
     }
 
     /**
