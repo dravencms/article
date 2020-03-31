@@ -5,16 +5,20 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Dravencms\Model\Locale\Entities\Locale;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Translatable\Translatable;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Nette;
 
 /**
- * Class Group
+ * Class GroupTranslation
  * @package App\Model\Article\Entities
  * @ORM\Entity
- * @ORM\Table(name="articleGroupTranslation")
+ * @ORM\Table(name="articleGroupTranslation",
+ *     uniqueConstraints={
+ *        @UniqueConstraint(name="name_locale_unique",
+ *            columns={"name", "locale_id"})
+ *    }))
  */
 class GroupTranslation
 {
