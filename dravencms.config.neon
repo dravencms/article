@@ -1,0 +1,7 @@
+extensions:
+    dravencms.article: Dravencms\Article\DI\ArticleExtension
+
+
+nettrine.orm.annotations:
+    mapping:
+        Dravencms\Model\Article: %appDir%/../vendor/dravencms/article/src/Dravencms/Model/Article/Entities
