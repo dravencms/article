@@ -14,12 +14,10 @@
       "name": "Adam Schubert"
     }
   ],
-  "require": {
-    "dravencms/tag": "^v1.0",
-    "dravencms/file": "^v1.0",
-    "dravencms/user": "^v1.0",
-    "dravencms/structure": "^v1.0",
-    "dravencms/paginator": "^v1.0"
+  "require": {    
+    "dravencms/admin": ">=2.0",
+    "dravencms/tag": ">=2.0",
+    "dravencms/file": ">=2.0"
   },
   "require-dev": {
     "nette/tester": "@dev"
@@ -31,20 +29,7 @@
   },
   "extra": {
     "dravencms": {
-      "configuration": {
-        "extensions": {
-          "article": "Dravencms\\Article\\DI\\ArticleExtension"
-        },
-        "doctrine":{
-          "metadata": {
-            "Dravencms\\Model\\Article": "%appDir%/../vendor/dravencms/article/src/Dravencms/Model/Article"
-          }
-        }
-      },
-      "scripts": {
-        "post-install": "Dravencms\\Article\\Script\\PostInstall",
-        "pre-uninstall": "Dravencms\\Article\\Script\\PreUninstall"
-      }
+      "configuration": "dravencms.config.neon"
     }
   }
 }
