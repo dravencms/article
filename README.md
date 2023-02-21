@@ -8,12 +8,12 @@ The best way to install dravencms/article is using  [Composer](http://getcompose
 
 
 ```sh
-$ composer require dravencms/article:@dev
+$ composer require dravencms/article
 ```
 
 Then you have to register extension in `config.neon`.
 
 ```yaml
 extensions:
-	article: Dravencms\Article\DI\ArticleExtension
+	dravencms.article: Dravencms\Article\DI\ArticleExtension
 ```
