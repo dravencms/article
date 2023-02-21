@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dravencms\FrontModule\Components\Article\Article\Detail;
 
@@ -6,7 +6,7 @@ use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Locale\CurrentLocaleResolver;
 use Dravencms\Model\Article\Repository\ArticleRepository;
 use Dravencms\Model\Article\Repository\ArticleTranslationRepository;
-use Salamek\Cms\ICmsActionOption;
+use Dravencms\Structure\ICmsActionOption;
 
 class Detail extends BaseControl
 {
@@ -36,14 +36,13 @@ class Detail extends BaseControl
         CurrentLocaleResolver $currentLocaleResolver
     )
     {
-        parent::__construct();
         $this->cmsActionOption = $cmsActionOption;
         $this->articleRepository = $articleRepository;
         $this->articleTranslationRepository = $articleTranslationRepository;
         $this->currentLocale = $currentLocaleResolver->getCurrentLocale();
     }
     
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $article = $this->articleRepository->getOneByIdAndActive($this->cmsActionOption->getParameter('id'));

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /*
  * To change this template, choose Tools | Templates
@@ -8,7 +8,9 @@
 namespace Dravencms\AdminModule\ArticleModule;
 
 use Dravencms\AdminModule\Components\Article\ArticleForm\ArticleFormFactory;
+use Dravencms\AdminModule\Components\Article\ArticleForm\ArticleForm;
 use Dravencms\AdminModule\Components\Article\ArticleGrid\ArticleGridFactory;
+use Dravencms\AdminModule\Components\Article\ArticleGrid\ArticleGrid;
 use Dravencms\AdminModule\SecuredPresenter;
 use Dravencms\Flash;
 use Dravencms\Model\Article\Entities\Article;
@@ -50,7 +52,7 @@ class ArticlePresenter extends SecuredPresenter
      * @param integer $groupId
      * @isAllowed(article,edit)
      */
-    public function actionDefault($groupId)
+    public function actionDefault(int $groupId): void
     {
         $this->group = $this->groupRepository->getOneById($groupId);
         $this->template->group = $this->group;
@@ -63,7 +65,7 @@ class ArticlePresenter extends SecuredPresenter
      * @param $id
      * @throws \Nette\Application\BadRequestException
      */
-    public function actionEdit($groupId, $id = null)
+    public function actionEdit(int $groupId, int $id = null): void
     {
         $this->group = $this->groupRepository->getOneById($groupId);
         if ($id) {
@@ -82,9 +84,9 @@ class ArticlePresenter extends SecuredPresenter
     }
 
     /**
-     * @return \Dravencms\AdminModule\Components\Article\ArticleForm\ArticleForm
+     * @return ArticleForm
      */
-    protected function createComponentFormArticle()
+    protected function createComponentFormArticle(): ArticleForm
     {
         $control = $this->articleFormFactory->create($this->group, $this->article);
         $control->onSuccess[] = function(){
@@ -95,9 +97,9 @@ class ArticlePresenter extends SecuredPresenter
     }
 
     /**
-     * @return \Dravencms\AdminModule\Components\Article\ArticleGrid\ArticleGrid
+     * @return ArticleGrid
      */
-    public function createComponentGridArticle()
+    public function createComponentGridArticle(): ArticleGrid
     {
         $control = $this->articleGridFactory->create($this->group);
         $control->onDelete[] = function()

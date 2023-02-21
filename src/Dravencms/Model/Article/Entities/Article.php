@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 namespace Dravencms\Model\Article\Entities;
 
 use Dravencms\Model\File\Entities\StructureFile;
@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
+use Dravencms\Database\Attributes\Identifier;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Nette;
 
@@ -100,7 +100,7 @@ class Article
      * @param bool $isAutoDetectTags
      * @param StructureFile|null $file
      */
-    public function __construct(Group $group, $identifier, $isActive = true, $isShowTitle = true, $isAutoDetectTags = true, StructureFile $file = null)
+    public function __construct(Group $group, string $identifier, bool $isActive = true, bool $isShowTitle = true, bool $isAutoDetectTags = true, StructureFile $file = null)
     {
         $this->group = $group;
         $this->identifier = $identifier;
@@ -116,7 +116,7 @@ class Article
     /**
      * @param boolean $isActive
      */
-    public function setIsActive($isActive)
+    public function setIsActive(bool $isActive): void
     {
         $this->isActive = $isActive;
     }
@@ -124,7 +124,7 @@ class Article
     /**
      * @param boolean $isShowName
      */
-    public function setIsShowName($isShowName)
+    public function setIsShowName(bool $isShowName): void
     {
         $this->isShowName = $isShowName;
     }
@@ -132,7 +132,7 @@ class Article
     /**
      * @param boolean $isAutoDetectTags
      */
-    public function setIsAutoDetectTags($isAutoDetectTags)
+    public function setIsAutoDetectTags(bool $isAutoDetectTags): void
     {
         $this->isAutoDetectTags = $isAutoDetectTags;
     }
@@ -140,7 +140,7 @@ class Article
     /**
      * @param mixed $position
      */
-    public function setPosition($position)
+    public function setPosition(int $position): void
     {
         $this->position = $position;
     }
@@ -148,7 +148,7 @@ class Article
     /**
      * @param StructureFile|null $structureFile
      */
-    public function setStructureFile(StructureFile $structureFile = null)
+    public function setStructureFile(StructureFile $structureFile = null): void
     {
         $this->structureFile = $structureFile;
     }
@@ -156,7 +156,7 @@ class Article
     /**
      * @param string $identifier
      */
-    public function setIdentifier($identifier)
+    public function setIdentifier(string $identifier): void
     {
         $this->identifier = $identifier;
     }
@@ -164,7 +164,7 @@ class Article
     /**
      * @param Tag $tag
      */
-    public function addTag(Tag $tag)
+    public function addTag(Tag $tag): void
     {
         if ($this->tags->contains($tag))
         {
@@ -176,7 +176,7 @@ class Article
     /**
      * @param Tag $tag
      */
-    public function removeTag(Tag $tag)
+    public function removeTag(Tag $tag): void
     {
         if (!$this->tags->contains($tag))
         {
@@ -189,7 +189,7 @@ class Article
      *
      * @param ArrayCollection $tags
      */
-    public function setTags(ArrayCollection $tags)
+    public function setTags(ArrayCollection $tags): void
     {
         //Remove all not in
         foreach($this->tags AS $tag)
@@ -213,7 +213,7 @@ class Article
     /**
      * @return boolean
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->isActive;
     }
@@ -221,7 +221,7 @@ class Article
     /**
      * @return boolean
      */
-    public function isShowName()
+    public function isShowName(): bool
     {
         return $this->isShowName;
     }
@@ -229,7 +229,7 @@ class Article
     /**
      * @return boolean
      */
-    public function isAutoDetectTags()
+    public function isAutoDetectTags(): bool
     {
         return $this->isAutoDetectTags;
     }
@@ -237,7 +237,7 @@ class Article
     /**
      * @return string
      */
-    public function getLead()
+    public function getLead(): string
     {
         return $this->lead;
     }
@@ -245,7 +245,7 @@ class Article
     /**
      * @return mixed
      */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -253,7 +253,7 @@ class Article
     /**
      * @return StructureFile
      */
-    public function getStructureFile()
+    public function getStructureFile(): ?StructureFile
     {
         return $this->structureFile;
     }
@@ -269,7 +269,7 @@ class Article
     /**
      * @return Group
      */
-    public function getGroup()
+    public function getGroup(): Group
     {
         return $this->group;
     }
@@ -277,7 +277,7 @@ class Article
     /**
      * @param Group $group
      */
-    public function setGroup($group)
+    public function setGroup(Group $group): void
     {
         $this->group = $group;
     }
@@ -293,7 +293,7 @@ class Article
     /**
      * @return string
      */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }

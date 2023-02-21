@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -8,12 +8,12 @@ namespace Dravencms\Model\Article\Repository;
 use Dravencms\Model\Article\Entities\Group;
 use Dravencms\Model\Article\Entities\GroupTranslation;
 use Dravencms\Model\Locale\Entities\ILocale;
-use Kdyby\Doctrine\EntityManager;
+use Dravencms\Database\EntityManager;
 use Nette;
 
 class GroupTranslationRepository
 {
-    /** @var \Kdyby\Doctrine\EntityRepository */
+    /** @var \Doctrine\Persistence\ObjectRepository|GroupTranslation */
     private $groupTranslationRepository;
 
     /** @var EntityManager */
@@ -36,7 +36,7 @@ class GroupTranslationRepository
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree($name, ILocale $locale, Group $groupIgnore = null)
+    public function isNameFree(string $name, ILocale $locale, Group $groupIgnore = null): bool
     {
         $qb = $this->groupTranslationRepository->createQueryBuilder('gt')
             ->select('gt')
@@ -62,7 +62,7 @@ class GroupTranslationRepository
      * @param ILocale $locale
      * @return null|GroupTranslation
      */
-    public function getTranslation(Group $group, ILocale $locale)
+    public function getTranslation(Group $group, ILocale $locale): ?GroupTranslation
     {
         return $this->groupTranslationRepository->findOneBy(['group' => $group, 'locale' => $locale]);
     }

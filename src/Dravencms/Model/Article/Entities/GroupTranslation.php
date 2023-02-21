@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 namespace Dravencms\Model\Article\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -52,7 +52,7 @@ class GroupTranslation
      * @param Group $group
      * @param Locale $locale
      */
-    public function __construct(Group $group, Locale $locale, $name)
+    public function __construct(Group $group, Locale $locale, string $name)
     {
         $this->name = $name;
         $this->group = $group;
@@ -62,7 +62,7 @@ class GroupTranslation
     /**
      * @param string $name
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -70,7 +70,7 @@ class GroupTranslation
     /**
      * @param Group $group
      */
-    public function setGroup(Group $group)
+    public function setGroup(Group $group): void
     {
         $this->group = $group;
     }
@@ -78,7 +78,7 @@ class GroupTranslation
     /**
      * @param Locale $locale
      */
-    public function setLocale(Locale $locale)
+    public function setLocale(Locale $locale): void
     {
         $this->locale = $locale;
     }
@@ -86,7 +86,7 @@ class GroupTranslation
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -94,7 +94,7 @@ class GroupTranslation
     /**
      * @return Group
      */
-    public function getGroup()
+    public function getGroup(): Group
     {
         return $this->group;
     }
@@ -102,7 +102,7 @@ class GroupTranslation
     /**
      * @return Locale
      */
-    public function getLocale()
+    public function getLocale(): Locale
     {
         return $this->locale;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -16,7 +16,7 @@ class Encryptor
      * @param string $encryptionKey
      * @throws \Exception
      */
-    public function __construct($encryptionKey)
+    public function __construct(string $encryptionKey)
     {
         if (!function_exists('mcrypt_encrypt'))
         {
@@ -26,10 +26,10 @@ class Encryptor
     }
 
     /**
-     * @param $pureString
-     * @return mixed
+     * @param string $pureString
+     * @return string
      */
-    public function encrypt($pureString)
+    public function encrypt(string $pureString): string
     {
         $iv_size = mcrypt_get_iv_size(MCRYPT_BLOWFISH, MCRYPT_MODE_ECB);
         $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
@@ -37,10 +37,10 @@ class Encryptor
     }
 
     /**
-     * @param $encryptedString
-     * @return mixed
+     * @param string $encryptedString
+     * @return string
      */
-    public function decrypt($encryptedString)
+    public function decrypt(string $encryptedString): string
     {
         $iv_size = mcrypt_get_iv_size(MCRYPT_BLOWFISH, MCRYPT_MODE_ECB);
         $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);

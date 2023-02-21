@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -8,14 +8,13 @@ namespace Dravencms\Model\Article\Repository;
 use Dravencms\Model\Article\Entities\Article;
 use Dravencms\Model\Article\Entities\ArticleTranslation;
 use Dravencms\Model\Article\Entities\Group;
-use Kdyby\Doctrine\EntityManager;
+use Dravencms\Database\EntityManager;
 use Nette;
-use Gedmo\Translatable\TranslatableListener;
 use Dravencms\Model\Locale\Entities\ILocale;
 
 class ArticleTranslationRepository
 {
-    /** @var \Kdyby\Doctrine\EntityRepository */
+    /** @var \Doctrine\Persistence\ObjectRepository|ArticleTranslation */
     private $articleTranslationRepository;
 
     /** @var EntityManager */
@@ -39,7 +38,7 @@ class ArticleTranslationRepository
      * @return bool
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree($name, ILocale $locale, Group $group, Article $articleIgnore = null)
+    public function isNameFree(string $name, ILocale $locale, Group $group, Article $articleIgnore = null): bool
     {
         $qb = $this->articleTranslationRepository->createQueryBuilder('at')
             ->select('at')
@@ -59,8 +58,6 @@ class ArticleTranslationRepository
 
         $query = $qb->getQuery();
 
-        $query->setHint(TranslatableListener::HINT_TRANSLATABLE_LOCALE, $locale->getLanguageCode());
-
         return (is_null($query->getOneOrNullResult()));
     }
 
@@ -74,7 +71,7 @@ class ArticleTranslationRepository
      * @param Article|null $ignoreArticle
      * @return array
      */
-    public function search(Group $group = null, $query = null, array $tags = [], $isActive = true, $limit = null, $offset = null, Article $ignoreArticle = null)
+    public function search(Group $group = null, string $query = null, array $tags = [], bool $isActive = true, bool $limit = null, bool $offset = null, Article $ignoreArticle = null)
     {
         $qb = $this->articleTranslationRepository->createQueryBuilder('a')
             ->select('a')
@@ -140,7 +137,7 @@ class ArticleTranslationRepository
      * @param ILocale $locale
      * @return null|ArticleTranslation
      */
-    public function getTranslation(Article $article, ILocale $locale)
+    public function getTranslation(Article $article, ILocale $locale): ?ArticleTranslation
     {
         return $this->articleTranslationRepository->findOneBy(['article' => $article, 'locale' => $locale]);
     }

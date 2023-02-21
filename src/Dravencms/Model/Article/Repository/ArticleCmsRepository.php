@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -7,10 +7,9 @@ namespace Dravencms\Model\Article\Repository;
 
 use Dravencms\Model\Article\Entities\Article;
 use Nette;
-use Salamek\Cms\CmsActionOption;
-use Salamek\Cms\ICmsActionOption;
-use Salamek\Cms\ICmsComponentRepository;
-use Salamek\Cms\Models\ILocale;
+use Dravencms\Structure\CmsActionOption;
+use Dravencms\Structure\ICmsActionOption;
+use Dravencms\Structure\ICmsComponentRepository;
 
 class ArticleCmsRepository implements ICmsComponentRepository
 {
@@ -25,7 +24,7 @@ class ArticleCmsRepository implements ICmsComponentRepository
      * @param string $componentAction
      * @return ICmsActionOption[]
      */
-    public function getActionOptions($componentAction)
+    public function getActionOptions(string $componentAction)
     {
         switch ($componentAction)
         {
@@ -58,7 +57,7 @@ class ArticleCmsRepository implements ICmsComponentRepository
      * @param array $parameters
      * @return null|CmsActionOption
      */
-    public function getActionOption($componentAction, array $parameters)
+    public function getActionOption(string $componentAction, array $parameters): ?CmsActionOption
     {
         /** @var Article $found */
         $found = $this->articleRepository->getOneByParameters($parameters + ['isActive' => true]);

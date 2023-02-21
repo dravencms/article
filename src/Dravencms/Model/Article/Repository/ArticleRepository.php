@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -7,12 +7,12 @@ namespace Dravencms\Model\Article\Repository;
 
 use Dravencms\Model\Article\Entities\Article;
 use Dravencms\Model\Article\Entities\Group;
-use Kdyby\Doctrine\EntityManager;
+use Dravencms\Database\EntityManager;
 use Nette;
 
 class ArticleRepository
 {
-    /** @var \Kdyby\Doctrine\EntityRepository */
+    /** @var \Doctrine\Persistence\ObjectRepository|Article */
     private $articleRepository;
 
     /** @var EntityManager */
@@ -30,9 +30,9 @@ class ArticleRepository
 
     /**
      * @param $id
-     * @return mixed|null|Article
+     * @return null|Article
      */
-    public function getOneById($id)
+    public function getOneById(int $id): ?Article
     {
         return $this->articleRepository->find($id);
     }
@@ -61,7 +61,7 @@ class ArticleRepository
      * @return bool
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isIdentifierFree($identifier, Group $group, Article $articleIgnore = null)
+    public function isIdentifierFree(string $identifier, Group $group, Article $articleIgnore = null): bool
     {
         $qb = $this->articleRepository->createQueryBuilder('a')
             ->select('a')
@@ -85,7 +85,7 @@ class ArticleRepository
 
     /**
      * @param Group $group
-     * @return \Kdyby\Doctrine\QueryBuilder
+     * @return QueryBuilder
      */
     public function getArticleQueryBuilder(Group $group)
     {
@@ -99,9 +99,9 @@ class ArticleRepository
     /**
      * @param integer $id
      * @param bool $isActive
-     * @return mixed|null|Article
+     * @return null|Article
      */
-    public function getOneByIdAndActive($id, $isActive = true)
+    public function getOneByIdAndActive(int $id, bool $isActive = true): ?Article
     {
         return $this->articleRepository->findOneBy(['id' => $id, 'isActive' => $isActive]);
     }
@@ -111,7 +111,7 @@ class ArticleRepository
      * @return Article[]
      * @deprecated do filtering in Repository
      */
-    public function getAllByActive($isActive = true)
+    public function getAllByActive(bool $isActive = true)
     {
         return $this->articleRepository->findBy(['isActive' => $isActive]);
     }
@@ -122,7 +122,7 @@ class ArticleRepository
      * @return Article
      * @deprecated
      */
-    public function getOneByActiveAndParameters($isActive = true, array $parameters = [])
+    public function getOneByActiveAndParameters(bool $isActive = true, array $parameters = []): ?Article
     {
         $parameters['isActive'] = $isActive;
         return $this->articleRepository->findOneBy($parameters);
@@ -132,7 +132,7 @@ class ArticleRepository
      * @param array $parameters
      * @return Article
      */
-    public function getOneByParameters(array $parameters)
+    public function getOneByParameters(array $parameters): ?Article
     {
         return $this->articleRepository->findOneBy($parameters);
     }

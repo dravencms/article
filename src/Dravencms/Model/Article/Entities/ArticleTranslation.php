@@ -1,11 +1,11 @@
-<?php
+<?php declare(strict_types = 1);
 namespace Dravencms\Model\Article\Entities;
 
 use Dravencms\Model\Locale\Entities\Locale;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
+use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
@@ -73,7 +73,7 @@ class ArticleTranslation
      * @param Article $article
      * @param Locale $locale
      */
-    public function __construct(Article $article, Locale $locale, $name, $subtitle, $lead, $text, $perex)
+    public function __construct(Article $article, Locale $locale, string $name, string $subtitle, string $lead, string $text, string $perex)
     {
         $this->name = $name;
         $this->subtitle = $subtitle;
@@ -87,7 +87,7 @@ class ArticleTranslation
     /**
      * @param string $name
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -95,7 +95,7 @@ class ArticleTranslation
     /**
      * @param string $subtitle
      */
-    public function setSubtitle($subtitle)
+    public function setSubtitle(string $subtitle): void
     {
         $this->subtitle = $subtitle;
     }
@@ -103,7 +103,7 @@ class ArticleTranslation
     /**
      * @param string $lead
      */
-    public function setLead($lead)
+    public function setLead(string $lead): void
     {
         $this->lead = $lead;
     }
@@ -111,7 +111,7 @@ class ArticleTranslation
     /**
      * @param string $text
      */
-    public function setText($text)
+    public function setText(string $text): void
     {
         $this->text = $text;
     }
@@ -119,7 +119,7 @@ class ArticleTranslation
     /**
      * @param string $perex
      */
-    public function setPerex($perex)
+    public function setPerex(string $perex): void
     {
         $this->perex = $perex;
     }
@@ -127,7 +127,7 @@ class ArticleTranslation
     /**
      * @param Article $article
      */
-    public function setArticle(Article $article)
+    public function setArticle(Article $article): void
     {
         $this->article = $article;
     }
@@ -135,7 +135,7 @@ class ArticleTranslation
     /**
      * @param Locale $locale
      */
-    public function setLocale(Locale $locale)
+    public function setLocale(Locale $locale): void
     {
         $this->locale = $locale;
     }
@@ -143,7 +143,7 @@ class ArticleTranslation
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -151,7 +151,7 @@ class ArticleTranslation
     /**
      * @return string
      */
-    public function getSubtitle()
+    public function getSubtitle(): ?string
     {
         return $this->subtitle;
     }
@@ -159,7 +159,7 @@ class ArticleTranslation
     /**
      * @return string
      */
-    public function getLead()
+    public function getLead(): ?string
     {
         return $this->lead;
     }
@@ -167,7 +167,7 @@ class ArticleTranslation
     /**
      * @return string
      */
-    public function getText()
+    public function getText(): string
     {
         return $this->text;
     }
@@ -175,7 +175,7 @@ class ArticleTranslation
     /**
      * @return string
      */
-    public function getPerex()
+    public function getPerex(): ?string
     {
         return $this->perex;
     }
@@ -183,7 +183,7 @@ class ArticleTranslation
     /**
      * @return Article
      */
-    public function getArticle()
+    public function getArticle(): Article
     {
         return $this->article;
     }
@@ -191,7 +191,7 @@ class ArticleTranslation
     /**
      * @return Locale
      */
-    public function getLocale()
+    public function getLocale(): Locale
     {
         return $this->locale;
     }

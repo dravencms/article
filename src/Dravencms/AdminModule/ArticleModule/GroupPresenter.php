@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /*
  * To change this template, choose Tools | Templates
@@ -8,7 +8,9 @@
 namespace Dravencms\AdminModule\ArticleModule;
 
 use Dravencms\AdminModule\Components\Article\GroupForm\GroupFormFactory;
+use Dravencms\AdminModule\Components\Article\GroupForm\GroupForm;
 use Dravencms\AdminModule\Components\Article\GroupGrid\GroupGridFactory;
+use Dravencms\AdminModule\Components\Article\GroupGrid\GroupGrid;
 use Dravencms\AdminModule\SecuredPresenter;
 use Dravencms\Flash;
 use Dravencms\Model\Article\Entities\Article;
@@ -36,7 +38,7 @@ class GroupPresenter extends SecuredPresenter
     /**
      * @isAllowed(article,edit)
      */
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->h1 = 'Article groups';
     }
@@ -46,7 +48,7 @@ class GroupPresenter extends SecuredPresenter
      * @param $id
      * @throws \Nette\Application\BadRequestException
      */
-    public function actionEdit($id)
+    public function actionEdit(int $id = null): void
     {
         if ($id) {
             $group = $this->groupRepository->getOneById($id);
@@ -64,9 +66,9 @@ class GroupPresenter extends SecuredPresenter
     }
 
     /**
-     * @return \Dravencms\AdminModule\Components\Article\GroupForm\GroupForm
+     * @return GroupForm
      */
-    protected function createComponentFormGroup()
+    protected function createComponentFormGroup(): GroupForm
     {
         $control = $this->groupFormFactory->create($this->group);
         $control->onSuccess[] = function(){
@@ -77,9 +79,9 @@ class GroupPresenter extends SecuredPresenter
     }
 
     /**
-     * @return \Dravencms\AdminModule\Components\Article\GroupGrid\GroupGrid
+     * @return GroupGrid
      */
-    public function createComponentGridGroup()
+    public function createComponentGridGroup(): GroupGrid
     {
         $control = $this->groupGridFactory->create();
         $control->onDelete[] = function()

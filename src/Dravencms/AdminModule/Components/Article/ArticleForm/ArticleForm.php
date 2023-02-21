@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  *
@@ -33,8 +33,9 @@ use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Dravencms\Model\Tag\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Dravencms\Model\Tag\Repository\TagTranslationRepository;
-use Kdyby\Doctrine\EntityManager;
+use Dravencms\Database\EntityManager;
 use Nette\Application\UI\Form;
+use Nette\Security\User;
 use Nette\Utils\Strings;
 
 /**
@@ -74,6 +75,9 @@ class ArticleForm extends BaseControl
     /** @var File */
     private $file;
 
+    /** @var User */
+    private $user;
+
     /** @var Article|null */
     private $article = null;
 
@@ -91,10 +95,9 @@ class ArticleForm extends BaseControl
         StructureFileRepository $structureFileRepository,
         LocaleRepository $localeRepository,
         File $file,
+        User $user,
         Article $article = null
     ) {
-        parent::__construct();
-
         $this->group = $group;
         $this->article = $article;
 
@@ -107,6 +110,7 @@ class ArticleForm extends BaseControl
         $this->tagTranslationRepository = $tagTranslationRepository;
         $this->localeRepository = $localeRepository;
         $this->file = $file;
+        $this->user = $user;
 
 
         if ($this->article) {
@@ -144,7 +148,7 @@ class ArticleForm extends BaseControl
         $this['form']->setDefaults($defaults);
     }
 
-    protected function createComponentForm()
+    protected function createComponentForm(): Form
     {
         $form = $this->baseFormFactory->create();
 
@@ -172,9 +176,9 @@ class ArticleForm extends BaseControl
             ->setRequired('Please fill in an identifier');
 
 
-        $form->addText('structureFile');
+        $form->addInteger('structureFile');
 
-        $form->addText('position')
+        $form->addInteger('position')
             ->setDisabled((is_null($this->article)));
 
         $form->addMultiSelect('tags', null, $this->tagRepository->getPairs());
@@ -192,7 +196,7 @@ class ArticleForm extends BaseControl
         return $form;
     }
 
-    public function editFormValidate(Form $form)
+    public function editFormValidate(Form $form): void
     {
         $values = $form->getValues();
 
@@ -202,12 +206,12 @@ class ArticleForm extends BaseControl
             }
         }
 
-        if (!$this->presenter->isAllowed('article', 'edit')) {
+        if (!$this->user->isAllowed('article', 'edit')) {
             $form->addError('Nemáte oprávění editovat article.');
         }
     }
 
-    public function editFormSucceeded(Form $form)
+    public function editFormSucceeded(Form $form): void
     {
         $values = $form->getValues();
         if ($values->isAutoDetectTags) {
@@ -277,7 +281,7 @@ class ArticleForm extends BaseControl
      * @param $text
      * @return string
      */
-    private function cleanText($text)
+    private function cleanText(string $text): string
     {
         $dom = new \DOMDocument('1.0', 'utf-8');
         $text = mb_convert_encoding($text, 'HTML-ENTITIES', "UTF-8");
@@ -322,7 +326,7 @@ class ArticleForm extends BaseControl
         return html_entity_decode(strtr($dom->saveHTML($body->item(0)), array('<body>' => '', '</body>' => '')));
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->fileSelectorPath = $this->file->getFileSelectorPath();

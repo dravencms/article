@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  *
@@ -27,7 +27,8 @@ use Dravencms\Model\Article\Entities\GroupTranslation;
 use Dravencms\Model\Article\Repository\GroupRepository;
 use Dravencms\Model\Article\Repository\GroupTranslationRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
-use Kdyby\Doctrine\EntityManager;
+use Dravencms\Database\EntityManager;
+use Nette\Security\User;
 use Nette\Application\UI\Form;
 
 /**
@@ -52,6 +53,9 @@ class GroupForm extends BaseControl
     /** @var GroupTranslationRepository */
     private $groupTranslationRepository;
 
+    /** @var User */
+    private $user;
+
     /** @var Group|null */
     private $group = null;
 
@@ -73,10 +77,9 @@ class GroupForm extends BaseControl
         GroupRepository $groupRepository,
         GroupTranslationRepository $groupTranslationRepository,
         LocaleRepository $localeRepository,
+        User $user,
         Group $group = null
     ) {
-        parent::__construct();
-
         $this->group = $group;
 
         $this->baseFormFactory = $baseFormFactory;
@@ -84,6 +87,7 @@ class GroupForm extends BaseControl
         $this->groupRepository = $groupRepository;
         $this->groupTranslationRepository = $groupTranslationRepository;
         $this->localeRepository = $localeRepository;
+        $this->user = $user;
 
 
         if ($this->group) {
@@ -109,7 +113,7 @@ class GroupForm extends BaseControl
         $this['form']->setDefaults($defaults);
     }
 
-    protected function createComponentForm()
+    protected function createComponentForm(): Form
     {
         $form = $this->baseFormFactory->create();
 
@@ -140,7 +144,7 @@ class GroupForm extends BaseControl
     /**
      * @param Form $form
      */
-    public function editFormValidate(Form $form)
+    public function editFormValidate(Form $form): void
     {
         $values = $form->getValues();
         if (!$this->groupRepository->isIdentifierFree($values->identifier, $this->group)) {
@@ -153,7 +157,7 @@ class GroupForm extends BaseControl
             }
         }
 
-        if (!$this->presenter->isAllowed('article', 'edit')) {
+        if (!$this->user->isAllowed('article', 'edit')) {
             $form->addError('Nemáte oprávění editovat article group.');
         }
     }
@@ -162,7 +166,7 @@ class GroupForm extends BaseControl
      * @param Form $form
      * @throws \Exception
      */
-    public function editFormSucceeded(Form $form)
+    public function editFormSucceeded(Form $form): void
     {
         $values = $form->getValues();
 
@@ -199,7 +203,7 @@ class GroupForm extends BaseControl
         $this->onSuccess();
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->activeLocales = $this->localeRepository->getActive();

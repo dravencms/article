@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  *
@@ -19,7 +19,7 @@
  */
 namespace Dravencms\FrontModule\Components\Article\Article\GroupDetail;
 
-use Salamek\Cms\ICmsActionOption;
+use Dravencms\Structure\ICmsActionOption;
 
 interface GroupDetailFactory
 {
@@ -27,5 +27,5 @@ interface GroupDetailFactory
      * @param ICmsActionOption $cmsActionOption
      * @return GroupDetail
      */
-    public function create(ICmsActionOption $cmsActionOption);
+    public function create(ICmsActionOption $cmsActionOption): GroupDetail;
 }

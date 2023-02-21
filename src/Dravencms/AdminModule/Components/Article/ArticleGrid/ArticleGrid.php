@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
@@ -23,11 +23,15 @@ namespace Dravencms\AdminModule\Components\Article\ArticleGrid;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseGrid\BaseGridFactory;
+use Dravencms\Components\BaseGrid\Grid;
 use Dravencms\Locale\CurrentLocaleResolver;
+use Dravencms\Model\Locale\Entities\Locale;
 use Dravencms\Model\Article\Entities\Group;
 use Dravencms\Model\Article\Repository\ArticleRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
-use Kdyby\Doctrine\EntityManager;
+use Dravencms\Database\EntityManager;
+use Nette\Security\User;
+use Ublaboo\DataGrid\Column\Action\Confirmation\StringConfirmation;
 
 /**
  * Description of ArticleGrid
@@ -46,7 +50,10 @@ class ArticleGrid extends BaseControl
     /** @var EntityManager */
     private $entityManager;
 
-    /** @var ILocale */
+     /** @var User */
+     private $user;
+
+    /** @var Locale */
     private $currentLocale;
 
     /** @var Group */
@@ -70,15 +77,15 @@ class ArticleGrid extends BaseControl
         ArticleRepository $articleRepository,
         BaseGridFactory $baseGridFactory,
         EntityManager $entityManager,
+        User $user,
         CurrentLocaleResolver $currentLocaleResolver
     )
     {
-        parent::__construct();
-
         $this->group = $group;
         $this->baseGridFactory = $baseGridFactory;
         $this->articleRepository = $articleRepository;
         $this->currentLocale = $currentLocaleResolver->getCurrentLocale();
+        $this->user = $user;
         $this->entityManager = $entityManager;
     }
 
@@ -87,7 +94,7 @@ class ArticleGrid extends BaseControl
      * @param $name
      * @return \Dravencms\Components\BaseGrid\BaseGrid
      */
-    public function createComponentGrid($name)
+    public function createComponentGrid(string $name): Grid
     {
         $grid = $this->baseGridFactory->create($this, $name);
 
@@ -121,28 +128,21 @@ class ArticleGrid extends BaseControl
                 ->setFilterDate();
         }
 
-        if ($this->presenter->isAllowed('article', 'edit')) {
+        if ($this->user->isAllowed('article', 'edit')) {
 
             $grid->addAction('edit', 'Upravit', 'edit', ['groupId' => 'group.id', 'id'])
                 ->setIcon('pencil')
                 ->setTitle('Upravit')
                 ->setClass('btn btn-xs btn-primary');
 
-            /*
-            $grid->addActionHref('edit', 'Upravit')
-                ->setCustomHref(function($row){
-                    return $this->presenter->link('edit', ['id' => $row->getId(), 'groupId' => $this->group->getId()]);
-                })
-                ->setIcon('pencil');
-            */
         }
 
-        if ($this->presenter->isAllowed('article', 'delete')) {
+        if ($this->user->isAllowed('article', 'delete')) {
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
                 ->setTitle('Smazat')
                 ->setClass('btn btn-xs btn-danger ajax')
-                ->setConfirm('Do you really want to delete row %s?', 'identifier');
+                ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'identifier'));
             $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDelete'];
         }
         $grid->addExportCsvFiltered('Csv export (filtered)', 'articles_filtered.csv')
@@ -157,7 +157,7 @@ class ArticleGrid extends BaseControl
      * @param $id
      * @throws \Exception
      */
-    public function handleDelete($id)
+    public function handleDelete($id): void
     {
         $articles = $this->articleRepository->getById($id);
         foreach ($articles AS $article)
@@ -173,7 +173,7 @@ class ArticleGrid extends BaseControl
     /**
      * @param $id
      */
-    public function handleUp($id)
+    public function handleUp(int $id): void
     {
         $articleItem = $this->articleRepository->getOneById($id);
         $articleItem->setPosition($articleItem->getPosition() - 1);
@@ -185,7 +185,7 @@ class ArticleGrid extends BaseControl
     /**
      * @param $id
      */
-    public function handleDown($id)
+    public function handleDown(int $id): void
     {
         $articleItem = $this->articleRepository->getOneById($id);
         $articleItem->setPosition($articleItem->getPosition() + 1);
@@ -193,7 +193,7 @@ class ArticleGrid extends BaseControl
         $this->entityManager->flush();
     }
     
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/ArticleGrid.latte');

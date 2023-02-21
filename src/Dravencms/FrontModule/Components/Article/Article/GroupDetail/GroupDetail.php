@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dravencms\FrontModule\Components\Article\Article\GroupDetail;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Model\Article\Repository\ArticleRepository;
-use Salamek\Cms\ICmsActionOption;
+use Dravencms\Structure\ICmsActionOption;
 
 class GroupDetail extends BaseControl
 {
@@ -16,12 +16,11 @@ class GroupDetail extends BaseControl
 
     public function __construct(ICmsActionOption $cmsActionOption, ArticleRepository $articleRepository)
     {
-        parent::__construct();
         $this->cmsActionOption = $cmsActionOption;
         $this->articleRepository = $articleRepository;
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $detail = $this->articleRepository->getOneByIdAndActive($this->cmsActionOption->getParameter('id'));

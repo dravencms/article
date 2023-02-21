@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 namespace Dravencms\Model\Article\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Translatable\Translatable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
+use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
@@ -66,7 +66,7 @@ class Group
      * @param $isShowName
      * @param string $sortBy
      */
-    public function __construct($identifier, $isShowName, $sortBy = self::SORT_BY_POSITION)
+    public function __construct(string $identifier, bool $isShowName, string $sortBy = self::SORT_BY_POSITION)
     {
         $this->identifier = $identifier;
         $this->isShowName = $isShowName;
@@ -78,7 +78,7 @@ class Group
     /**
      * @param string $identifier
      */
-    public function setIdentifier($identifier)
+    public function setIdentifier(string $identifier): void
     {
         $this->identifier = $identifier;
     }
@@ -86,7 +86,7 @@ class Group
     /**
      * @param boolean $isShowName
      */
-    public function setIsShowName($isShowName)
+    public function setIsShowName(bool $isShowName): void
     {
         $this->isShowName = $isShowName;
     }
@@ -94,7 +94,7 @@ class Group
     /**
      * @param string $sortBy
      */
-    public function setSortBy($sortBy)
+    public function setSortBy(string $sortBy): void
     {
         if (!array_key_exists($sortBy, self::$sortByList))
         {
@@ -106,7 +106,7 @@ class Group
     /**
      * @return string
      */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }
@@ -114,7 +114,7 @@ class Group
     /**
      * @return boolean
      */
-    public function isShowName()
+    public function isShowName(): bool
     {
         return $this->isShowName;
     }
@@ -130,7 +130,7 @@ class Group
     /**
      * @return string
      */
-    public function getSortBy()
+    public function getSortBy(): string
     {
         return $this->sortBy;
     }

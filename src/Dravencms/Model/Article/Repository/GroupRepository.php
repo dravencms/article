@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -7,12 +7,12 @@ namespace Dravencms\Model\Article\Repository;
 
 use Dravencms\Model\Article\Entities\Article;
 use Dravencms\Model\Article\Entities\Group;
-use Kdyby\Doctrine\EntityManager;
+use Dravencms\Database\EntityManager;
 use Nette;
 
 class GroupRepository
 {
-    /** @var \Kdyby\Doctrine\EntityRepository */
+    /** @var \Doctrine\Persistence\ObjectRepository|Group */
     private $groupRepository;
 
     /** @var EntityManager */
@@ -30,9 +30,9 @@ class GroupRepository
 
     /**
      * @param $id
-     * @return mixed|null|Group
+     * @return null|Group
      */
-    public function getOneById($id)
+    public function getOneById(int $id): ?Group
     {
         return $this->groupRepository->find($id);
     }
@@ -60,7 +60,7 @@ class GroupRepository
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isIdentifierFree($identifier, Group $groupIgnore = null)
+    public function isIdentifierFree(string $identifier, Group $groupIgnore = null): bool
     {
         $qb = $this->groupRepository->createQueryBuilder('g')
             ->select('g')
@@ -79,7 +79,7 @@ class GroupRepository
     }
 
     /**
-     * @return \Kdyby\Doctrine\QueryBuilder
+     * @return QueryBuilder
      */
     public function getGroupQueryBuilder()
     {
@@ -92,7 +92,7 @@ class GroupRepository
      * @param $identifier
      * @return Article|null
      */
-    public function getOneByIdentifier($identifier)
+    public function getOneByIdentifier(string $identifier): ?Article
     {
         return $this->groupRepository->findOneBy(['identifier' => $identifier]);
     }
@@ -101,7 +101,7 @@ class GroupRepository
      * @param array $parameters
      * @return null|Article
      */
-    public function getOneByParameters(array $parameters)
+    public function getOneByParameters(array $parameters): ?Article
     {
         return $this->groupRepository->findOneBy($parameters);
     }

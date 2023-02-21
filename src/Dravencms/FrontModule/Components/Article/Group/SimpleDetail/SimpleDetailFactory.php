@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  *
@@ -19,7 +19,7 @@
  */
 namespace Dravencms\FrontModule\Components\Article\Group\SimpleDetail;
 
-use Salamek\Cms\ICmsActionOption;
+use Dravencms\Structure\ICmsActionOption;
 
 interface SimpleDetailFactory
 {
@@ -27,5 +27,5 @@ interface SimpleDetailFactory
      * @param ICmsActionOption $cmsActionOption
      * @return SimpleDetail
      */
-    public function create(ICmsActionOption $cmsActionOption);
+    public function create(ICmsActionOption $cmsActionOption): SimpleDetail;
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Dravencms\FrontModule\Components\Article\Group\SimpleDetail;
 
@@ -7,7 +7,7 @@ use Dravencms\Components\BasePaginator\BasePaginatorFactory;
 use Dravencms\Model\Article\Repository\ArticleRepository;
 use Dravencms\Model\Article\Repository\GroupRepository;
 use IPub\VisualPaginator\Components\Control;
-use Salamek\Cms\ICmsActionOption;
+use Dravencms\Structure\ICmsActionOption;
 
 class SimpleDetail extends BaseControl
 {
@@ -25,7 +25,6 @@ class SimpleDetail extends BaseControl
 
     public function __construct(ICmsActionOption $cmsActionOption, ArticleRepository $articleRepository, GroupRepository $groupRepository, BasePaginatorFactory $basePaginatorFactory)
     {
-        parent::__construct();
         $this->cmsActionOption = $cmsActionOption;
         $this->articleRepository = $articleRepository;
         $this->groupRepository = $groupRepository;
@@ -33,7 +32,7 @@ class SimpleDetail extends BaseControl
     }
 
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
 

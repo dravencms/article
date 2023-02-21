@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
@@ -23,9 +23,12 @@ namespace Dravencms\AdminModule\Components\Article\GroupGrid;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseGrid\BaseGridFactory;
+use Dravencms\Components\BaseGrid\Grid;
 use Dravencms\Model\Article\Entities\Group;
 use Dravencms\Model\Article\Repository\GroupRepository;
-use Kdyby\Doctrine\EntityManager;
+use Dravencms\Database\EntityManager;
+use Nette\Security\User;
+use Ublaboo\DataGrid\Column\Action\Confirmation\StringConfirmation;
 
 /**
  * Description of GroupGrid
@@ -41,6 +44,9 @@ class GroupGrid extends BaseControl
     /** @var GroupRepository */
     private $groupRepository;
 
+     /** @var User */
+     private $user;
+
     /** @var EntityManager */
     private $entityManager;
 
@@ -55,13 +61,17 @@ class GroupGrid extends BaseControl
      * @param BaseGridFactory $baseGridFactory
      * @param EntityManager $entityManager
      */
-    public function __construct(GroupRepository $groupRepository, BaseGridFactory $baseGridFactory, EntityManager $entityManager)
+    public function __construct(
+        GroupRepository $groupRepository, 
+        BaseGridFactory $baseGridFactory, 
+        EntityManager $entityManager,
+        User $user
+    )
     {
-        parent::__construct();
-
         $this->baseGridFactory = $baseGridFactory;
         $this->groupRepository = $groupRepository;
         $this->entityManager = $entityManager;
+        $this->user = $user;
     }
 
 
@@ -69,7 +79,7 @@ class GroupGrid extends BaseControl
      * @param $name
      * @return \Dravencms\Components\BaseGrid\BaseGrid
      */
-    public function createComponentGrid($name)
+    public function createComponentGrid(string $name): Grid
     {
         $grid = $this->baseGridFactory->create($this, $name);
 
@@ -88,14 +98,7 @@ class GroupGrid extends BaseControl
 
         $grid->addColumnBoolean('isShowName', 'Show name');
 
-        if ($this->presenter->isAllowed('article', 'edit')) {
-
-/*
-            $grid->addActionHref('articles', 'Articles')
-                ->setCustomHref(function($row){
-                    return $this->presenter->link('Article:', ['groupId' => $row->getId()]);
-                })
-                ->setIcon('bars');*/
+        if ($this->user->isAllowed('article', 'edit')) {
 
             $grid->addAction('articles', 'Articles', 'Article:default', ['groupId' => 'id'])
                 ->setIcon('bars')
@@ -106,15 +109,14 @@ class GroupGrid extends BaseControl
                 ->setIcon('pencil')
                 ->setTitle('Upravit')
                 ->setClass('btn btn-xs btn-primary');
-
         }
 
-        if ($this->presenter->isAllowed('article', 'delete')) {
+        if ($this->user->isAllowed('article', 'delete')) {
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
                 ->setTitle('Smazat')
                 ->setClass('btn btn-xs btn-danger ajax')
-                ->setConfirm('Do you really want to delete row %s?', 'identifier');
+                ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'identifier'));
             $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDelete'];
         }
         $grid->addExportCsvFiltered('Csv export (filtered)', 'article_group_filtered.csv')
@@ -130,7 +132,7 @@ class GroupGrid extends BaseControl
      * @param $id
      * @throws \Exception
      */
-    public function handleDelete($id)
+    public function handleDelete($id): void
     {
         $groups = $this->groupRepository->getById($id);
         foreach ($groups AS $group)
@@ -143,7 +145,7 @@ class GroupGrid extends BaseControl
         $this->onDelete();
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/GroupGrid.latte');

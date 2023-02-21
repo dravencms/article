@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 namespace Dravencms\Article;
 
 use Nette\SmartObject;
@@ -29,7 +29,7 @@ class LinkProtector
      * @param $html
      * @throws \Exception
      */
-    public function __construct($html)
+    public function __construct(string $html)
     {
         $this->encryptor = new Encryptor($this->getEncryptionKey());
 
@@ -43,7 +43,7 @@ class LinkProtector
     /**
      * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         return $this->html;
     }
@@ -51,7 +51,7 @@ class LinkProtector
     /**
      * @return string
      */
-    public function getProtectedHtml()
+    public function getProtectedHtml(): string
     {
         $dom = new \DOMDocument('1.0', 'utf-8');
         $this->html = mb_convert_encoding($this->html, 'HTML-ENTITIES', "UTF-8");
@@ -80,7 +80,7 @@ class LinkProtector
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getProtectedHtml();
     }
@@ -88,7 +88,7 @@ class LinkProtector
     /**
      * @return mixed
      */
-    public function getEncryptionKey()
+    public function getEncryptionKey(): string
     {
         return date('Y-m');
     }
@@ -97,7 +97,7 @@ class LinkProtector
      * @param $data
      * @return mixed
      */
-    public function decrypt($data)
+    public function decrypt(string $data): string
     {
         return preg_replace('/[\x00-\x1F\x7F]/', '', $this->encryptor->decrypt(base64_decode($data)));
     }
