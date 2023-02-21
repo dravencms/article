@@ -17,7 +17,11 @@
   "require": {    
     "dravencms/admin": ">=2.0",
     "dravencms/tag": ">=2.0",
-    "dravencms/file": ">=2.0"
+    "dravencms/file": ">=2.0",
+    "dravencms/paginator": ">=1.0",
+  },
+  "suggest": {
+    "dravencms/structure": "Allows article components to be used in cms"
   },
   "require-dev": {
     "nette/tester": "@dev"
