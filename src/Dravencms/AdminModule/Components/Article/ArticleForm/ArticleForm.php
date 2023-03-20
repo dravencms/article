@@ -72,9 +72,6 @@ class ArticleForm extends BaseControl
     /** @var Group */
     private $group;
 
-    /** @var File */
-    private $file;
-
     /** @var User */
     private $user;
 
@@ -92,9 +89,7 @@ class ArticleForm extends BaseControl
         ArticleTranslationRepository $articleTranslationRepository,
         TagRepository $tagRepository,
         TagTranslationRepository $tagTranslationRepository,
-        StructureFileRepository $structureFileRepository,
         LocaleRepository $localeRepository,
-        File $file,
         User $user,
         Article $article = null
     ) {
@@ -106,10 +101,8 @@ class ArticleForm extends BaseControl
         $this->articleRepository = $articleRepository;
         $this->articleTranslationRepository = $articleTranslationRepository;
         $this->tagRepository = $tagRepository;
-        $this->structureFileRepository = $structureFileRepository;
         $this->tagTranslationRepository = $tagTranslationRepository;
         $this->localeRepository = $localeRepository;
-        $this->file = $file;
         $this->user = $user;
 
 
@@ -120,7 +113,6 @@ class ArticleForm extends BaseControl
             }
 
             $defaults = [
-                'structureFile' => ($this->article->getStructureFile() ? $this->article->getStructureFile()->getId() : null),
                 'position' => $this->article->getPosition(),
                 'identifier' => $this->article->getIdentifier(),
                 'isActive' => $this->article->isActive(),
@@ -132,8 +124,6 @@ class ArticleForm extends BaseControl
             foreach ($this->article->getTranslations() AS $translation)
             {
                 $defaults[$translation->getLocale()->getLanguageCode()]['name'] = $translation->getName();
-                $defaults[$translation->getLocale()->getLanguageCode()]['lead'] = $translation->getLead();
-                $defaults[$translation->getLocale()->getLanguageCode()]['subtitle'] = $translation->getSubtitle();
                 $defaults[$translation->getLocale()->getLanguageCode()]['perex'] = $translation->getPerex();
                 $defaults[$translation->getLocale()->getLanguageCode()]['text'] = $translation->getText();
             }
@@ -159,15 +149,8 @@ class ArticleForm extends BaseControl
                 ->setRequired('Please enter article name.')
                 ->addRule(Form::MAX_LENGTH, 'Article name is too long.', 255);
 
-            $container->addText('lead')
-                ->setRequired(false)
-                ->addRule(Form::MAX_LENGTH, 'Article lead is too long.', 255);
-
-            $container->addText('subtitle')
-                ->setRequired(false)
-                ->addRule(Form::MAX_LENGTH, 'Article subtitle is too long.', 255);
-
-            $container->addTextArea('perex');
+            $container->addTextArea('perex')
+            ->addRule(Form::MAX_LENGTH, 'Article perex is too long.', 512);
 
             $container->addTextArea('text');
         }
@@ -175,8 +158,6 @@ class ArticleForm extends BaseControl
         $form->addText('identifier')
             ->setRequired('Please fill in an identifier');
 
-
-        $form->addInteger('structureFile');
 
         $form->addInteger('position')
             ->setDisabled((is_null($this->article)));
@@ -226,22 +207,24 @@ class ArticleForm extends BaseControl
 
         $tags = new ArrayCollection($this->tagRepository->getById($values->tags));
 
-        if ($values->structureFile) {
-            $structureFile = $this->structureFileRepository->getOneById($values->structureFile);
-        } else {
-            $structureFile = null;
-        }
-
         if ($this->article) {
             $article = $this->article;
             $article->setIdentifier($values->identifier);
-            $article->setStructureFile($structureFile);
             $article->setIsActive($values->isActive);
             $article->setIsShowName($values->isShowName);
             $article->setIsAutoDetectTags($values->isAutoDetectTags);
             $article->setPosition($values->position);
+            $article->setUpdatedBy($this->user->getIdentity());
         } else {
-            $article = new Article($this->group, $values->identifier, $values->isActive, $values->isShowName, $values->isAutoDetectTags, $structureFile);
+            $article = new Article(
+                $this->group, 
+                $values->identifier, 
+                $this->user->getIdentity(),
+                $this->user->getIdentity(),
+                $values->isActive, 
+                $values->isShowName, 
+                $values->isAutoDetectTags
+            );
         }
         $article->setTags($tags);
 
@@ -253,8 +236,6 @@ class ArticleForm extends BaseControl
             if ($articleTranslation = $this->articleTranslationRepository->getTranslation($article, $activeLocale))
             {
                 $articleTranslation->setName($values->{$activeLocale->getLanguageCode()}->name);
-                $articleTranslation->setSubtitle($values->{$activeLocale->getLanguageCode()}->subtitle);
-                $articleTranslation->setLead($values->{$activeLocale->getLanguageCode()}->lead);
                 $articleTranslation->setText($values->{$activeLocale->getLanguageCode()}->text);
                 $articleTranslation->setPerex($values->{$activeLocale->getLanguageCode()}->perex);
             }
@@ -264,8 +245,6 @@ class ArticleForm extends BaseControl
                     $article,
                     $activeLocale,
                     $values->{$activeLocale->getLanguageCode()}->name,
-                    $values->{$activeLocale->getLanguageCode()}->subtitle,
-                    $values->{$activeLocale->getLanguageCode()}->lead,
                     $this->cleanText($values->{$activeLocale->getLanguageCode()}->text),
                     $values->{$activeLocale->getLanguageCode()}->perex
                 );
@@ -329,7 +308,6 @@ class ArticleForm extends BaseControl
     public function render(): void
     {
         $template = $this->template;
-        $template->fileSelectorPath = $this->file->getFileSelectorPath();
         $template->activeLocales = $this->localeRepository->getActive();
         $template->setFile(__DIR__ . '/ArticleForm.latte');
         $template->render();

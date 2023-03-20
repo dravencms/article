@@ -41,6 +41,11 @@ class AdminMenuFixtures extends AbstractFixture implements DependentFixtureInter
      */
     public function getDependencies(): array
     {
-        return ['Dravencms\Model\Article\Fixtures\AclOperationFixtures', 'Dravencms\Model\Structure\Fixtures\AdminMenuFixtures'];
+        $depedencies = ['Dravencms\Model\Article\Fixtures\AclOperationFixtures'];
+        if (class_exists(Dravencms\Model\Structure\Fixtures\AdminMenuFixtures::class)) {
+            $depedencies[] = 'Dravencms\Model\Structure\Fixtures\AdminMenuFixtures';
+        }
+
+        return $depedencies;
     }
 }

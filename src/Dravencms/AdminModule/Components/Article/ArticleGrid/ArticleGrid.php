@@ -130,6 +130,11 @@ class ArticleGrid extends BaseControl
 
         if ($this->user->isAllowed('article', 'edit')) {
 
+            $grid->addAction('pictures', 'Pictures', 'ArticlePicture:', ['articleId' => 'id'])
+            ->setIcon('file-image-o')
+            ->setTitle('Pictures')
+            ->setClass('btn btn-xs btn-default');
+
             $grid->addAction('edit', 'Upravit', 'edit', ['groupId' => 'group.id', 'id'])
                 ->setIcon('pencil')
                 ->setTitle('Upravit')

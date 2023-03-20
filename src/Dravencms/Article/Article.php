@@ -10,6 +10,8 @@ use Nette\SmartObject;
  */
 class Article
 {
+    const PLUGIN_NAME = 'article';
+
     use SmartObject;
     public function __construct()
     {

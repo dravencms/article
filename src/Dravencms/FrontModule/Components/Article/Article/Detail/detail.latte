@@ -1,13 +1,9 @@
 <div class="article news-wrapper {$article->getIdentifier()|webalize}">
     <article class="news-item">
     <h2 n:if="$article->isShowName()">
-        <span n:if="$articleTranslation->getLead()" class="lead">{$articleTranslation->getLead()}</span>
         {$articleTranslation->getName()}
     </h2>
-    <div n:if="$articleTranslation->getSubtitle()" class="subtitle">
-        {$articleTranslation->getSubtitle()}
-    </div>
-    <p n:if="$article->getStructureFile()" class="featured-image"><img class="img-responsive" n:img="$article->getStructureFile(), '750x300', 'fit_exact'" alt="{$articleTranslation->getName()}"></p>
+    <p n:if="$article->getStructureFile()" class="featured-image"><img class="img-responsive" n:img="$article->getStructureFile()->getFile(), '750x300', 'fit_exact'" alt="{$articleTranslation->getName()}"></p>
     <p>{$articleTranslation->getText()|noescape}</p>
     </article>
 </div>

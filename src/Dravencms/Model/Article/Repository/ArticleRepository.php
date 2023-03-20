@@ -117,6 +117,14 @@ class ArticleRepository
     }
 
     /**
+     * @return Article[]
+     */
+    public function getAll()
+    {
+        return $this->articleRepository->findAll();
+    }
+
+    /**
      * @param bool $isActive
      * @param array $parameters
      * @return Article
@@ -135,5 +143,59 @@ class ArticleRepository
     public function getOneByParameters(array $parameters): ?Article
     {
         return $this->articleRepository->findOneBy($parameters);
+    }
+
+    public function getPreviousArticle(Article $currentArticle): ?Article
+    {
+        $qb = $this->articleRepository->createQueryBuilder('a')
+            ->select('a')
+            ->andWhere('a.group = :group')
+            ->andWhere('a != :articleIgnore')
+            ->setParameters([
+                'group' => $currentArticle->getGroup(),
+                'articleIgnore' => $currentArticle
+            ]);
+
+        if ($currentArticle->getGroup()->getSortBy() == Group::SORT_BY_POSITION) {
+            $qb->orderBy('a.position', 'ASC')
+            ->andWhere('a.position < :fromPosition')
+            ->setParameter('fromPosition', $currentArticle->getPosition());
+        } else {
+            $qb->orderBy('a.createdAt', 'DESC')
+            ->andWhere('a.createdAt < :fromCreatedAt')
+            ->setParameter('fromCreatedAt', $currentArticle->getCreatedAt());
+        }
+
+        $query = $qb->getQuery();
+
+        return $query->getOneOrNullResult();
+    }
+
+    public function getNextArticle(Article $currentArticle): ?Article
+    {
+        $qb = $this->articleRepository->createQueryBuilder('a')
+            ->select('a')
+            ->andWhere('a.group = :group')
+            ->andWhere('a != :articleIgnore')
+            ->setParameters([
+                'group' => $currentArticle->getGroup(),
+                'articleIgnore' => $currentArticle
+            ]);
+
+        if ($currentArticle->getGroup()->getSortBy() == Group::SORT_BY_POSITION) {
+            $qb->orderBy('a.position', 'ASC')
+            ->andWhere('a.position > :fromPosition')
+            ->setParameter('fromPosition', $currentArticle->getPosition());
+        } else {
+            $qb->orderBy('a.createdAt', 'DESC')
+            ->andWhere('a.createdAt > :fromCreatedAt')
+            ->setParameter('fromCreatedAt', $currentArticle->getCreatedAt());
+        }
+
+        $qb->setMaxResults(1);
+
+        $query = $qb->getQuery();
+
+        return $query->getOneOrNullResult();
     }
 }

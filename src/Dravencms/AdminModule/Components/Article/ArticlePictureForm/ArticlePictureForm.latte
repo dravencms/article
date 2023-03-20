@@ -1,0 +1,37 @@
+<form n:name="form" class="panel form-horizontal">
+    <ul class="alert alert-danger" n:if="$form->hasErrors()">
+        <li n:foreach="$form->errors as $error">{$error}</li>
+    </ul>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group no-margin-hr">
+                    <label class="control-label" n:name="position">{_"Position"}</label>
+                    <input n:name="position" class="form-control">
+                </div>
+            </div><!-- col-sm-12 -->
+        </div><!-- row -->
+        {include $fileSelectorPath, filetype => Salamek\Files\Models\IFile::TYPE_IMAGE, form => $form, selectorName => articlePicture, uploadName => file}
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" n:name="isPrimary" class="px"> <span class="lbl">{_"Primary"}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" n:name="isActive" class="px"> <span class="lbl">{_"Active"}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <input type="submit" n:name="send" class="btn btn-success button" value="{_"Save"}">
+    </div>
+</form>

@@ -64,7 +64,7 @@ class ArticleCmsRepository implements ICmsComponentRepository
         
         if ($found)
         {
-            return new CmsActionOption(($found->getLead() ? $found->getLead() . ' ' : '') . $found->getIdentifier(), $parameters);
+            return new CmsActionOption($found->getIdentifier(), $parameters);
         }
 
         return null;

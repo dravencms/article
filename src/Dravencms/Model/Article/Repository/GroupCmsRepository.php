@@ -32,7 +32,7 @@ class GroupCmsRepository implements ICmsComponentRepository
                 $return = [];
                 /** @var Group $group */
                 foreach ($this->groupRepository->getAll() AS $group) {
-                    $return[] = new CmsActionOption($group->getName(), ['id' => $group->getId()]);
+                    $return[] = new CmsActionOption($group->getIdentifier(), ['id' => $group->getId()]);
                 }
                 break;
 

@@ -28,18 +28,6 @@ class ArticleTranslation
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=true)
-     */
-    private $subtitle;
-
-    /**
-     * @var string
-     * @ORM\Column(type="string",length=255,nullable=true)
-     */
-    private $lead;
-
-    /**
-     * @var string
      * @ORM\Column(type="text",nullable=false)
      */
     private $text;
@@ -66,18 +54,14 @@ class ArticleTranslation
     /**
      * ArticleTranslation constructor.
      * @param string $name
-     * @param string $subtitle
-     * @param string $lead
      * @param string $text
      * @param string $perex
      * @param Article $article
      * @param Locale $locale
      */
-    public function __construct(Article $article, Locale $locale, string $name, string $subtitle, string $lead, string $text, string $perex)
+    public function __construct(Article $article, Locale $locale, string $name, string $text, string $perex)
     {
         $this->name = $name;
-        $this->subtitle = $subtitle;
-        $this->lead = $lead;
         $this->text = $text;
         $this->perex = $perex;
         $this->article = $article;
@@ -90,22 +74,6 @@ class ArticleTranslation
     public function setName(string $name): void
     {
         $this->name = $name;
-    }
-
-    /**
-     * @param string $subtitle
-     */
-    public function setSubtitle(string $subtitle): void
-    {
-        $this->subtitle = $subtitle;
-    }
-
-    /**
-     * @param string $lead
-     */
-    public function setLead(string $lead): void
-    {
-        $this->lead = $lead;
     }
 
     /**
@@ -146,22 +114,6 @@ class ArticleTranslation
     public function getName(): string
     {
         return $this->name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSubtitle(): ?string
-    {
-        return $this->subtitle;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLead(): ?string
-    {
-        return $this->lead;
     }
 
     /**

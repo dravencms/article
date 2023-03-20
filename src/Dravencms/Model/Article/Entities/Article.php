@@ -2,8 +2,10 @@
 namespace Dravencms\Model\Article\Entities;
 
 use Dravencms\Model\File\Entities\StructureFile;
+use Dravencms\Model\User\Entities\User;
 use Dravencms\Model\Tag\Entities\Tag;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -56,6 +58,7 @@ class Article
 
     /**
      * @var StructureFile
+     * @deprecated Replaced by ArticlePicture one2n model
      * @ORM\ManyToOne(targetEntity="\Dravencms\Model\File\Entities\StructureFile")
      * @ORM\JoinColumn(name="structure_file_id", referencedColumnName="id")
      */
@@ -86,10 +89,32 @@ class Article
     private $group;
 
     /**
+     * @var User
+     * @Gedmo\SortableGroup
+     * @ORM\ManyToOne(targetEntity="Dravencms\Model\User\Entities\User")
+     * @ORM\JoinColumn(name="created_by_id", referencedColumnName="id", nullable=false)
+     */
+    private $createdBy;
+
+    /**
+     * @var User
+     * @Gedmo\SortableGroup
+     * @ORM\ManyToOne(targetEntity="Dravencms\Model\User\Entities\User")
+     * @ORM\JoinColumn(name="updated_by_id", referencedColumnName="id", nullable=false)
+     */
+    private $updatedBy;
+
+    /**
      * @var ArrayCollection|ArticleTranslation[]
      * @ORM\OneToMany(targetEntity="ArticleTranslation", mappedBy="article",cascade={"persist", "remove"})
      */
     private $translations;
+
+    /**
+     * @var ArrayCollection|ArticlePicture[]
+     * @ORM\OneToMany(targetEntity="ArticlePicture", mappedBy="article",cascade={"persist", "remove"})
+     */
+    private $pictures;
 
     /**
      * Article constructor.
@@ -100,17 +125,27 @@ class Article
      * @param bool $isAutoDetectTags
      * @param StructureFile|null $file
      */
-    public function __construct(Group $group, string $identifier, bool $isActive = true, bool $isShowTitle = true, bool $isAutoDetectTags = true, StructureFile $file = null)
+    public function __construct(
+        Group $group, 
+        string $identifier,
+        User $createdBy,
+        User $updatedBy,
+        bool $isActive = true, 
+        bool $isShowTitle = true, 
+        bool $isAutoDetectTags = true
+        )
     {
         $this->group = $group;
         $this->identifier = $identifier;
         $this->isActive = $isActive;
         $this->isShowName = $isShowTitle;
         $this->isAutoDetectTags = $isAutoDetectTags;
-        $this->structureFile = $file;
+        $this->createdBy = $createdBy;
+        $this->updatedBy = $updatedBy;
 
         $this->tags = new ArrayCollection();
         $this->translations = new ArrayCollection();
+        $this->pictures = new ArrayCollection();
     }
 
     /**
@@ -211,6 +246,22 @@ class Article
     }
 
     /**
+     * @param User|null $createdBy
+     */
+    public function setCreatedBy(User $createdBy = null): void
+    {
+        $this->createdBy = $createdBy;
+    }
+
+    /**
+     * @param User|null $updatedBy
+     */
+    public function setUpdatedBy(User $updatedBy = null): void
+    {
+        $this->updatedBy = $updatedBy;
+    }
+
+    /**
      * @return boolean
      */
     public function isActive(): bool
@@ -232,14 +283,6 @@ class Article
     public function isAutoDetectTags(): bool
     {
         return $this->isAutoDetectTags;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLead(): string
-    {
-        return $this->lead;
     }
 
     /**
@@ -296,6 +339,43 @@ class Article
     public function getIdentifier(): string
     {
         return $this->identifier;
+    }
+
+    /**
+     * @return User
+     */
+    public function getCreatedBy(): User
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUpdatedBy(): User
+    {
+        return $this->updatedBy;
+    }
+
+    /**
+     * @return ArrayCollection|ArticlePicture[]
+     */
+    public function getPictures()
+    {
+        return $this->pictures;
+    }
+
+    /**
+     * @return ArticlePicture|null
+     */
+    public function getPrimaryPicture()
+    {
+        /*if (!$this->pictures) {
+            return null;
+        }*/
+
+        $criteria = Criteria::create()->where(Criteria::expr()->eq("isPrimary", true), Criteria::expr()->eq("isActive", true));
+        return $this->pictures->matching($criteria)->first();
     }
 }
 

@@ -1,0 +1,7 @@
+{block #content}
+    <p n:isAllowed="article, edit">
+        <a n:href="ArticlePicture:edit, articleId => $article->getId()" class="btn btn-primary"><i class="fa fa-plus"></i> {_"New picture"}</a>
+    </p>
+
+    {control articlePictureGrid}
+{/block}

@@ -25,24 +25,6 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group no-margin-hr">
-                                    <label class="control-label" n:name="lead">{_"Lead"}</label>
-                                    <input type="text" n:name="lead" class="form-control">
-                                </div>
-                            </div><!-- col-sm-12 -->
-                        </div><!-- row -->
-
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group no-margin-hr">
-                                    <label class="control-label" n:name="subtitle">{_"Subtitle"}</label>
-                                    <input type="text" n:name="subtitle" class="form-control">
-                                </div>
-                            </div><!-- col-sm-12 -->
-                        </div><!-- row -->
-
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group no-margin-hr">
                                     <label class="control-label" n:name="perex">{_"Perex"}</label>
                                     <textarea n:name="perex" class="form-control wysiwyg"></textarea>
                                 </div>
@@ -61,8 +43,6 @@
                 {/formContainer}
             </div>
         </div>
-        {include $fileSelectorPath, filetype => Salamek\Files\Models\IFile::TYPE_IMAGE, form => $form}
-
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group no-margin-hr">

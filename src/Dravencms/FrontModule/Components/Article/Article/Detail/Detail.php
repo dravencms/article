@@ -53,7 +53,7 @@ class Detail extends BaseControl
 
         $template->article = $article;
         $template->articleTranslation = $this->articleTranslationRepository->getTranslation($article, $this->currentLocale);
-        $template->setFile($this->cmsActionOption->getTemplatePath(__DIR__ . '/detail.latte'));
+        $template->setFile($this->cmsActionOption->getTemplatePath($this->cmsActionOption->getTemplatePath(__DIR__.'/detail.latte')));
         $template->render();
     }
 }

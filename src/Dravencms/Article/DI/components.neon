@@ -2,3 +2,6 @@
 - Dravencms\AdminModule\Components\Article\ArticleForm\ArticleFormFactory
 - Dravencms\AdminModule\Components\Article\GroupForm\GroupFormFactory
 - Dravencms\AdminModule\Components\Article\GroupGrid\GroupGridFactory
+
+- Dravencms\AdminModule\Components\Article\ArticlePictureForm\ArticlePictureFormFactory
+- Dravencms\AdminModule\Components\Article\ArticlePictureGrid\ArticlePictureGridFactory

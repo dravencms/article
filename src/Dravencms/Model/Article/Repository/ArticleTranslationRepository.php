@@ -71,14 +71,17 @@ class ArticleTranslationRepository
      * @param Article|null $ignoreArticle
      * @return array
      */
-    public function search(Group $group = null, string $query = null, array $tags = [], bool $isActive = true, bool $limit = null, bool $offset = null, Article $ignoreArticle = null)
+    public function search(ILocale $locale, Group $group = null, string $query = null, array $tags = [], bool $isActive = true, int $limit = null, int $offset = null, Article $ignoreArticle = null)
     {
-        $qb = $this->articleTranslationRepository->createQueryBuilder('a')
-            ->select('a')
+        $qb = $this->articleTranslationRepository->createQueryBuilder('atr')
+            ->select('atr')
+            ->join('atr.article', 'a')
             ->where('a.isActive = :isActive')
+            ->andWhere('atr.locale = :locale')
             ->setParameters(
                 [
                     'isActive' => $isActive,
+                    'locale' => $locale
                 ]
             );
 
@@ -100,9 +103,8 @@ class ArticleTranslationRepository
         if ($query)
         {
             $qb->andWhere('at.name LIKE :query')
-                ->orWhere('a.text LIKE :query')
-                ->orWhere('a.name LIKE :query')
-                ->orWhere('a.perex LIKE :query')
+                ->orWhere('at.text LIKE :query')
+                ->orWhere('at.perex LIKE :query')
                 ->setParameter('query', '%'.$query.'%');
         }
 
