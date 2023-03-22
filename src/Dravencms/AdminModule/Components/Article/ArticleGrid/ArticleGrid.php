@@ -108,20 +108,20 @@ class ArticleGrid extends BaseControl
             $grid->setDefaultSort(['createdAt' => 'DESC']);
         }
 
-        $grid->addColumnText('identifier', 'Identifier')
+        $grid->addColumnText('identifier', 'article.identifier')
             ->setSortable()
             ->setFilterText();
 
-        $grid->addColumnBoolean('isActive', 'Active');
-        $grid->addColumnBoolean('isShowName', 'Show name');
+        $grid->addColumnBoolean('isActive', 'article.isActive');
+        $grid->addColumnBoolean('isShowName', 'article.isShowName');
 
         if ($this->group->getSortBy() == Group::SORT_BY_POSITION)
         {
-            $grid->addColumnPosition('position', 'Position', 'up!', 'down!');
+            $grid->addColumnPosition('position', 'article.position', 'up!', 'down!');
         }
         elseif ($this->group->getSortBy() == Group::SORT_BY_CREATED_AT)
         {
-            $grid->addColumnDateTime('updatedAt', 'Last edit')
+            $grid->addColumnDateTime('updatedAt', 'article.updatedAt')
                 ->setFormat($this->currentLocale->getDateTimeFormat())
                 ->setAlign('center')
                 ->setSortable()
@@ -130,14 +130,14 @@ class ArticleGrid extends BaseControl
 
         if ($this->user->isAllowed('article', 'edit')) {
 
-            $grid->addAction('pictures', 'Pictures', 'ArticlePicture:', ['articleId' => 'id'])
+            $grid->addAction('pictures', 'article.pictures', 'ArticlePicture:', ['articleId' => 'id'])
             ->setIcon('file-image-o')
-            ->setTitle('Pictures')
+            ->setTitle('article.pictures')
             ->setClass('btn btn-xs btn-default');
 
-            $grid->addAction('edit', 'Upravit', 'edit', ['groupId' => 'group.id', 'id'])
+            $grid->addAction('edit', 'article.edit', 'edit', ['groupId' => 'group.id', 'id'])
                 ->setIcon('pencil')
-                ->setTitle('Upravit')
+                ->setTitle('article.edit')
                 ->setClass('btn btn-xs btn-primary');
 
         }
@@ -145,15 +145,15 @@ class ArticleGrid extends BaseControl
         if ($this->user->isAllowed('article', 'delete')) {
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
-                ->setTitle('Smazat')
+                ->setTitle('article.delete')
                 ->setClass('btn btn-xs btn-danger ajax')
-                ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'identifier'));
-            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDelete'];
+                ->setConfirmation(new StringConfirmation('article.doYouReallyWantToDeleteRowIdentifier', 'identifier'));
+            $grid->addGroupAction('article.delete')->onSelect[] = [$this, 'handleDelete'];
         }
-        $grid->addExportCsvFiltered('Csv export (filtered)', 'articles_filtered.csv')
-            ->setTitle('Csv export (filtered)');
-        $grid->addExportCsv('Csv export', 'articlesall.csv')
-            ->setTitle('Csv export');
+        $grid->addExportCsvFiltered('article.csvExportFiltered', 'articles_filtered.csv')
+            ->setTitle('article.csvExportFiltered');
+        $grid->addExportCsv('article.csvExport', 'articles_all.csv')
+            ->setTitle('article.csvExport');
 
         return $grid;
     }

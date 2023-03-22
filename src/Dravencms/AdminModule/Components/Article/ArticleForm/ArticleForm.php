@@ -146,17 +146,17 @@ class ArticleForm extends BaseControl
             $container = $form->addContainer($activeLocale->getLanguageCode());
 
             $container->addText('name')
-                ->setRequired('Please enter article name.')
-                ->addRule(Form::MAX_LENGTH, 'Article name is too long.', 255);
+                ->setRequired('article.pleaseEnterArticleName')
+                ->addRule(Form::MAX_LENGTH, 'article.articleNameIsTooLong', 255);
 
             $container->addTextArea('perex')
-            ->addRule(Form::MAX_LENGTH, 'Article perex is too long.', 512);
+            ->addRule(Form::MAX_LENGTH, 'article.articlePerexIsTooLong', 512);
 
             $container->addTextArea('text');
         }
 
         $form->addText('identifier')
-            ->setRequired('Please fill in an identifier');
+            ->setRequired('article.pleaseFillInTheIdentifier');
 
 
         $form->addInteger('position')
@@ -183,12 +183,12 @@ class ArticleForm extends BaseControl
 
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
             if (!$this->articleTranslationRepository->isNameFree($values->{$activeLocale->getLanguageCode()}->name, $activeLocale, $this->group, $this->article)) {
-                $form->addError('Tento název je již zabrán.');
+                $form->addError('article.thisNameIsAlreadyUsed');
             }
         }
 
         if (!$this->user->isAllowed('article', 'edit')) {
-            $form->addError('Nemáte oprávění editovat article.');
+            $form->addError('article.youHaveNoPermissionToEditThisArticle');
         }
     }
 

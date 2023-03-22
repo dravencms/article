@@ -120,15 +120,15 @@ class GroupForm extends BaseControl
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
             $container = $form->addContainer($activeLocale->getLanguageCode());
             $container->addText('name')
-                ->setRequired('Please enter group name.')
-                ->addRule(Form::MAX_LENGTH, 'Group name is too long.', 255);
+                ->setRequired('article.pleaseEnterGroupName')
+                ->addRule(Form::MAX_LENGTH, 'article.groupNameIsTooLong', 255);
         }
 
         $form->addText('identifier')
-            ->setRequired('Please fill in an identifier');
+            ->setRequired('article.pleaseEnterGroupIdentifier');
 
         $form->addSelect('sortBy', null, Group::$sortByList)
-            ->setRequired('Please select sorting mode');
+            ->setRequired('article.pleaseSelectSortingMode');
 
         $form->addCheckbox('isShowName');
 
@@ -148,12 +148,12 @@ class GroupForm extends BaseControl
     {
         $values = $form->getValues();
         if (!$this->groupRepository->isIdentifierFree($values->identifier, $this->group)) {
-            $form->addError('Tento identifier je již zabrán.');
+            $form->addError('article.thisIdentifierIsAlreadyUsed');
         }
 
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
             if (!$this->groupTranslationRepository->isNameFree($values->{$activeLocale->getLanguageCode()}->name, $activeLocale, $this->group)) {
-                $form->addError('Tento název je již zabrán.');
+                $form->addError('article.thisNameIsAlreadyUsed');
             }
         }
 

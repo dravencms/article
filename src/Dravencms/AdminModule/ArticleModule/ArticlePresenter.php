@@ -56,7 +56,7 @@ class ArticlePresenter extends SecuredPresenter
     {
         $this->group = $this->groupRepository->getOneById($groupId);
         $this->template->group = $this->group;
-        $this->template->h1 = 'Articles in group '.$this->group->getIdentifier();
+        $this->template->h1 = $this->translator->translate('article.articlesInGroupIdentifier', ['groupIdentifier' => $this->group->getIdentifier()]);
     }
 
     /**
@@ -76,10 +76,9 @@ class ArticlePresenter extends SecuredPresenter
             }
 
             $this->article = $article;
-
-            $this->template->h1 = sprintf('Edit article „%s“', $article->getIdentifier());
+            $this->template->h1 = $this->translator->translate('article.editArticleIdentifier', ['articleIdentifier' => $article->getIdentifier()]);
         } else {
-            $this->template->h1 = 'New article in group '.$this->group->getIdentifier();
+            $this->template->h1 = $this->translator->translate('article.newArticleInGroupIdentifier', ['groupIdentifier' => $this->group->getIdentifier()]);
         }
     }
 
@@ -90,7 +89,7 @@ class ArticlePresenter extends SecuredPresenter
     {
         $control = $this->articleFormFactory->create($this->group, $this->article);
         $control->onSuccess[] = function(){
-            $this->flashMessage('Article has been successfully saved', Flash::SUCCESS);
+            $this->flashMessage($this->translator->translate('article.articleHasBeenSucessfullySaved'), Flash::SUCCESS);
             $this->redirect('Article:', ['groupId' => $this->group->getId()]);
         };
         return $control;
@@ -104,7 +103,7 @@ class ArticlePresenter extends SecuredPresenter
         $control = $this->articleGridFactory->create($this->group);
         $control->onDelete[] = function()
         {
-            $this->flashMessage('Article has been successfully deleted', Flash::SUCCESS);
+            $this->flashMessage($this->translator->translate('article.articleHasBeenSucessfullyDeleted'), Flash::SUCCESS);
             $this->redirect('Article:', ['groupId' => $this->group->getId()]);
         };
         return $control;

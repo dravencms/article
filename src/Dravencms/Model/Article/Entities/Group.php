@@ -26,8 +26,8 @@ class Group
 
     /** @var array */
     public static $sortByList = [
-        self::SORT_BY_POSITION => 'Sort by position',
-        self::SORT_BY_CREATED_AT => 'Sort by created at',
+        self::SORT_BY_POSITION => 'article.sortByPosition',
+        self::SORT_BY_CREATED_AT => 'article.sortByCreatedAt',
     ];
 
     /**

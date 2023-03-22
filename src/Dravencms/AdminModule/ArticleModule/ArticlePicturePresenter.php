@@ -59,7 +59,7 @@ class ArticlePicturePresenter extends SecuredPresenter
 
         $this->article = $article;
         $this->template->article = $article;
-        $this->template->h1 = 'Article articlePictures';
+        $this->template->h1 = $this->translator->translate('article.articlePictures');
     }
 
     /**
@@ -87,9 +87,9 @@ class ArticlePicturePresenter extends SecuredPresenter
 
             $this->articlePicture = $articlePicture;
 
-            $this->template->h1 = 'Edit article articlePicture';
+            $this->template->h1 = $this->translator->translate('article.editArticlePicture');
         } else {
-            $this->template->h1 = 'New article articlePicture';
+            $this->template->h1 = $this->translator->translate('article.newArticlePicture');
         }
     }
 
@@ -99,8 +99,8 @@ class ArticlePicturePresenter extends SecuredPresenter
     protected function createComponentArticlePictureForm(): ArticlePictureForm
     {
         $control = $this->articlePictureFormFactory->create($this->article, $this->articlePicture);
-        $control->onSuccess[] = function(){
-            $this->flashMessage('Article articlePicture has been successfully saved', Flash::SUCCESS);
+        $control->onSuccess[] = function() {
+            $this->flashMessage($this->translator->translate('article.articlePictureHasBeenSucessfullySaved'), Flash::SUCCESS);
             $this->redirect('ArticlePicture:', ['articleId' => $this->article->getId()]);
         };
         return $control;
@@ -114,7 +114,7 @@ class ArticlePicturePresenter extends SecuredPresenter
         $control = $this->articlePictureGridFactory->create($this->article);
         $control->onDelete[] = function()
         {
-            $this->flashMessage('Article articlePicture has been successfully deleted', Flash::SUCCESS);
+            $this->flashMessage($this->translator->translate('article.articlePictureHasBeenSucessfullyDeleted'), Flash::SUCCESS);
             $this->redirect('ArticlePicture:', ['articleId' => $this->article->getId()]);
         };
         return $control;

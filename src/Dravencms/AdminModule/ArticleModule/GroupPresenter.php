@@ -40,7 +40,7 @@ class GroupPresenter extends SecuredPresenter
      */
     public function renderDefault(): void
     {
-        $this->template->h1 = 'Article groups';
+        $this->template->h1 = $this->translator->translate('article.articleGroups');
     }
 
     /**
@@ -59,9 +59,9 @@ class GroupPresenter extends SecuredPresenter
 
             $this->group = $group;
 
-            $this->template->h1 = sprintf('Edit article group „%s“', $group->getIdentifier());
+            $this->template->h1 = $this->translator->translate('article.editArticleGroupIdentifier', ['groupIdentifier' => $this->getIdentifier()]);
         } else {
-            $this->template->h1 = 'New article group';
+            $this->template->h1 = $this->translator->translate('article.newArticleGroup');
         }
     }
 
@@ -72,7 +72,8 @@ class GroupPresenter extends SecuredPresenter
     {
         $control = $this->groupFormFactory->create($this->group);
         $control->onSuccess[] = function(){
-            $this->flashMessage('Article group has been successfully saved', Flash::SUCCESS);
+            $this->flashMessage($this->translator->translate('article.articleGroupHasBeenSucessfullySaved'), Flash::SUCCESS);
+            $this->flashMessage('', Flash::SUCCESS);
             $this->redirect('Group:');
         };
         return $control;
@@ -86,7 +87,7 @@ class GroupPresenter extends SecuredPresenter
         $control = $this->groupGridFactory->create();
         $control->onDelete[] = function()
         {
-            $this->flashMessage('Article group has been successfully deleted', Flash::SUCCESS);
+            $this->flashMessage($this->translator->translate('article.articleGroupHasBeenSucessfullyDeleted'), Flash::SUCCESS);
             $this->redirect('Group:');
         };
         return $control;

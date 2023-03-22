@@ -85,44 +85,51 @@ class GroupGrid extends BaseControl
 
         $grid->setDataSource($this->groupRepository->getGroupQueryBuilder());
 
-        $grid->addColumnText('identifier', 'Identifier')
+        $grid->addColumnText('identifier', 'article.identifier')
             ->setSortable()
             ->setFilterText();
 
-        $grid->addColumnText('sortBy', 'Sorted by')
-            ->setRenderer(function($row){
-                return Group::$sortByList[$row->getSortBy()];
+
+        $translatedSotringModes = [];
+        foreach(Group::$sortByList AS $k => $v)
+        {
+            $translatedSotringModes[$k] = $grid->getTranslator()->translate($v);
+        }
+
+        $grid->addColumnText('sortBy', 'article.sortingMode')
+            ->setRenderer(function($row) use ($grid){
+                return $grid->getTranslator()->translate(Group::$sortByList[$row->getSortBy()]);
             })
             ->setSortable()
-            ->setFilterSelect(Group::$sortByList);
+            ->setFilterSelect($translatedSotringModes);
 
-        $grid->addColumnBoolean('isShowName', 'Show name');
+        $grid->addColumnBoolean('isShowName', 'article.isShowName');
 
         if ($this->user->isAllowed('article', 'edit')) {
 
-            $grid->addAction('articles', 'Articles', 'Article:default', ['groupId' => 'id'])
+            $grid->addAction('articles', 'article.articles', 'Article:default', ['groupId' => 'id'])
                 ->setIcon('bars')
-                ->setTitle('Pictures')
+                ->setTitle('article.articles')
                 ->setClass('btn btn-xs btn-default');
 
             $grid->addAction('edit', '')
                 ->setIcon('pencil')
-                ->setTitle('Upravit')
+                ->setTitle('article.edit')
                 ->setClass('btn btn-xs btn-primary');
         }
 
         if ($this->user->isAllowed('article', 'delete')) {
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
-                ->setTitle('Smazat')
+                ->setTitle('article.delete')
                 ->setClass('btn btn-xs btn-danger ajax')
-                ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'identifier'));
-            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDelete'];
+                ->setConfirmation(new StringConfirmation('article.doYouReallyWantToDeleteRowIdentifier', 'identifier'));
+            $grid->addGroupAction('article.delete')->onSelect[] = [$this, 'handleDelete'];
         }
-        $grid->addExportCsvFiltered('Csv export (filtered)', 'article_group_filtered.csv')
-            ->setTitle('Csv export (filtered)');
-        $grid->addExportCsv('Csv export', 'article_group_all.csv')
-            ->setTitle('Csv export');
+        $grid->addExportCsvFiltered('article.csvExportFiltered', 'article_group_filtered.csv')
+            ->setTitle('article.csvExportFiltered');
+        $grid->addExportCsv('article.csvExport', 'article_group_all.csv')
+            ->setTitle('article.csvExport');
 
 
         return $grid;

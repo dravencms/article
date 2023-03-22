@@ -77,7 +77,7 @@ class ArticlePictureGrid extends BaseControl
         $grid->setDataSource($this->articlePictureRepository->getPictureItemsQueryBuilder($this->article));
 
         $grid->setDefaultSort(['position' => 'ASC']);
-        $grid->addColumnText('name', 'Name')
+        $grid->addColumnText('name', 'article.preview')
             ->setAlign('center')
             ->setRenderer(function ($row) use($grid){
                 /** @var Picture $row */
@@ -88,7 +88,7 @@ class ArticlePictureGrid extends BaseControl
                     $img = '';
                 }
                 if ($row->isPrimary()) {
-                    $el = Html::el('span', $grid->getTranslator()->translate('Primary photo'));
+                    $el = Html::el('span', $grid->getTranslator()->translate('article.primaryPicture'));
                     $el->class = 'label label-info';
                 } else {
                     $el = '';
@@ -101,22 +101,22 @@ class ArticlePictureGrid extends BaseControl
                 return $container;
             });
 
-        $grid->addColumnNumber('positionShow', 'Position', 'position')
+        $grid->addColumnNumber('positionShow', 'article.position', 'position')
         ->setAlign('center')
         ->setFilterRange();
 
 
-        $grid->addColumnBoolean('isActive', 'Active');
-        $grid->addColumnBoolean('isPrimary', 'Primary');
+        $grid->addColumnBoolean('isActive', 'article.isActive');
+        $grid->addColumnBoolean('isPrimary', 'article.isPrimary');
 
 
         if ($this->user->isAllowed('article', 'edit')) {
             
-            $grid->addColumnPosition('position', 'Position');
+            $grid->addColumnPosition('position', 'article.position');
 
             $grid->addAction('edit', '', 'edit', ['articleId' => 'article.id', 'id'])
                 ->setIcon('pencil')
-                ->setTitle('Upravit')
+                ->setTitle('article.edit')
                 ->setClass('btn btn-xs btn-primary');
         }
 
@@ -124,18 +124,18 @@ class ArticlePictureGrid extends BaseControl
         {
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
-                ->setTitle('Smazat')
+                ->setTitle('article.delete')
                 ->setClass('btn btn-xs btn-danger ajax')
-                ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'position'));
+                ->setConfirmation(new StringConfirmation('article.doYouReallyWantToDeleteRowIdentifier', 'position'));
             
-            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'gridGroupActionDelete'];
+            $grid->addGroupAction('article.delete')->onSelect[] = [$this, 'gridGroupActionDelete'];
         }
 
-        $grid->addExportCsvFiltered('Csv export (filtered)', 'acl_resource_filtered.csv')
-            ->setTitle('Csv export (filtered)');
+        $grid->addExportCsvFiltered('article.csvExportFiltered', 'article_filtered.csv')
+            ->setTitle('article.csvExportFiltered');
 
-        $grid->addExportCsv('Csv export', 'acl_resource_all.csv')
-            ->setTitle('Csv export');
+        $grid->addExportCsv('article.csvExport', 'article_all.csv')
+            ->setTitle('article.csvExport');
 
         return $grid;
     }

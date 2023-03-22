@@ -2,6 +2,7 @@
 
 namespace Dravencms\Article\DI;
 
+use Contributte\Translation\DI\TranslationProviderInterface;
 use Dravencms\Article\Article;
 
 
@@ -12,7 +13,7 @@ use Dravencms\Structure\DI\StructureExtension;
  * Class ArticleExtension
  * @package Dravencms\Article\DI
  */
-class ArticleExtension extends CompilerExtension
+class ArticleExtension extends CompilerExtension implements TranslationProviderInterface
 {
 
     public function loadConfiguration()
@@ -100,5 +101,10 @@ class ArticleExtension extends CompilerExtension
                 throw new \InvalidArgumentException;
             }
         }
+    }
+
+    public function getTranslationResources(): array
+    {
+        return [__DIR__.'/../lang'];
     }
 }
