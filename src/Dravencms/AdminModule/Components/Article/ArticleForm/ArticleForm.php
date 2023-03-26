@@ -180,6 +180,10 @@ class ArticleForm extends BaseControl
     public function editFormValidate(Form $form): void
     {
         $values = $form->getValues();
+        
+        if (!$this->articleRepository->isIdentifierFree($values->identifier, $this->group, $this->article)) {
+            $form->addError('article.thisIdentifierIsAlreadyUsed');
+        }
 
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
             if (!$this->articleTranslationRepository->isNameFree($values->{$activeLocale->getLanguageCode()}->name, $activeLocale, $this->group, $this->article)) {
