@@ -163,7 +163,7 @@ class ArticlePictureGrid extends BaseControl
                 $structureFileLink->setIsAutoclean(true);
                 $this->entityManager->persist($structureFileLink);
             }
-            $this->entityManager->remove($picture);
+            $this->entityManager->remove($articlePicture);
         }
 
         $this->entityManager->flush();
