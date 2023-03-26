@@ -43,6 +43,12 @@ class Group
     private $isShowName;
 
     /**
+     * @var boolean
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $isPerexWysiwig;
+
+    /**
      * @var string
      * @ORM\Column(type="string",length=255,nullable=false)
      */
@@ -64,12 +70,14 @@ class Group
      * Group constructor.
      * @param $identifier
      * @param $isShowName
+     * @param $isPerexWysiwig
      * @param string $sortBy
      */
-    public function __construct(string $identifier, bool $isShowName, string $sortBy = self::SORT_BY_POSITION)
+    public function __construct(string $identifier, bool $isShowName, bool $isPerexWysiwig, string $sortBy = self::SORT_BY_POSITION)
     {
         $this->identifier = $identifier;
         $this->isShowName = $isShowName;
+        $this->isPerexWysiwig = $isPerexWysiwig;
         $this->sortBy = $sortBy;
         $this->articles = new ArrayCollection();
         $this->translations = new ArrayCollection();
@@ -89,6 +97,14 @@ class Group
     public function setIsShowName(bool $isShowName): void
     {
         $this->isShowName = $isShowName;
+    }
+
+    /**
+     * @param boolean $isPerexWysiwig
+     */
+    public function setIsPerexWysiwig(bool $isPerexWysiwig): void
+    {
+        $this->isPerexWysiwig = $isPerexWysiwig;
     }
 
     /**
@@ -117,6 +133,14 @@ class Group
     public function isShowName(): bool
     {
         return $this->isShowName;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isPerexWysiwig(): bool
+    {
+        return $this->isPerexWysiwig;
     }
 
     /**

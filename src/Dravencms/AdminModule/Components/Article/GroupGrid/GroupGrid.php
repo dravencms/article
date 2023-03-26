@@ -104,6 +104,7 @@ class GroupGrid extends BaseControl
             ->setFilterSelect($translatedSotringModes);
 
         $grid->addColumnBoolean('isShowName', 'article.isShowName');
+        $grid->addColumnBoolean('isPerexWysiwig', 'article.isPerexWysiwig');
 
         if ($this->user->isAllowed('article', 'edit')) {
 

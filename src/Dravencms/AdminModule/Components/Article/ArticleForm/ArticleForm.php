@@ -180,7 +180,6 @@ class ArticleForm extends BaseControl
     public function editFormValidate(Form $form): void
     {
         $values = $form->getValues();
-        
         if (!$this->articleRepository->isIdentifierFree($values->identifier, $this->group, $this->article)) {
             $form->addError('article.thisIdentifierIsAlreadyUsed');
         }
@@ -312,6 +311,7 @@ class ArticleForm extends BaseControl
     public function render(): void
     {
         $template = $this->template;
+        $template->group = $this->group;
         $template->activeLocales = $this->localeRepository->getActive();
         $template->setFile(__DIR__ . '/ArticleForm.latte');
         $template->render();

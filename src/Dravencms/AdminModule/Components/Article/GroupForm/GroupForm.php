@@ -95,6 +95,7 @@ class GroupForm extends BaseControl
             $defaults = [
                 'identifier' => $this->group->getIdentifier(),
                 'isShowName' => $this->group->isShowName(),
+                'isPerexWysiwig' => $this->group->isPerexWysiwig(),
                 'sortBy' => $this->group->getSortBy()
             ];
 
@@ -106,6 +107,7 @@ class GroupForm extends BaseControl
         else{
             $defaults = [
                 'isShowName' => false,
+                'isPerexWysiwig' => false,
                 'sortBy' => Group::SORT_BY_CREATED_AT
             ];
         }
@@ -131,8 +133,8 @@ class GroupForm extends BaseControl
             ->setRequired('article.pleaseSelectSortingMode');
 
         $form->addCheckbox('isShowName');
-
-
+        $form->addCheckbox('isPerexWysiwig');
+        
         $form->addSubmit('send');
 
         $form->onValidate[] = [$this, 'editFormValidate'];
@@ -158,7 +160,7 @@ class GroupForm extends BaseControl
         }
 
         if (!$this->user->isAllowed('article', 'edit')) {
-            $form->addError('Nemáte oprávění editovat article group.');
+            $form->addError('article.youHaveNoPermissionToEditThisArticleGroup');
         }
     }
 
@@ -174,9 +176,10 @@ class GroupForm extends BaseControl
             $group = $this->group;
             $group->setIdentifier($values->identifier);
             $group->setIsShowName($values->isShowName);
+            $group->setIsPerexWysiwig($values->isPerexWysiwig);
             $group->setSortBy($values->sortBy);
         } else {
-            $group = new Group($values->identifier, $values->isShowName, $values->sortBy);
+            $group = new Group($values->identifier, $values->isShowName, $values->isPerexWysiwig, $values->sortBy);
         }
 
         $this->entityManager->persist($group);
@@ -211,3 +214,4 @@ class GroupForm extends BaseControl
         $template->render();
     }
 }
+

@@ -26,7 +26,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group no-margin-hr">
                                     <label class="control-label" n:name="perex">{_"article.perex"}</label>
-                                    <textarea n:name="perex" class="form-control wysiwyg"></textarea>
+                                    <textarea n:name="perex" class="form-control{if $group->isPerexWysiwig()} wysiwyg{/if}"></textarea>
                                 </div>
                             </div><!-- col-sm-12 -->
                         </div><!-- row -->
