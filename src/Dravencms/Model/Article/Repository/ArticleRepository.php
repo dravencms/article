@@ -165,6 +165,8 @@ class ArticleRepository
             ->andWhere('a.createdAt < :fromCreatedAt')
             ->setParameter('fromCreatedAt', $currentArticle->getCreatedAt());
         }
+        
+        $qb->setMaxResults(1);
 
         $query = $qb->getQuery();
 
