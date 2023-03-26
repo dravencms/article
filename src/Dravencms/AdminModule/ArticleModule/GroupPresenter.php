@@ -59,7 +59,7 @@ class GroupPresenter extends SecuredPresenter
 
             $this->group = $group;
 
-            $this->template->h1 = $this->translator->translate('article.editArticleGroupIdentifier', ['groupIdentifier' => $this->getIdentifier()]);
+            $this->template->h1 = $this->translator->translate('article.editArticleGroupIdentifier', ['groupIdentifier' => $this->group->getIdentifier()]);
         } else {
             $this->template->h1 = $this->translator->translate('article.newArticleGroup');
         }
@@ -73,7 +73,6 @@ class GroupPresenter extends SecuredPresenter
         $control = $this->groupFormFactory->create($this->group);
         $control->onSuccess[] = function(){
             $this->flashMessage($this->translator->translate('article.articleGroupHasBeenSucessfullySaved'), Flash::SUCCESS);
-            $this->flashMessage('', Flash::SUCCESS);
             $this->redirect('Group:');
         };
         return $control;
