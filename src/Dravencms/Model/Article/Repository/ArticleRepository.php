@@ -151,9 +151,11 @@ class ArticleRepository
             ->select('a')
             ->andWhere('a.group = :group')
             ->andWhere('a != :articleIgnore')
+            ->andWhere('a.isActive = :isActive')
             ->setParameters([
                 'group' => $currentArticle->getGroup(),
-                'articleIgnore' => $currentArticle
+                'articleIgnore' => $currentArticle,
+                'isActive' => true
             ]);
 
         if ($currentArticle->getGroup()->getSortBy() == Group::SORT_BY_POSITION) {
@@ -165,7 +167,7 @@ class ArticleRepository
             ->andWhere('a.createdAt < :fromCreatedAt')
             ->setParameter('fromCreatedAt', $currentArticle->getCreatedAt());
         }
-        
+
         $qb->setMaxResults(1);
 
         $query = $qb->getQuery();
@@ -179,9 +181,11 @@ class ArticleRepository
             ->select('a')
             ->andWhere('a.group = :group')
             ->andWhere('a != :articleIgnore')
+            ->andWhere('a.isActive = :isActive')
             ->setParameters([
                 'group' => $currentArticle->getGroup(),
-                'articleIgnore' => $currentArticle
+                'articleIgnore' => $currentArticle,
+                'isActive' => true
             ]);
 
         if ($currentArticle->getGroup()->getSortBy() == Group::SORT_BY_POSITION) {
