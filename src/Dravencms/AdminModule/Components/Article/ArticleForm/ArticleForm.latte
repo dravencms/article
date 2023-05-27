@@ -59,12 +59,18 @@
         </div><!-- row -->
 
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-6">
                 <div class="form-group no-margin-hr">
                     <label class="control-label" n:name="tags">{_"article.tags"}</label>
                     <select n:name="tags" class="form-control"></select>
                 </div>
-            </div><!-- col-sm-12 -->
+            </div><!-- col-sm-6 -->
+            <div class="col-sm-6">
+                <div class="form-group no-margin-hr">
+                    <label class="control-label" n:name="createdAt">{_"article.createdAt"}</label>
+                    <input n:name="createdAt" class="form-control date" data-format="{$dateTimeFormat}">
+                </div>
+            </div><!-- col-sm-6 -->
         </div><!-- row -->
 
         <div class="row">

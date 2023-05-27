@@ -31,6 +31,8 @@ use Dravencms\Model\Article\Repository\ArticleTranslationRepository;
 use Dravencms\Model\File\Repository\StructureFileRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Dravencms\Model\Tag\Repository\TagRepository;
+use Dravencms\Locale\CurrentLocaleResolver;
+use Dravencms\Model\Locale\Entities\Locale;
 use Doctrine\Common\Collections\ArrayCollection;
 use Dravencms\Model\Tag\Repository\TagTranslationRepository;
 use Dravencms\Database\EntityManager;
@@ -75,6 +77,9 @@ class ArticleForm extends BaseControl
     /** @var User */
     private $user;
 
+    /** @var Locale */
+    private $currentLocale;
+
     /** @var Article|null */
     private $article = null;
 
@@ -90,12 +95,13 @@ class ArticleForm extends BaseControl
         TagRepository $tagRepository,
         TagTranslationRepository $tagTranslationRepository,
         LocaleRepository $localeRepository,
+        CurrentLocaleResolver $currentLocaleResolver,
         User $user,
         Article $article = null
     ) {
         $this->group = $group;
         $this->article = $article;
-
+        $this->currentLocale = $currentLocaleResolver->getCurrentLocale();
         $this->baseFormFactory = $baseFormFactory;
         $this->entityManager = $entityManager;
         $this->articleRepository = $articleRepository;
@@ -117,6 +123,7 @@ class ArticleForm extends BaseControl
                 'identifier' => $this->article->getIdentifier(),
                 'isActive' => $this->article->isActive(),
                 'isShowName' => $this->article->isShowName(),
+                'createdAt' => ($this->article->getCreatedAt() ? $this->article->getCreatedAt()->format($this->currentLocale->getDateTimeFormat()): null),
                 'isAutoDetectTags' => $this->article->isAutoDetectTags(),
                 'tags' => $tags
             ];
@@ -131,7 +138,8 @@ class ArticleForm extends BaseControl
             $defaults = [
                 'isActive' => true,
                 'isShowName' => true,
-                'isAutoDetectTags' => true
+                'isAutoDetectTags' => true,
+                'createdAt' => (new \DateTime)->format($this->currentLocale->getDateTimeFormat())
             ];
         }
 
@@ -164,6 +172,8 @@ class ArticleForm extends BaseControl
 
         $form->addMultiSelect('tags', null, $this->tagRepository->getPairs());
 
+        $form->addText('createdAt');
+
         $form->addCheckbox('isActive');
         $form->addCheckbox('isShowName');
         $form->addCheckbox('isAutoDetectTags');
@@ -193,6 +203,11 @@ class ArticleForm extends BaseControl
         if (!$this->user->isAllowed('article', 'edit')) {
             $form->addError('article.youHaveNoPermissionToEditThisArticle');
         }
+
+        $createdAt = \DateTime::createFromFormat($this->currentLocale->getDateTimeFormat(), $values->createdAt);
+        if ($createdAt === false) {
+            $form->addError('article.createdAtHasIncorrectFormat');
+        }
     }
 
     public function editFormSucceeded(Form $form): void
@@ -209,6 +224,8 @@ class ArticleForm extends BaseControl
         }
 
         $tags = new ArrayCollection($this->tagRepository->getById($values->tags));
+
+        $createdAt = \DateTime::createFromFormat($this->currentLocale->getDateTimeFormat(), $values->createdAt);
 
         if ($this->article) {
             $article = $this->article;
@@ -230,6 +247,7 @@ class ArticleForm extends BaseControl
             );
         }
         $article->setTags($tags);
+        $article->setCreatedAt($createdAt);
 
         $this->entityManager->persist($article);
 
@@ -313,6 +331,7 @@ class ArticleForm extends BaseControl
         $template = $this->template;
         $template->group = $this->group;
         $template->activeLocales = $this->localeRepository->getActive();
+        $template->dateTimeFormat = $this->currentLocale->getDateTimeFormat();
         $template->setFile(__DIR__ . '/ArticleForm.latte');
         $template->render();
     }

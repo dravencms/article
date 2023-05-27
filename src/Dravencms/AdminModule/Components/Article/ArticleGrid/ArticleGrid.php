@@ -119,15 +119,19 @@ class ArticleGrid extends BaseControl
         {
             $grid->addColumnPosition('position', 'article.position', 'up!', 'down!');
         }
-        elseif ($this->group->getSortBy() == Group::SORT_BY_CREATED_AT)
-        {
-            $grid->addColumnDateTime('updatedAt', 'article.updatedAt')
+      
+        $grid->addColumnDateTime('updatedAt', 'article.updatedAt')
                 ->setFormat($this->currentLocale->getDateTimeFormat())
                 ->setAlign('center')
                 ->setSortable()
                 ->setFilterDate();
-        }
 
+        $grid->addColumnDateTime('createdAt', 'article.createdAt')
+            ->setFormat($this->currentLocale->getDateTimeFormat())
+            ->setAlign('center')
+            ->setSortable()
+            ->setFilterDate();
+        
         if ($this->user->isAllowed('article', 'edit')) {
 
             $grid->addAction('pictures', 'article.pictures', 'ArticlePicture:', ['articleId' => 'id'])
