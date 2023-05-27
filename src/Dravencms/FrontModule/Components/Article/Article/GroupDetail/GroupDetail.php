@@ -40,6 +40,9 @@ class GroupDetail extends BaseControl
     {
         $template = $this->template;
         $article = $this->articleRepository->getOneByIdAndActive($this->cmsActionOption->getParameter('id'));
+        if (!$article) {
+            throw new \Nette\Application\BadRequestException(sprintf('Article %s not found', $this->cmsActionOption->getParameter('id')));
+        }
         $articleTranslation = $this->articleTranslationRepository->getTranslation($article, $this->currentLocale);
         $template->article = $article;
         $template->articleTranslation = $articleTranslation;
