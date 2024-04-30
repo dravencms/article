@@ -160,7 +160,8 @@ class ArticleForm extends BaseControl
             $container->addTextArea('perex')
             ->addRule(Form::MAX_LENGTH, 'article.articlePerexIsTooLong', 512);
 
-            $container->addTextArea('text');
+            $container->addTextArea('text')
+                ->setRequired('article.pleaseEnterArticleText');
         }
 
         $form->addText('identifier')
