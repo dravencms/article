@@ -284,7 +284,7 @@ class ArticleForm extends BaseControl
     private function cleanText(string $text): string
     {
         $dom = new \DOMDocument('1.0', 'utf-8');
-        $text = mb_convert_encoding($text, 'HTML-ENTITIES', "UTF-8");
+        $text = htmlspecialchars_decode(mb_encode_numericentity(htmlentities($text, ENT_QUOTES, 'UTF-8'), [0x80, 0x10FFFF, 0, ~0], 'UTF-8'));
         @$dom->loadHTML($text);
 
         foreach ($dom->getElementsByTagName('div') as $node) {
