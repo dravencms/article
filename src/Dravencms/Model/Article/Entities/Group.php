@@ -5,16 +5,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Translatable\Translatable;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Dravencms\Database\Attributes\TimestampableEntity;
 use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
  * Class Group
  * @package App\Model\Article\Entities
- * @ORM\Entity
- * @ORM\Table(name="articleGroup")
  */
+#[ORM\Entity]
+#[ORM\Table(name: "articleGroup")]
 class Group
 {
     const SORT_BY_POSITION = 'position';
@@ -32,38 +32,38 @@ class Group
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false,unique=true)
      */
+    #[ORM\Column(type: "string",length: 255,nullable: false,unique: true)]
     private $identifier;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isShowName;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isPerexWysiwig;
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false)
      */
+    #[ORM\Column(type: "string",length: 255,nullable: false)]
     private $sortBy;
 
     /**
      * @var ArrayCollection|Article[]
-     * @ORM\OneToMany(targetEntity="Article", mappedBy="group",cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: "Article", mappedBy: "group",cascade: ["persist"])]
     private $articles;
 
     /**
      * @var ArrayCollection|GroupTranslation[]
-     * @ORM\OneToMany(targetEntity="GroupTranslation", mappedBy="group",cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: "GroupTranslation", mappedBy: "group",cascade: ["persist", "remove"])]
     private $translations;
 
     /**

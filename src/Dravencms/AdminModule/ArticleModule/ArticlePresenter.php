@@ -50,8 +50,8 @@ class ArticlePresenter extends SecuredPresenter
 
     /**
      * @param integer $groupId
-     * @isAllowed(article,edit)
      */
+    #[\Dravencms\User\Attributes\IsAllowed('article', 'edit')]
     public function actionDefault(int $groupId): void
     {
         $this->group = $this->groupRepository->getOneById($groupId);
@@ -60,12 +60,12 @@ class ArticlePresenter extends SecuredPresenter
     }
 
     /**
-     * @isAllowed(article,edit)
      * @param $groupId
      * @param $id
      * @throws \Nette\Application\BadRequestException
      */
-    public function actionEdit(int $groupId, int $id = null): void
+    #[\Dravencms\User\Attributes\IsAllowed('article', 'edit')]
+    public function actionEdit(int $groupId, ?int $id = null): void
     {
         $this->group = $this->groupRepository->getOneById($groupId);
         if ($id) {

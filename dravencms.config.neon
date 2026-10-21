@@ -2,6 +2,12 @@ extensions:
     dravencms.article: Dravencms\Article\DI\ArticleExtension
 
 
-nettrine.orm.annotations:
-    mapping:
-        Dravencms\Model\Article: %appDir%/../vendor/dravencms/article/src/Dravencms/Model/Article/Entities
+nettrine.orm:
+    managers:
+        default:
+            mapping:
+                DravencmsModelArticle :
+                    type: attributes
+                    directories:
+                        - %appDir%/../vendor/dravencms/article/src/Dravencms/Model/Article/Entities
+                    namespace: Dravencms\Model\Article

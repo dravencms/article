@@ -8,7 +8,7 @@ use Dravencms\Model\Tag\Entities\Tag;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Dravencms\Database\Attributes\TimestampableEntity;
 use Dravencms\Database\Attributes\Identifier;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Nette;
@@ -16,9 +16,9 @@ use Nette;
 /**
  * Class ArticlePicture
  * @package Dravencms\Model\Article\Entities
- * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
- * @ORM\Table(name="articleArticlePicture")
  */
+#[ORM\Entity(repositoryClass: "Gedmo\Sortable\Entity\Repository\SortableRepository")]
+#[ORM\Table(name: "articleArticlePicture")]
 class ArticlePicture
 {
     use Nette\SmartObject;
@@ -27,36 +27,36 @@ class ArticlePicture
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isActive;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isPrimary;
 
     /**
      * @var integer
-     * @Gedmo\SortablePosition
-     * @ORM\Column(type="integer")
      */
+    #[Gedmo\SortablePosition]
+    #[ORM\Column(type: "integer")]
     private $position;
 
     /**
      * @var StructureFileLink
-     * @ORM\ManyToOne(targetEntity="\Dravencms\Model\File\Entities\StructureFileLink")
-     * @ORM\JoinColumn(name="structure_file_link_id", referencedColumnName="id")
      */
+    #[ORM\ManyToOne(targetEntity: "\Dravencms\Model\File\Entities\StructureFileLink")]
+    #[ORM\JoinColumn(name: "structure_file_link_id", referencedColumnName: "id")]
     private $structureFileLink;
 
     /**
      * @var Article
-     * @Gedmo\SortableGroup
-     * @ORM\ManyToOne(targetEntity="Article", inversedBy="pictures")
-     * @ORM\JoinColumn(name="article_id", referencedColumnName="id")
      */
+    #[Gedmo\SortableGroup]
+    #[ORM\ManyToOne(targetEntity: "Article", inversedBy: "pictures")]
+    #[ORM\JoinColumn(name: "article_id", referencedColumnName: "id")]
     private $article;
 
     /**
@@ -106,7 +106,7 @@ class ArticlePicture
     /**
      * @param StructureFileLink|null $structureFileLink
      */
-    public function setStructureFileLink(StructureFileLink $structureFileLink = null): void
+    public function setStructureFileLink(?StructureFileLink $structureFileLink = null): void
     {
         $this->structureFileLink = $structureFileLink;
     }

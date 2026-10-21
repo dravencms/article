@@ -36,7 +36,7 @@ class GroupTranslationRepository
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree(string $name, ILocale $locale, Group $groupIgnore = null): bool
+    public function isNameFree(string $name, ILocale $locale, ?Group $groupIgnore = null): bool
     {
         $qb = $this->groupTranslationRepository->createQueryBuilder('gt')
             ->select('gt')

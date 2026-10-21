@@ -14,11 +14,13 @@
       "name": "Adam Schubert"
     }
   ],
-  "require": {    
+  "require": {
     "dravencms/admin": ">=2.0",
     "dravencms/tag": ">=2.0",
     "dravencms/file": ">=2.0",
-    "dravencms/paginator": ">=1.0"
+    "dravencms/paginator": ">=1.0",
+    "php": "^8.4",
+    "dravencms/database": "^0.2.4"
   },
   "suggest": {
     "dravencms/structure": "Allows article components to be used in cms"

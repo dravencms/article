@@ -35,20 +35,18 @@ class GroupPresenter extends SecuredPresenter
     /** @var Article|null */
     private $group = null;
 
-    /**
-     * @isAllowed(article,edit)
-     */
+    #[\Dravencms\User\Attributes\IsAllowed('article', 'edit')]
     public function renderDefault(): void
     {
         $this->template->h1 = $this->translator->translate('article.articleGroups');
     }
 
     /**
-     * @isAllowed(article,edit)
      * @param $id
      * @throws \Nette\Application\BadRequestException
      */
-    public function actionEdit(int $id = null): void
+    #[\Dravencms\User\Attributes\IsAllowed('article', 'edit')]
+    public function actionEdit(?int $id = null): void
     {
         if ($id) {
             $group = $this->groupRepository->getOneById($id);

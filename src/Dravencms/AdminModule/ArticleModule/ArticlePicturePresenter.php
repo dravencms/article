@@ -47,8 +47,8 @@ class ArticlePicturePresenter extends SecuredPresenter
 
     /**
      * @param integer $articleId
-     * @isAllowed(article,edit)
      */
+    #[\Dravencms\User\Attributes\IsAllowed('article', 'edit')]
     public function actionDefault(int $articleId): void
     {
         $article = $this->articleRepository->getOneById($articleId);
@@ -63,12 +63,12 @@ class ArticlePicturePresenter extends SecuredPresenter
     }
 
     /**
-     * @isAllowed(article,edit)
      * @param integer $articleId
      * @param integer|null $id
      * @throws \Nette\Application\BadRequestException
      */
-    public function actionEdit(int $articleId, int $id = null): void
+    #[\Dravencms\User\Attributes\IsAllowed('article', 'edit')]
+    public function actionEdit(int $articleId, ?int $id = null): void
     {
         $article = $this->articleRepository->getOneById($articleId);
         if (!$article)

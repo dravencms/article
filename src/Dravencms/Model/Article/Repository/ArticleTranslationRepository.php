@@ -38,7 +38,7 @@ class ArticleTranslationRepository
      * @return bool
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree(string $name, ILocale $locale, Group $group, Article $articleIgnore = null): bool
+    public function isNameFree(string $name, ILocale $locale, Group $group, ?Article $articleIgnore = null): bool
     {
         $qb = $this->articleTranslationRepository->createQueryBuilder('at')
             ->select('at')
@@ -71,7 +71,7 @@ class ArticleTranslationRepository
      * @param Article|null $ignoreArticle
      * @return array
      */
-    public function search(ILocale $locale, Group $group = null, string $query = null, array $tags = [], bool $isActive = true, int $limit = null, int $offset = null, Article $ignoreArticle = null)
+    public function search(ILocale $locale, ?Group $group = null, ?string $query = null, array $tags = [], bool $isActive = true, ?int $limit = null, ?int $offset = null, ?Article $ignoreArticle = null)
     {
         $qb = $this->articleTranslationRepository->createQueryBuilder('atr')
             ->select('atr')

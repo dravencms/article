@@ -74,7 +74,7 @@ class ArticlePictureForm extends BaseControl
         StructureRepository $structureRepository,
         FileStorage $fileStorage,
         File $file,
-        ArticlePicture $articlePicture = null
+        ?ArticlePicture $articlePicture = null
     )
     {
         $this->baseFormFactory = $baseForm;

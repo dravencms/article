@@ -9,7 +9,7 @@
     <aside class="page-sidebar  col-md-3 col-md-offset-1 col-sm-4 col-sm-offset-1 col-xs-12">
         <section class="widget has-divider">
             <h3 class="title">{_"article.moreArticles"}</h3>
-            <article class="news-item row" n:foreach="$articleTranslations AS $otherArticleTranslation">
+            <article class="news-item row" n:foreach="$articleTranslations as $otherArticleTranslation">
                 {var $otherArticle = $otherArticleTranslation->getArticle()}
                 <figure class="thumb col-md-2 col-sm-3 col-xs-3">
                     <img n:img="$otherArticle->getStructureFile()->getFile(), '40x40', 'shrink_only'" alt="{$otherArticleTranslation->getName()}">

@@ -4,16 +4,16 @@ namespace Dravencms\Model\Article\Entities;
 use Dravencms\Model\Locale\Entities\Locale;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Dravencms\Database\Attributes\TimestampableEntity;
 use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
  * Class ArticleTranslation
  * @package Dravencms\Model\Article\Entities
- * @ORM\Entity
- * @ORM\Table(name="articleArticleTranslation")
  */
+#[ORM\Entity]
+#[ORM\Table(name: "articleArticleTranslation")]
 class ArticleTranslation
 {
     use Nette\SmartObject;
@@ -22,33 +22,33 @@ class ArticleTranslation
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false)
      */
+    #[ORM\Column(type: "string",length: 255,nullable: false)]
     private $name;
 
     /**
      * @var string
-     * @ORM\Column(type="text",nullable=false)
      */
+    #[ORM\Column(type: "text",nullable: false)]
     private $text;
 
     /**
      * @var string
-     * @ORM\Column(type="text",nullable=true)
      */
+    #[ORM\Column(type: "text",nullable: true)]
     private $perex;
 
     /**
      * @var Article
-     * @ORM\ManyToOne(targetEntity="Article", inversedBy="translations")
-     * @ORM\JoinColumn(name="article_id", referencedColumnName="id")
      */
+    #[ORM\ManyToOne(targetEntity: "Article", inversedBy: "translations")]
+    #[ORM\JoinColumn(name: "article_id", referencedColumnName: "id")]
     private $article;
     /**
      * @var Locale
-     * @ORM\ManyToOne(targetEntity="Dravencms\Model\Locale\Entities\Locale")
-     * @ORM\JoinColumn(name="locale_id", referencedColumnName="id")
      */
+    #[ORM\ManyToOne(targetEntity: "Dravencms\Model\Locale\Entities\Locale")]
+    #[ORM\JoinColumn(name: "locale_id", referencedColumnName: "id")]
     private $locale;
 
     /**

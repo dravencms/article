@@ -97,7 +97,7 @@ class ArticleForm extends BaseControl
         LocaleRepository $localeRepository,
         CurrentLocaleResolver $currentLocaleResolver,
         User $user,
-        Article $article = null
+        ?Article $article = null
     ) {
         $this->group = $group;
         $this->article = $article;

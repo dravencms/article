@@ -30,5 +30,5 @@ interface ArticleFormFactory
      * @param Article|null $article
      * @return ArticleForm
      */
-    public function create(Group $group, Article $article = null): ArticleForm;
+    public function create(Group $group, ?Article $article = null): ArticleForm;
 }

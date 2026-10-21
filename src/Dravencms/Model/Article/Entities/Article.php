@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Dravencms\Database\Attributes\TimestampableEntity;
 use Dravencms\Database\Attributes\Identifier;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Nette;
@@ -16,9 +16,10 @@ use Nette;
 /**
  * Class Article
  * @package Dravencms\Model\Article\Entities
- * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
- * @ORM\Table(name="articleArticle", uniqueConstraints={@UniqueConstraint(name="identifier_unique", columns={"identifier", "group_id"})})
  */
+#[ORM\Entity(repositoryClass: "Gedmo\Sortable\Entity\Repository\SortableRepository")]
+#[ORM\UniqueConstraint(name: "identifier_unique", columns: ["identifier", "group_id"])]
+#[ORM\Table(name: "articleArticle")]
 class Article
 {
     use Nette\SmartObject;
@@ -27,93 +28,84 @@ class Article
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false)
      */
+    #[ORM\Column(type: "string",length: 255,nullable: false)]
     private $identifier;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isActive;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isShowName;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isAutoDetectTags;
 
     /**
      * @var integer
-     * @Gedmo\SortablePosition
-     * @ORM\Column(type="integer")
      */
+    #[Gedmo\SortablePosition]
+    #[ORM\Column(type: "integer")]
     private $position;
 
     /**
      * @var StructureFile
      * @deprecated Replaced by ArticlePicture one2n model
-     * @ORM\ManyToOne(targetEntity="\Dravencms\Model\File\Entities\StructureFile")
-     * @ORM\JoinColumn(name="structure_file_id", referencedColumnName="id")
      */
+    #[ORM\ManyToOne(targetEntity: "\Dravencms\Model\File\Entities\StructureFile")]
+    #[ORM\JoinColumn(name: "structure_file_id", referencedColumnName: "id")]
     private $structureFile;
 
     /**
      * @var \Doctrine\Common\Collections\Collection|Tag[]
-     *
-     * @ORM\ManyToMany(targetEntity="\Dravencms\Model\Tag\Entities\Tag")
-     * @ORM\JoinTable(
-     *  name="article_tag",
-     *  joinColumns={
-     *      @ORM\JoinColumn(name="article_id", referencedColumnName="id")
-     *  },
-     *  inverseJoinColumns={
-     *      @ORM\JoinColumn(name="tag_id", referencedColumnName="id")
-     *  }
-     * )
      */
+    #[ORM\ManyToMany(targetEntity: "\Dravencms\Model\Tag\Entities\Tag")]
+    #[ORM\JoinTable( name: "article_tag", joinColumns: [ new ORM\JoinColumn(name: "article_id", referencedColumnName: "id") ], inverseJoinColumns: [ new ORM\JoinColumn(name: "tag_id", referencedColumnName: "id") ] )]
     private $tags;
 
     /**
      * @var Group
-     * @Gedmo\SortableGroup
-     * @ORM\ManyToOne(targetEntity="Group", inversedBy="articles")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="id")
      */
+    #[Gedmo\SortableGroup]
+    #[ORM\ManyToOne(targetEntity: "Group", inversedBy: "articles")]
+    #[ORM\JoinColumn(name: "group_id", referencedColumnName: "id")]
     private $group;
 
     /**
      * @var User
-     * @Gedmo\SortableGroup
-     * @ORM\ManyToOne(targetEntity="Dravencms\Model\User\Entities\User")
-     * @ORM\JoinColumn(name="created_by_id", referencedColumnName="id", nullable=false)
      */
+    #[Gedmo\SortableGroup]
+    #[ORM\ManyToOne(targetEntity: "Dravencms\Model\User\Entities\User")]
+    #[ORM\JoinColumn(name: "created_by_id", referencedColumnName: "id", nullable: false)]
     private $createdBy;
 
     /**
      * @var User
-     * @Gedmo\SortableGroup
-     * @ORM\ManyToOne(targetEntity="Dravencms\Model\User\Entities\User")
-     * @ORM\JoinColumn(name="updated_by_id", referencedColumnName="id", nullable=false)
      */
+    #[Gedmo\SortableGroup]
+    #[ORM\ManyToOne(targetEntity: "Dravencms\Model\User\Entities\User")]
+    #[ORM\JoinColumn(name: "updated_by_id", referencedColumnName: "id", nullable: false)]
     private $updatedBy;
 
     /**
      * @var ArrayCollection|ArticleTranslation[]
-     * @ORM\OneToMany(targetEntity="ArticleTranslation", mappedBy="article",cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: "ArticleTranslation", mappedBy: "article",cascade: ["persist", "remove"])]
     private $translations;
 
     /**
      * @var ArrayCollection|ArticlePicture[]
-     * @ORM\OneToMany(targetEntity="ArticlePicture", mappedBy="article",cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: "ArticlePicture", mappedBy: "article",cascade: ["persist", "remove"])]
     private $pictures;
 
     /**
@@ -183,7 +175,7 @@ class Article
     /**
      * @param StructureFile|null $structureFile
      */
-    public function setStructureFile(StructureFile $structureFile = null): void
+    public function setStructureFile(?StructureFile $structureFile = null): void
     {
         $this->structureFile = $structureFile;
     }
@@ -248,7 +240,7 @@ class Article
     /**
      * @param User|null $createdBy
      */
-    public function setCreatedBy(User $createdBy = null): void
+    public function setCreatedBy(?User $createdBy = null): void
     {
         $this->createdBy = $createdBy;
     }
@@ -256,7 +248,7 @@ class Article
     /**
      * @param User|null $updatedBy
      */
-    public function setUpdatedBy(User $updatedBy = null): void
+    public function setUpdatedBy(?User $updatedBy = null): void
     {
         $this->updatedBy = $updatedBy;
     }

@@ -13,7 +13,7 @@ use Dravencms\Components\BaseGrid\Grid;
 use Dravencms\Database\EntityManager;
 use Dravencms\Model\Article\Entities\Article;
 use Dravencms\Model\Article\Repository\ArticlePictureRepository;
-use Ublaboo\DataGrid\Column\Action\Confirmation\StringConfirmation;
+use Contributte\Datagrid\Column\Action\Confirmation\StringConfirmation;
 use Nette\Utils\Html;
 use Salamek\Files\ImagePipe;
 use Nette\Security\User;

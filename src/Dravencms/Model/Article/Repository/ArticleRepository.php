@@ -61,7 +61,7 @@ class ArticleRepository
      * @return bool
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isIdentifierFree(string $identifier, Group $group, Article $articleIgnore = null): bool
+    public function isIdentifierFree(string $identifier, Group $group, ?Article $articleIgnore = null): bool
     {
         $qb = $this->articleRepository->createQueryBuilder('a')
             ->select('a')

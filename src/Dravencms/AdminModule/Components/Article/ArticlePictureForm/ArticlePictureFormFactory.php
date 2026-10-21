@@ -17,5 +17,5 @@ interface ArticlePictureFormFactory
      * @param ArticlePicture|null $articlePicture
      * @return ArticlePictureForm
      */
-    public function create(Article $article, ArticlePicture $articlePicture = null): ArticlePictureForm;
+    public function create(Article $article, ?ArticlePicture $articlePicture = null): ArticlePictureForm;
 }

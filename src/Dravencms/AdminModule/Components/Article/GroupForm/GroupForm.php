@@ -78,7 +78,7 @@ class GroupForm extends BaseControl
         GroupTranslationRepository $groupTranslationRepository,
         LocaleRepository $localeRepository,
         User $user,
-        Group $group = null
+        ?Group $group = null
     ) {
         $this->group = $group;
 

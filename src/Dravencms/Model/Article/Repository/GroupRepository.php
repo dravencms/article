@@ -60,7 +60,7 @@ class GroupRepository
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isIdentifierFree(string $identifier, Group $groupIgnore = null): bool
+    public function isIdentifierFree(string $identifier, ?Group $groupIgnore = null): bool
     {
         $qb = $this->groupRepository->createQueryBuilder('g')
             ->select('g')
