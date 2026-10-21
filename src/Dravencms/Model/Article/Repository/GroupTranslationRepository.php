@@ -43,10 +43,8 @@ class GroupTranslationRepository
             ->join('gt.group', 'g')
             ->where('gt.name = :name')
             ->andWhere('gt.locale = :locale')
-            ->setParameters([
-                'name' => $name,
-                'locale' => $locale
-            ]);
+            ->setParameter('name', $name)
+            ->setParameter('locale', $locale);
 
         if ($groupIgnore)
         {

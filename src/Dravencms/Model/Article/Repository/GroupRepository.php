@@ -65,9 +65,7 @@ class GroupRepository
         $qb = $this->groupRepository->createQueryBuilder('g')
             ->select('g')
             ->where('g.identifier = :identifier')
-            ->setParameters([
-                'identifier' => $identifier
-            ]);
+            ->setParameter('identifier', $identifier);
 
         if ($groupIgnore)
         {

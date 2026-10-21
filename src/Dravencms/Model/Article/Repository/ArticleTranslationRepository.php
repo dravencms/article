@@ -45,10 +45,8 @@ class ArticleTranslationRepository
             ->join('at.article', 'a')
             ->where('at.name = :name')
             ->andWhere('a.group = :group')
-            ->setParameters([
-                'name' => $name,
-                'group' => $group
-            ]);
+            ->setParameter('name', $name)
+            ->setParameter('group', $group);
 
         if ($articleIgnore)
         {
@@ -78,12 +76,8 @@ class ArticleTranslationRepository
             ->join('atr.article', 'a')
             ->where('a.isActive = :isActive')
             ->andWhere('atr.locale = :locale')
-            ->setParameters(
-                [
-                    'isActive' => $isActive,
-                    'locale' => $locale
-                ]
-            );
+            ->setParameter('isActive', $isActive)
+            ->setParameter('locale', $locale);
 
         if ($group)
         {

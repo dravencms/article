@@ -67,10 +67,8 @@ class ArticleRepository
             ->select('a')
             ->where('a.identifier = :identifier')
             ->andWhere('a.group = :group')
-            ->setParameters([
-                'identifier' => $identifier,
-                'group' => $group
-            ]);
+            ->setParameter('identifier', $identifier)
+            ->setParameter('group', $group);
 
         if ($articleIgnore)
         {
@@ -152,11 +150,9 @@ class ArticleRepository
             ->andWhere('a.group = :group')
             ->andWhere('a != :articleIgnore')
             ->andWhere('a.isActive = :isActive')
-            ->setParameters([
-                'group' => $currentArticle->getGroup(),
-                'articleIgnore' => $currentArticle,
-                'isActive' => true
-            ]);
+            ->setParameter('group', $currentArticle->getGroup())
+            ->setParameter('articleIgnore', $currentArticle)
+            ->setParameter('isActive', true);
 
         if ($currentArticle->getGroup()->getSortBy() == Group::SORT_BY_POSITION) {
             $qb->orderBy('a.position', 'ASC')
@@ -182,11 +178,9 @@ class ArticleRepository
             ->andWhere('a.group = :group')
             ->andWhere('a != :articleIgnore')
             ->andWhere('a.isActive = :isActive')
-            ->setParameters([
-                'group' => $currentArticle->getGroup(),
-                'articleIgnore' => $currentArticle,
-                'isActive' => true
-            ]);
+            ->setParameter('group', $currentArticle->getGroup())
+            ->setParameter('articleIgnore', $currentArticle)
+            ->setParameter('isActive', true);
 
         if ($currentArticle->getGroup()->getSortBy() == Group::SORT_BY_POSITION) {
             $qb->orderBy('a.position', 'ASC')
