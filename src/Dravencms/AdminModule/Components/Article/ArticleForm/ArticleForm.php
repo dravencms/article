@@ -110,40 +110,6 @@ class ArticleForm extends BaseControl
         $this->tagTranslationRepository = $tagTranslationRepository;
         $this->localeRepository = $localeRepository;
         $this->user = $user;
-
-
-        if ($this->article) {
-            $tags = [];
-            foreach ($this->article->getTags() AS $tag) {
-                $tags[$tag->getId()] = $tag->getId();
-            }
-
-            $defaults = [
-                'position' => $this->article->getPosition(),
-                'identifier' => $this->article->getIdentifier(),
-                'isActive' => $this->article->isActive(),
-                'isShowName' => $this->article->isShowName(),
-                'createdAt' => ($this->article->getCreatedAt() ? $this->article->getCreatedAt()->format($this->currentLocale->getDateTimeFormat()): null),
-                'isAutoDetectTags' => $this->article->isAutoDetectTags(),
-                'tags' => $tags
-            ];
-
-            foreach ($this->article->getTranslations() AS $translation)
-            {
-                $defaults[$translation->getLocale()->getLanguageCode()]['name'] = $translation->getName();
-                $defaults[$translation->getLocale()->getLanguageCode()]['perex'] = $translation->getPerex();
-                $defaults[$translation->getLocale()->getLanguageCode()]['text'] = $translation->getText();
-            }
-        } else {
-            $defaults = [
-                'isActive' => true,
-                'isShowName' => true,
-                'isAutoDetectTags' => true,
-                'createdAt' => (new \DateTime)->format($this->currentLocale->getDateTimeFormat())
-            ];
-        }
-
-        $this['form']->setDefaults($defaults);
     }
 
     protected function createComponentForm(): Form
@@ -184,6 +150,39 @@ class ArticleForm extends BaseControl
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
+
+        if ($this->article) {
+            $tags = [];
+            foreach ($this->article->getTags() AS $tag) {
+                $tags[$tag->getId()] = $tag->getId();
+            }
+
+            $defaults = [
+                'position' => $this->article->getPosition(),
+                'identifier' => $this->article->getIdentifier(),
+                'isActive' => $this->article->isActive(),
+                'isShowName' => $this->article->isShowName(),
+                'createdAt' => ($this->article->getCreatedAt() ? $this->article->getCreatedAt()->format($this->currentLocale->getDateTimeFormat()): null),
+                'isAutoDetectTags' => $this->article->isAutoDetectTags(),
+                'tags' => $tags
+            ];
+
+            foreach ($this->article->getTranslations() AS $translation)
+            {
+                $defaults[$translation->getLocale()->getLanguageCode()]['name'] = $translation->getName();
+                $defaults[$translation->getLocale()->getLanguageCode()]['perex'] = $translation->getPerex();
+                $defaults[$translation->getLocale()->getLanguageCode()]['text'] = $translation->getText();
+            }
+        } else {
+            $defaults = [
+                'isActive' => true,
+                'isShowName' => true,
+                'isAutoDetectTags' => true,
+                'createdAt' => (new \DateTime)->format($this->currentLocale->getDateTimeFormat())
+            ];
+        }
+
+        $form->setDefaults($defaults);
 
         return $form;
     }

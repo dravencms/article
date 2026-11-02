@@ -88,31 +88,6 @@ class GroupForm extends BaseControl
         $this->groupTranslationRepository = $groupTranslationRepository;
         $this->localeRepository = $localeRepository;
         $this->user = $user;
-
-
-        if ($this->group) {
-
-            $defaults = [
-                'identifier' => $this->group->getIdentifier(),
-                'isShowName' => $this->group->isShowName(),
-                'isPerexWysiwig' => $this->group->isPerexWysiwig(),
-                'sortBy' => $this->group->getSortBy()
-            ];
-
-            foreach ($this->group->getTranslations() AS $translation)
-            {
-                $defaults[$translation->getLocale()->getLanguageCode()]['name'] = $translation->getName();
-            }
-        }
-        else{
-            $defaults = [
-                'isShowName' => false,
-                'isPerexWysiwig' => false,
-                'sortBy' => Group::SORT_BY_CREATED_AT
-            ];
-        }
-
-        $this['form']->setDefaults($defaults);
     }
 
     protected function createComponentForm(): Form
@@ -139,6 +114,30 @@ class GroupForm extends BaseControl
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
+
+        if ($this->group) {
+
+            $defaults = [
+                'identifier' => $this->group->getIdentifier(),
+                'isShowName' => $this->group->isShowName(),
+                'isPerexWysiwig' => $this->group->isPerexWysiwig(),
+                'sortBy' => $this->group->getSortBy()
+            ];
+
+            foreach ($this->group->getTranslations() AS $translation)
+            {
+                $defaults[$translation->getLocale()->getLanguageCode()]['name'] = $translation->getName();
+            }
+        }
+        else{
+            $defaults = [
+                'isShowName' => false,
+                'isPerexWysiwig' => false,
+                'sortBy' => Group::SORT_BY_CREATED_AT
+            ];
+        }
+
+        $form->setDefaults($defaults);
 
         return $form;
     }

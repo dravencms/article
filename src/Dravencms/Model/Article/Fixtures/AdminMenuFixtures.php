@@ -7,6 +7,7 @@ namespace Dravencms\Model\Article\Fixtures;
 
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Dravencms\Model\Admin\Entities\Menu;
+use Dravencms\Model\User\Entities\AclOperation;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -21,7 +22,7 @@ class AdminMenuFixtures extends AbstractFixture implements DependentFixtureInter
     {
         $menu = $manager->getRepository(Menu::class);
 
-        $adminMenu = new Menu('Article', ':Admin:Article:Group', 'fa-bullhorn', $this->getReference('user-acl-operation-article-edit'));
+        $adminMenu = new Menu('Article', ':Admin:Article:Group', 'fa-bullhorn', $this->getReference('user-acl-operation-article-edit', AclOperation::class));
 
         if ($parent = $menu->findOneBy(['name' => 'Site items']))
         {

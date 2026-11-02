@@ -86,21 +86,6 @@ class ArticlePictureForm extends BaseControl
         $this->structureRepository = $structureRepository;
         $this->fileStorage = $fileStorage;
         $this->article = $article;
-
-        $defaultValues = [];
-        if ($this->articlePicture)
-        {
-            $defaultValues['articlePicture'] = ($this->articlePicture->getStructureFileLink() ? $this->articlePicture->getStructureFileLink()->getStructureFile()->getId() : null);
-            $defaultValues['isPrimary'] = $this->articlePicture->isPrimary();
-            $defaultValues['isActive'] = $this->articlePicture->isActive();
-            $defaultValues['position'] = $this->articlePicture->getPosition();
-        }
-        else{
-            $defaultValues['isPrimary'] = false;
-            $defaultValues['isActive'] = true;
-        }
-
-        $this['form']->setDefaults($defaultValues);
     }
 
     /**
@@ -122,6 +107,21 @@ class ArticlePictureForm extends BaseControl
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
+
+        $defaultValues = [];
+        if ($this->articlePicture)
+        {
+            $defaultValues['articlePicture'] = ($this->articlePicture->getStructureFileLink() ? $this->articlePicture->getStructureFileLink()->getStructureFile()->getId() : null);
+            $defaultValues['isPrimary'] = $this->articlePicture->isPrimary();
+            $defaultValues['isActive'] = $this->articlePicture->isActive();
+            $defaultValues['position'] = $this->articlePicture->getPosition();
+        }
+        else{
+            $defaultValues['isPrimary'] = false;
+            $defaultValues['isActive'] = true;
+        }
+
+        $form->setDefaults($defaultValues);
 
         return $form;
     }
