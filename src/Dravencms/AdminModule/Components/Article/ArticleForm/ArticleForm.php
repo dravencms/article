@@ -134,7 +134,7 @@ class ArticleForm extends BaseControl
             ->setRequired('article.pleaseFillInTheIdentifier');
 
 
-        $form->addInteger('position')
+        $form->addText('position')->setNullable()->addRule(Form::INTEGER, 'article.positionMustBeInteger')
             ->setDisabled((is_null($this->article)));
 
         $form->addMultiSelect('tags', null, $this->tagRepository->getPairs());
@@ -146,7 +146,7 @@ class ArticleForm extends BaseControl
         $form->addCheckbox('isAutoDetectTags');
 
 
-        $form->addSubmit('send');
+        $form->addSubmit('send', 'article.save');
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];

@@ -110,7 +110,7 @@ class GroupForm extends BaseControl
         $form->addCheckbox('isShowName');
         $form->addCheckbox('isPerexWysiwig');
         
-        $form->addSubmit('send');
+        $form->addSubmit('send', 'article.save');
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];

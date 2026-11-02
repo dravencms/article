@@ -96,14 +96,15 @@ class ArticlePictureForm extends BaseControl
         $form = $this->baseFormFactory->create();
 
 
-        $form->addInteger('articlePicture');
-        $form->addInteger('position');
-        $form->addUpload('file');
+        $form->addText('articlePicture')->setNullable()->addRule(Form::INTEGER, 'article.pictureIdMustBeInteger');
+        $form->addText('position')->setNullable()->addRule(Form::INTEGER, 'article.positionMustBeInteger');
+        $upload = $form->addUpload('file');
+        \Dravencms\File\Forms\UploadMessages::localize($upload->getRules());
 
         $form->addCheckbox('isPrimary');
         $form->addCheckbox('isActive');
 
-        $form->addSubmit('send');
+        $form->addSubmit('send', 'article.save');
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
