@@ -137,12 +137,12 @@ class ArticleGrid extends BaseControl
             $grid->addAction('pictures', 'article.pictures', 'ArticlePicture:', ['articleId' => 'id'])
             ->setIcon('file-image-o')
             ->setTitle('article.pictures')
-            ->setClass('btn btn-xs btn-default');
+            ->setClass('btn btn-sm btn-outline-secondary');
 
             $grid->addAction('edit', 'article.edit', 'edit', ['groupId' => 'group.id', 'id'])
                 ->setIcon('pencil')
                 ->setTitle('article.edit')
-                ->setClass('btn btn-xs btn-primary');
+                ->setClass('btn btn-sm btn-primary');
 
         }
 
@@ -150,7 +150,7 @@ class ArticleGrid extends BaseControl
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
                 ->setTitle('article.delete')
-                ->setClass('btn btn-xs btn-danger ajax')
+                ->setClass('btn btn-sm btn-danger ajax')
                 ->setConfirmation(new StringConfirmation('article.doYouReallyWantToDeleteRowIdentifier', 'identifier'));
             $grid->addGroupAction('article.delete')->onSelect[] = [$this, 'handleDelete'];
         }

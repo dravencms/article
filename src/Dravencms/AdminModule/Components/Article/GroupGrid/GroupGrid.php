@@ -111,19 +111,19 @@ class GroupGrid extends BaseControl
             $grid->addAction('articles', 'article.articles', 'Article:default', ['groupId' => 'id'])
                 ->setIcon('bars')
                 ->setTitle('article.articles')
-                ->setClass('btn btn-xs btn-default');
+                ->setClass('btn btn-sm btn-outline-secondary');
 
             $grid->addAction('edit', '')
                 ->setIcon('pencil')
                 ->setTitle('article.edit')
-                ->setClass('btn btn-xs btn-primary');
+                ->setClass('btn btn-sm btn-primary');
         }
 
         if ($this->user->isAllowed('article', 'delete')) {
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
                 ->setTitle('article.delete')
-                ->setClass('btn btn-xs btn-danger ajax')
+                ->setClass('btn btn-sm btn-danger ajax')
                 ->setConfirmation(new StringConfirmation('article.doYouReallyWantToDeleteRowIdentifier', 'identifier'));
             $grid->addGroupAction('article.delete')->onSelect[] = [$this, 'handleDelete'];
         }

@@ -1,11 +1,11 @@
-<form n:name="form" class="panel form-horizontal">
+<form n:name="form" class="card">
     <ul class="alert alert-danger" n:if="$form->hasErrors()">
         <li n:foreach="$form->errors as $error">{$error}</li>
     </ul>
-    <div class="panel-body">
+    <div class="card-body">
         <ul class="nav nav-tabs" role="tablist">
-            <li n:foreach="$activeLocales as $activeLocale" role="presentation" n:class="$activeLocale->isDefault() ? active"><a href="#{$activeLocale->getLanguageCode()}" aria-controls="home"
-                                                                                                                                 role="tab" data-toggle="tab"><span
+            <li n:foreach="$activeLocales as $activeLocale" role="presentation" class="nav-item"><a n:class="$activeLocale->isDefault() ? active, nav-link" href="#{$activeLocale->getLanguageCode()}" aria-controls="home"
+                                                                                                                                 role="tab" data-bs-toggle="tab"><span
                             class="flag-icon flag-icon-{$activeLocale->getCountry()->getCode()|lower}"></span> {$activeLocale->getName()}</a></li>
         </ul>
         <div class="tab-content">
@@ -15,8 +15,8 @@
                         <legend>{$activeLocale->getName()}</legend>
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="form-group no-margin-hr">
-                                    <label class="control-label" n:name="name">{_"article.name"}</label>
+                                <div class="mb-3">
+                                    <label class="form-label" n:name="name">{_"article.name"}</label>
                                     <input type="text" n:name="name" autofocus="autofocus" class="form-control">
                                 </div>
                             </div><!-- col-sm-12 -->
@@ -24,8 +24,8 @@
 
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="form-group no-margin-hr">
-                                    <label class="control-label" n:name="perex">{_"article.perex"}</label>
+                                <div class="mb-3">
+                                    <label class="form-label" n:name="perex">{_"article.perex"}</label>
                                     <textarea n:name="perex" class="form-control{if $group->isPerexWysiwig()} wysiwyg{/if}"></textarea>
                                 </div>
                             </div><!-- col-sm-12 -->
@@ -33,8 +33,8 @@
 
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="form-group no-margin-hr">
-                                    <label class="control-label" n:name="text">{_"article.text"}</label>
+                                <div class="mb-3">
+                                    <label class="form-label" n:name="text">{_"article.text"}</label>
                                     <textarea n:name="text" class="form-control wysiwyg"></textarea>
                                 </div>
                             </div><!-- col-sm-12 -->
@@ -45,14 +45,14 @@
         </div>
         <div class="row">
             <div class="col-sm-6">
-                <div class="form-group no-margin-hr">
-                    <label class="control-label" n:name="identifier">{_"article.identifier"}</label>
+                <div class="mb-3">
+                    <label class="form-label" n:name="identifier">{_"article.identifier"}</label>
                     <input n:name="identifier" class="form-control">
                 </div>
             </div><!-- col-sm-6 -->
             <div class="col-sm-6">
-                <div class="form-group no-margin-hr">
-                    <label class="control-label" n:name="position">{_"article.position"}</label>
+                <div class="mb-3">
+                    <label class="form-label" n:name="position">{_"article.position"}</label>
                     <input n:name="position" class="form-control">
                 </div>
             </div><!-- col-sm-6 -->
@@ -60,14 +60,14 @@
 
         <div class="row">
             <div class="col-sm-6">
-                <div class="form-group no-margin-hr">
-                    <label class="control-label" n:name="tags">{_"article.tags"}</label>
+                <div class="mb-3">
+                    <label class="form-label" n:name="tags">{_"article.tags"}</label>
                     <select n:name="tags" class="form-control"></select>
                 </div>
             </div><!-- col-sm-6 -->
             <div class="col-sm-6">
-                <div class="form-group no-margin-hr">
-                    <label class="control-label" n:name="createdAt">{_"article.createdAt"}</label>
+                <div class="mb-3">
+                    <label class="form-label" n:name="createdAt">{_"article.createdAt"}</label>
                     <input n:name="createdAt" class="form-control date" data-format="{$dateTimeFormat}">
                 </div>
             </div><!-- col-sm-6 -->
@@ -75,34 +75,34 @@
 
         <div class="row">
             <div class="col-sm-12">
-                <div class="checkbox">
+                <div class="form-check">
                     <label>
-                        <input type="checkbox" n:name="isActive" class="px"> <span class="lbl">{_"article.isActive"}</span>
+                        <input type="checkbox" n:name="isActive" class="form-check-input"> <span class="form-check-label">{_"article.isActive"}</span>
                     </label>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <div class="checkbox">
+                <div class="form-check">
                     <label>
-                        <input type="checkbox" n:name="isShowName" class="px"> <span class="lbl">{_"article.isShowName"}</span>
+                        <input type="checkbox" n:name="isShowName" class="form-check-input"> <span class="form-check-label">{_"article.isShowName"}</span>
                     </label>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <div class="checkbox">
+                <div class="form-check">
                     <label>
-                        <input type="checkbox" n:name="isAutoDetectTags" class="px"> <span class="lbl">{_"article.isAutoDetectTags"}</span>
+                        <input type="checkbox" n:name="isAutoDetectTags" class="form-check-input"> <span class="form-check-label">{_"article.isAutoDetectTags"}</span>
                     </label>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="panel-footer">
+    <div class="card-footer">
         <input type="submit" n:name="send" class="btn btn-success button" value="{_"article.save"}">
     </div>
 </form>
