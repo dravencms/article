@@ -74,6 +74,7 @@ class ArticlePictureGrid extends BaseControl
     {
         /** @var Grid $grid */
         $grid = $this->baseGridFactory->create($this, $name);
+        $grid->setWritePermission('article', 'edit');
         $grid->setDataSource($this->articlePictureRepository->getPictureItemsQueryBuilder($this->article));
 
         $grid->setDefaultSort(['position' => 'ASC']);
@@ -152,8 +153,11 @@ class ArticlePictureGrid extends BaseControl
      * @param $id
      * @throws \Exception
      */
+    #[\Dravencms\User\Attributes\IsAllowed('article', 'delete')]
+    #[\Dravencms\Security\Mutation]
     public function handleDelete($id): void
     {
+        $this->requirePermission('article', 'delete');
         $articlePictures = $this->articlePictureRepository->getById($id);
         foreach ($articlePictures AS $articlePicture)
         {
@@ -174,8 +178,11 @@ class ArticlePictureGrid extends BaseControl
     /**
      * @param $id
      */
+    #[\Dravencms\User\Attributes\IsAllowed('article', 'edit')]
+    #[\Dravencms\Security\Mutation]
     public function handleUp(int $id): void
     {
+        $this->requirePermission('article', 'edit');
         $articlePictureItem = $this->articlePictureRepository->getOneById($id);
         $articlePictureItem->setPosition($articlePictureItem->getPosition() - 1);
         $this->entityManager->persist($articlePictureItem);
@@ -186,8 +193,11 @@ class ArticlePictureGrid extends BaseControl
     /**
      * @param $id
      */
+    #[\Dravencms\User\Attributes\IsAllowed('article', 'edit')]
+    #[\Dravencms\Security\Mutation]
     public function handleDown(int $id): void
     {
+        $this->requirePermission('article', 'edit');
         $articlePictureItem = $this->articlePictureRepository->getOneById($id);
         $articlePictureItem->setPosition($articlePictureItem->getPosition() + 1);
         $this->entityManager->persist($articlePictureItem);

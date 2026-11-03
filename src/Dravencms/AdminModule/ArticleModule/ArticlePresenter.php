@@ -24,6 +24,7 @@ use Dravencms\Model\Tag\Repository\TagRepository;
  *
  * @author Adam Schubert
  */
+#[\Dravencms\User\Attributes\IsAllowed('article', 'edit')]
 class ArticlePresenter extends SecuredPresenter
 {
 

@@ -97,6 +97,7 @@ class ArticleGrid extends BaseControl
     public function createComponentGrid(string $name): Grid
     {
         $grid = $this->baseGridFactory->create($this, $name);
+        $grid->setWritePermission('article', 'edit');
 
         $grid->setDataSource($this->articleRepository->getArticleQueryBuilder($this->group));
 
@@ -166,8 +167,11 @@ class ArticleGrid extends BaseControl
      * @param $id
      * @throws \Exception
      */
+    #[\Dravencms\User\Attributes\IsAllowed('article', 'delete')]
+    #[\Dravencms\Security\Mutation]
     public function handleDelete($id): void
     {
+        $this->requirePermission('article', 'delete');
         $articles = $this->articleRepository->getById($id);
         foreach ($articles AS $article)
         {
@@ -182,8 +186,11 @@ class ArticleGrid extends BaseControl
     /**
      * @param $id
      */
+    #[\Dravencms\User\Attributes\IsAllowed('article', 'edit')]
+    #[\Dravencms\Security\Mutation]
     public function handleUp(int $id): void
     {
+        $this->requirePermission('article', 'edit');
         $articleItem = $this->articleRepository->getOneById($id);
         $articleItem->setPosition($articleItem->getPosition() - 1);
         $this->entityManager->persist($articleItem);
@@ -194,8 +201,11 @@ class ArticleGrid extends BaseControl
     /**
      * @param $id
      */
+    #[\Dravencms\User\Attributes\IsAllowed('article', 'edit')]
+    #[\Dravencms\Security\Mutation]
     public function handleDown(int $id): void
     {
+        $this->requirePermission('article', 'edit');
         $articleItem = $this->articleRepository->getOneById($id);
         $articleItem->setPosition($articleItem->getPosition() + 1);
         $this->entityManager->persist($articleItem);

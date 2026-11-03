@@ -25,6 +25,7 @@ use Dravencms\Model\Article\Repository\ArticleRepository;
  *
  * @author Adam Schubert
  */
+#[\Dravencms\User\Attributes\IsAllowed('article', 'edit')]
 class ArticlePicturePresenter extends SecuredPresenter
 {
     /** @var ArticleRepository @inject */

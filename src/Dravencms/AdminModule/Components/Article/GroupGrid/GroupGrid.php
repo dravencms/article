@@ -82,6 +82,7 @@ class GroupGrid extends BaseControl
     public function createComponentGrid(string $name): Grid
     {
         $grid = $this->baseGridFactory->create($this, $name);
+        $grid->setWritePermission('article', 'edit');
 
         $grid->setDataSource($this->groupRepository->getGroupQueryBuilder());
 
@@ -140,8 +141,11 @@ class GroupGrid extends BaseControl
      * @param $id
      * @throws \Exception
      */
+    #[\Dravencms\User\Attributes\IsAllowed('article', 'delete')]
+    #[\Dravencms\Security\Mutation]
     public function handleDelete($id): void
     {
+        $this->requirePermission('article', 'delete');
         $groups = $this->groupRepository->getById($id);
         foreach ($groups AS $group)
         {

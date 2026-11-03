@@ -169,6 +169,7 @@ class GroupForm extends BaseControl
      */
     public function editFormSucceeded(Form $form): void
     {
+        $this->requirePermission('article', 'edit');
         $values = $form->getValues();
 
         if ($this->group) {

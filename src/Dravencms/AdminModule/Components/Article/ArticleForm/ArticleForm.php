@@ -212,6 +212,7 @@ class ArticleForm extends BaseControl
 
     public function editFormSucceeded(Form $form): void
     {
+        $this->requirePermission('article', 'edit');
         $values = $form->getValues();
         if ($values->isAutoDetectTags) {
             foreach ($this->localeRepository->getActive() AS $activeLocale) {
