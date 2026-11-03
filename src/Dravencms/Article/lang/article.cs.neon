@@ -62,3 +62,11 @@ pictureIdMustBeInteger: 'Identifikátor obrázku musí být celé číslo.'
 
 menu:
     overview: 'Články'
+
+acl:
+    resource: 'Články'
+    permissions:
+        edit:
+            label: 'Spravovat články'
+        delete:
+            label: 'Mazat články'

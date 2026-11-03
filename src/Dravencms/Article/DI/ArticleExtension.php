@@ -19,6 +19,9 @@ class ArticleExtension extends CompilerExtension implements TranslationProviderI
     public function loadConfiguration()
     {
         $builder = $this->getContainerBuilder();
+        if ($this->compiler->getExtensions(\Dravencms\User\DI\UserExtension::class) !== []) {
+            $builder->addDefinition($this->prefix('aclProvider'))->setFactory(\Dravencms\Article\AclProvider::class);
+        }
         if ($this->compiler->getExtensions(\Dravencms\Admin\DI\AdminExtension::class) !== []) {
             $builder->addDefinition($this->prefix('adminMenuProvider'))->setFactory(\Dravencms\Article\AdminMenuProvider::class);
         }

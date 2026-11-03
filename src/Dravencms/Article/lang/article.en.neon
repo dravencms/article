@@ -62,3 +62,11 @@ pictureIdMustBeInteger: 'The picture identifier must be an integer.'
 
 menu:
     overview: 'Articles'
+
+acl:
+    resource: 'Articles'
+    permissions:
+        edit:
+            label: 'Manage articles'
+        delete:
+            label: 'Delete articles'
