@@ -4,11 +4,11 @@
         <article n:foreach="$overview as $articleTranslation" class="news-item page-row has-divider clearfix row">
             {var $article = $articleTranslation->getArticle()}
             <figure class="thumb col-md-2 col-sm-3 col-xs-4">
-                <img class="img-responsive" n:img="$article->getStructureFile()->getFile(), '100x100'" alt="{$articleTranslation->getName()}">
+                <img class="img-responsive" n:img="\Salamek\Files\Access\FileReference::attachment('article.image', $article->getId(), $article->getStructureFile()), '100x100'" alt="{$articleTranslation->getName()}">
             </figure>
             <div class="details col-md-10 col-sm-9 col-xs-8">
                 <h3 class="title"><a href="{cmsLink 'Article\Article\GroupDetail', 'id' => $article->getId()}">{$articleTranslation->getName()}</a></h3>
-                <p>{$articleTranslation->getPerex()|noescape}</p>
+                <p>{$articleTranslation->getPerex()|fileContent:'article.body':$articleTranslation->getId()|noescape}</p>
                 <a class="btn btn-theme read-more" href="{cmsLink 'Article\Article\GroupDetail', 'id' => $article->getId()}">Více<i class="fa fa-chevron-right"></i></a>
             </div>
         </article><!--//news-item-->

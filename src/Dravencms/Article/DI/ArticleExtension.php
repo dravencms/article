@@ -19,6 +19,9 @@ class ArticleExtension extends CompilerExtension implements TranslationProviderI
     public function loadConfiguration()
     {
         $builder = $this->getContainerBuilder();
+        $builder->addDefinition($this->prefix('files.ArticleBodyProvider'))->setFactory(\Dravencms\Article\Access\ArticleBodyProvider::class);
+        $builder->addDefinition($this->prefix('files.PictureFileProvider'))->setFactory(\Dravencms\Article\Access\PictureFileProvider::class);
+        $builder->addDefinition($this->prefix('files.ArticleFileProvider'))->setFactory(\Dravencms\Article\Access\ArticleFileProvider::class);
         if ($this->compiler->getExtensions(\Dravencms\User\DI\UserExtension::class) !== []) {
             $builder->addDefinition($this->prefix('aclProvider'))->setFactory(\Dravencms\Article\AclProvider::class);
         }

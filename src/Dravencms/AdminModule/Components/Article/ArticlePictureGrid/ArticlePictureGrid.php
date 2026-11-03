@@ -84,7 +84,7 @@ class ArticlePictureGrid extends BaseControl
                 /** @var Picture $row */
                 if ($haveImage = $row->getStructureFileLink()->getStructureFile()) {
                     $img = Html::el('img');
-                    $img->src = $this->imagePipe->request($haveImage->getFile(), '200x');
+                    $img->src = $this->imagePipe->request(\Salamek\Files\Access\FileReference::attachment('article.picture', $row->getId(), $haveImage), '200x');
                 } else {
                     $img = '';
                 }

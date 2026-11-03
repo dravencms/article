@@ -30,6 +30,11 @@ class ArticleTranslationRepository
         $this->articleTranslationRepository = $entityManager->getRepository(ArticleTranslation::class);
     }
 
+    public function getOneById(int $id): ?ArticleTranslation
+    {
+        return $this->articleTranslationRepository->find($id);
+    }
+
     /**
      * @param $name
      * @param ILocale $locale
