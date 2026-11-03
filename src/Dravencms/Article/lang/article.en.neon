@@ -59,3 +59,6 @@ createdAt: 'Created at'
 createdAtHasIncorrectFormat: 'The creation date has an incorrect format.'
 positionMustBeInteger: 'Position must be an integer.'
 pictureIdMustBeInteger: 'The picture identifier must be an integer.'
+
+menu:
+    overview: 'Articles'
