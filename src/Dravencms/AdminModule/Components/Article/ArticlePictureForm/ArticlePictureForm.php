@@ -50,6 +50,9 @@ class ArticlePictureForm extends BaseControl
     /** @var null|ArticlePicture */
     private $articlePicture = null;
 
+    /** @var \Nette\Security\User */
+    private $user;
+
     /** @var null|callable */
     public $onSuccess = null;
 
@@ -66,6 +69,7 @@ class ArticlePictureForm extends BaseControl
      * @param ArticlePicture|null $articlePicture
      */
     public function __construct(
+        \Nette\Security\User $user,
         BaseFormFactory $baseForm,
         ArticlePictureRepository $articlePictureRepository,
         EntityManager $entityManager,
@@ -77,6 +81,7 @@ class ArticlePictureForm extends BaseControl
         ?ArticlePicture $articlePicture = null
     )
     {
+        $this->user = $user;
         $this->baseFormFactory = $baseForm;
         $this->articlePictureRepository = $articlePictureRepository;
         $this->entityManager = $entityManager;
@@ -132,7 +137,10 @@ class ArticlePictureForm extends BaseControl
      */
     public function editFormValidate(Form $form): void
     {
-        $values = $form->getValues();
+        if (!$this->user->isAllowed('article', 'edit')) {
+            $form->addError('article.youHaveNoPermissionToEditThisArticle');
+            return;
+        }
     }
 
     /**
@@ -141,7 +149,6 @@ class ArticlePictureForm extends BaseControl
      */
     public function editFormSucceeded(Form $form): void
     {
-        $this->requirePermission('article', 'edit');
         $values = $form->getValues();
 
         if ($values->articlePicture) {
