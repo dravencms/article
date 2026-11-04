@@ -2,11 +2,11 @@
 namespace Dravencms\Article\Access;
 use Salamek\Files\Access\{IFileAccessProvider, FileAccess};
 use Dravencms\Model\Article\Repository\ArticlePictureRepository;
-use Nette\Security\User;
+use Dravencms\File\Access\AdminFileAccess;
 
 final class PictureFileProvider implements IFileAccessProvider
 {
-    public function __construct(private ArticlePictureRepository $repository, private User $user) {}
+    public function __construct(private ArticlePictureRepository $repository, private AdminFileAccess $user) {}
     public static function getId(): string { return 'article.picture'; }
     public function resolve(string $reference): ?FileAccess
     {

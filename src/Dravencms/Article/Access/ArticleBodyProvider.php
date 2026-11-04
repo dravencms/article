@@ -2,11 +2,11 @@
 namespace Dravencms\Article\Access;
 use Salamek\Files\Access\{IFileAccessProvider, FileAccess, BodyFiles};
 use Dravencms\Model\Article\Repository\ArticleTranslationRepository;
-use Nette\Security\User;
+use Dravencms\File\Access\AdminFileAccess;
 
 final class ArticleBodyProvider implements IFileAccessProvider
 {
-    public function __construct(private ArticleTranslationRepository $repository, private User $user, private BodyFiles $bodyFiles) {}
+    public function __construct(private ArticleTranslationRepository $repository, private AdminFileAccess $user, private BodyFiles $bodyFiles) {}
     public static function getId(): string { return 'article.body'; }
     public function resolve(string $reference): ?FileAccess
     {
