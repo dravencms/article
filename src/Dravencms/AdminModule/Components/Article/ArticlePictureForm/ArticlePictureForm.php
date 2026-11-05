@@ -10,7 +10,6 @@ use Dravencms\Components\BaseForm\BaseFormFactory;
 use Dravencms\File\File;
 use Dravencms\Model\File\Entities\StructureFileLink;
 use Dravencms\Model\File\Entities\Structure;
-use Dravencms\Model\File\Repository\StructureFileRepository;
 use Dravencms\Model\File\Repository\StructureRepository;
 use Dravencms\Database\EntityManager;
 use Dravencms\Model\Article\Entities\ArticlePicture;
@@ -34,9 +33,6 @@ class ArticlePictureForm extends BaseControl
 
     /** @var Article */
     private $article;
-
-    /** @var StructureFileRepository */
-    private $structureFileRepository;
 
     /** @var StructureRepository */
     private $structureRepository;
@@ -62,7 +58,6 @@ class ArticlePictureForm extends BaseControl
      * @param ArticlePictureRepository $articlePictureRepository
      * @param EntityManager $entityManager
      * @param Article $article
-     * @param StructureFileRepository $structureFileRepository
      * @param StructureRepository $structureRepository
      * @param FileStorage $fileStorage
      * @param File $file
@@ -74,7 +69,6 @@ class ArticlePictureForm extends BaseControl
         ArticlePictureRepository $articlePictureRepository,
         EntityManager $entityManager,
         Article $article,
-        StructureFileRepository $structureFileRepository,
         StructureRepository $structureRepository,
         FileStorage $fileStorage,
         File $file,
@@ -87,7 +81,6 @@ class ArticlePictureForm extends BaseControl
         $this->entityManager = $entityManager;
         $this->articlePicture = $articlePicture;
         $this->file = $file;
-        $this->structureFileRepository = $structureFileRepository;
         $this->structureRepository = $structureRepository;
         $this->fileStorage = $fileStorage;
         $this->article = $article;
@@ -101,10 +94,9 @@ class ArticlePictureForm extends BaseControl
         $form = $this->baseFormFactory->create();
 
 
-        $form->addText('articlePicture')->setNullable()->addRule(Form::INTEGER, 'article.pictureIdMustBeInteger');
+        $this->file->addSelector($form, 'articlePicture', 'file.selectImage', \Salamek\Files\Models\IFile::TYPE_IMAGE, true)->setRequired('file.picker.required')->setExistingFile($this->articlePicture?->getStructureFileLink()?->getStructureFile());
         $form->addText('position')->setNullable()->addRule(Form::INTEGER, 'article.positionMustBeInteger');
-        $upload = $form->addUpload('file');
-        \Dravencms\File\Forms\UploadMessages::localize($upload->getRules());
+
 
         $form->addCheckbox('isPrimary');
         $form->addCheckbox('isActive');
@@ -151,14 +143,10 @@ class ArticlePictureForm extends BaseControl
     {
         $values = $form->getValues();
 
-        if ($values->articlePicture) {
-            $structureFile = $this->structureFileRepository->getOneById($values->articlePicture);
-        } else {
-            $structureFile = null;
-        }
+        $structureFile = $values->articlePicture->file;
 
         /** @var FileUpload $file */
-        $file = $values->file;
+        $file = $values->articlePicture->upload;
         if ($file->isOk()) {
             $structureName = 'Article';
             if (!$structure = $this->structureRepository->getOneByName($structureName)) {
@@ -204,7 +192,7 @@ class ArticlePictureForm extends BaseControl
     public function render(): void
     {
         $template = $this->template;
-        $template->fileSelectorPath = $this->file->getFileSelectorPath();
+
         $template->setFile(__DIR__ . '/ArticlePictureForm.latte');
         $template->render();
     }
