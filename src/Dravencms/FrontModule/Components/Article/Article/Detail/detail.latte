@@ -4,6 +4,6 @@
         {$articleTranslation->getName()}
     </h2>
     <p n:if="$article->getStructureFile()" class="featured-image"><img class="img-responsive" n:img="\Salamek\Files\Access\FileReference::attachment('article.image', $article->getId(), $article->getStructureFile()), '750x300', 'fit_exact'" alt="{$articleTranslation->getName()}"></p>
-    <p>{$articleTranslation->getText()|fileContent:'article.body':$articleTranslation->getId()|noescape}</p>
+    <p>{$articleTranslation->getText()|fileContent:'article.body', $articleTranslation->getId()|noescape}</p>
     </article>
 </div>
