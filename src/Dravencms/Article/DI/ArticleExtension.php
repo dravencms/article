@@ -27,6 +27,9 @@ class ArticleExtension extends CompilerExtension implements TranslationProviderI
         }
         if ($this->compiler->getExtensions(\Dravencms\Admin\DI\AdminExtension::class) !== []) {
             $builder->addDefinition($this->prefix('adminMenuProvider'))->setFactory(\Dravencms\Article\AdminMenuProvider::class);
+            if (interface_exists(\Dravencms\Admin\Dashboard\IDashboardComponent::class)) {
+                $builder->addDefinition($this->prefix('dashboard'))->setFactory(\Dravencms\Article\DashboardComponent::class)->setAutowired(false);
+            }
         }
 
 

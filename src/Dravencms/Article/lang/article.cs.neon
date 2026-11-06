@@ -70,3 +70,8 @@ acl:
             label: 'Spravovat články'
         delete:
             label: 'Mazat články'
+
+dashboard:
+    title: "Články"
+    total: "Články"
+    active: "Aktivní články"

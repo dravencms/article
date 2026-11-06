@@ -70,3 +70,8 @@ acl:
             label: 'Manage articles'
         delete:
             label: 'Delete articles'
+
+dashboard:
+    title: "Articles"
+    total: "Articles"
+    active: "Enabled articles"
